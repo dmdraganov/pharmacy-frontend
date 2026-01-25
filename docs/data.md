@@ -1,6 +1,7 @@
 # Data
 
 ## Data Sources
+
 - Статические массивы в коде
 - Асинхронная загрузка не используется
 
@@ -10,36 +11,36 @@
 
 ```ts
 type Category = {
-  id: string
-  name: string
-  subcategories: Subcategory[]
-}
+  id: string;
+  name: string;
+  subcategories: Subcategory[];
+};
 ```
 
 ### Subcategory
 
 ```ts
 type Subcategory = {
-  id: string
-  name: string
-  categoryId: string
-}
+  id: string;
+  name: string;
+  categoryId: string;
+};
 ```
 
 ### Product
 
 ```ts
 type Product = {
-  id: string
-  name: string
-  brand: string
-  categoryId: string
-  subcategoryId: string
-  price: number
-  oldPrice?: number
-  isPrescription: boolean
-  image: string
-}
+  id: string;
+  name: string;
+  brand: string;
+  categoryId: string;
+  subcategoryId: string;
+  price: number;
+  oldPrice?: number;
+  isPrescription: boolean;
+  image: string;
+};
 ```
 
 ## Relationships

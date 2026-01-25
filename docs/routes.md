@@ -1,6 +1,7 @@
 # Routes
 
 ## Routing Type
+
 Client-side SPA routing
 
 ## Routes List
@@ -15,6 +16,7 @@ Client-side SPA routing
 - `/product/:id` — страница товара
 
 ## Navigation Rules
+
 - Пустая корзина → кнопка перехода на главную
 - Пустое избранное → кнопка перехода на главную
 - Каталог открывается отдельным экраном

@@ -1,0 +1,45 @@
+import type { Product } from '@/entities/product/model';
+
+export const products: Product[] = [
+  {
+    id: '1',
+    name: 'Аспирин-C, таблетки шипучие, 10 шт.',
+    brand: 'Bayer',
+    categoryId: '1',
+    subcategoryId: '1',
+    price: 450,
+    isPrescription: false,
+    image: 'https://placehold.co/300x300/white/313131/png?text=Product',
+  },
+  {
+    id: '2',
+    name: 'Парацетамол, таблетки 500 мг, 20 шт.',
+    brand: 'Фармстандарт',
+    categoryId: '1',
+    subcategoryId: '1',
+    price: 70,
+    oldPrice: 85,
+    isPrescription: false,
+    image: 'https://placehold.co/300x300/white/313131/png?text=Product',
+  },
+  {
+    id: '3',
+    name: 'Но-шпа, таблетки 40 мг, 24 шт.',
+    brand: 'Sanofi',
+    categoryId: '1',
+    subcategoryId: '2',
+    price: 280,
+    isPrescription: false,
+    image: 'https://placehold.co/300x300/white/313131/png?text=Product',
+  },
+  {
+    id: '4',
+    name: 'Компливит Кальций Д3, таблетки, 100 шт.',
+    brand: 'Фармстандарт',
+    categoryId: '2',
+    subcategoryId: '1',
+    price: 550,
+    isPrescription: false,
+    image: 'https://placehold.co/300x300/white/313131/png?text=Product',
+  },
+];
