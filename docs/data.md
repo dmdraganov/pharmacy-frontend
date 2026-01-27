@@ -40,6 +40,19 @@ type Product = {
   oldPrice?: number;
   isPrescription: boolean;
   image: string;
+  description: string[]; //массив абзацев
+  composition: string[]; //массив абзацев
+  indications: string[]; //массив абзацев
+  contraindications?: string[]; //массив абзацев
+  sideEffects?: string[]; //массив элементов списка
+  dosage: string[]; //массив абзацев
+  storage: string[]; //массив абзацев
+  characteristics: ProductCharacteristic[];
+};
+
+type ProductCharacteristic = {
+  label: string;
+  value: string;
 };
 ```
 

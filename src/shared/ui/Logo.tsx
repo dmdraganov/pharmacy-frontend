@@ -1,8 +1,10 @@
+import { Link } from 'react-router-dom';
+
 const Logo = () => {
   return (
-    <a href='/' className='text-2xl font-bold'>
+    <Link to='/' className='text-2xl font-bold'>
       Pharmacy
-    </a>
+    </Link>
   );
 };
 

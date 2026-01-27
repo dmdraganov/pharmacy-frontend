@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import CartProvider from './CartProvider';
-import FavoritesProvider from './FavoritesProvider';
-import RegionProvider from './RegionProvider'; // New import
+import CartProvider from '@/features/cart/providers/CartProvider';
+import FavoritesProvider from '@/features/favorites/providers/FavoritesProvider';
+import RegionProvider from '@/features/region/providers/RegionProvider';
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   return (

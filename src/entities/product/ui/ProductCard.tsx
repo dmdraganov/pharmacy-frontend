@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import Badge from './Badge';
-import Button from './Button';
-import QuantityControl from './QuantityControl';
+import Badge from '@/shared/ui/Badge';
+import Button from '@/shared/ui/Button';
+import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product/model';
 
 interface ProductCardProps extends Product {

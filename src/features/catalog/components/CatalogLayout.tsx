@@ -2,7 +2,7 @@ import { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '@/data/categories';
 
-const CatalogLayout = memo(() => {
+const CatalogLayout = memo(({ onNavigate }: { onNavigate: () => void }) => {
   const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(
     null
   );
@@ -29,6 +29,7 @@ const CatalogLayout = memo(() => {
             >
               <Link
                 to={`/catalog/${cat.id}`} // Link to product list page for category
+                onClick={onNavigate}
                 className={`block text-lg hover:text-blue-600 ${
                   hoveredCategoryId === cat.id ? 'font-bold text-blue-700' : ''
                 }`}
@@ -50,7 +51,8 @@ const CatalogLayout = memo(() => {
                 <li key={sub.id} className='mb-2'>
                   <Link
                     to={`/catalog/${hoveredCategory.id}/${sub.id}`}
-                    className='hover:text-blue-600'
+                    onClick={onNavigate}
+                className='hover:text-blue-600'
                   >
                     {sub.name}
                   </Link>

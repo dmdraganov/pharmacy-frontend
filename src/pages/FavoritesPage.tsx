@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useFavorites } from '@/features/favorites';
 import { products } from '@/data/products';
-import ProductCard from '@/shared/ui/ProductCard';
+import ProductCard from '@/entities/product/ui/ProductCard';
 import Button from '@/shared/ui/Button';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart';

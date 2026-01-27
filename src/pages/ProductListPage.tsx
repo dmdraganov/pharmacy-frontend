@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { products } from '@/data/products';
-import ProductCard from '@/shared/ui/ProductCard';
+import ProductCard from '@/entities/product/ui/ProductCard';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 import { usePagination } from '@/shared/hooks/usePagination';

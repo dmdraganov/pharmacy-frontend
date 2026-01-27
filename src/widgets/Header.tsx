@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useSearch, SearchResults } from '@/features/search';
 import { useRegion } from '@/features/region'; // New import
 
-const Header = memo(() => {
+const Header = memo(({ onToggleCatalog }: { onToggleCatalog: () => void }) => {
   const { searchTerm, setSearchTerm, searchResults } = useSearch();
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -51,9 +51,7 @@ const Header = memo(() => {
           className='relative flex flex-1 items-center justify-center gap-4 px-8'
           ref={searchRef}
         >
-          <Link to='/catalog'>
-            <Button>Каталог</Button>
-          </Link>
+          <Button onClick={onToggleCatalog}>Каталог</Button>
           <div className='w-full max-w-sm'>
             <Input
               placeholder='Поиск...'

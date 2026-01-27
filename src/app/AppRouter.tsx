@@ -11,7 +11,6 @@ import CartPage from '@/pages/CartPage';
 // Lazily loaded pages
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
 const DeliveryPage = lazy(() => import('@/pages/DeliveryPage'));
-const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const ProductListPage = lazy(() => import('@/pages/ProductListPage'));
 
 const AppRouter = () => {
@@ -33,7 +32,6 @@ const AppRouter = () => {
           }
         >
           <Route index element={<HomePage />} />
-          <Route path='catalog' element={<CatalogPage />} />
           <Route path='catalog/:category' element={<ProductListPage />} />
           <Route
             path='catalog/:category/:subcategory'
