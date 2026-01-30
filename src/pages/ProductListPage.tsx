@@ -1,15 +1,11 @@
 import { memo, useMemo } from 'react';
 import { products } from '@/data/products';
-import ProductCard from '@/entities/product/ui/ProductCard';
-import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
-import { usePagination } from '@/shared/hooks/usePagination';
-import Pagination from '@/shared/ui/Pagination';
 import { useParams } from 'react-router-dom';
 import { categories } from '@/data/categories';
-import type { Product } from '@/entities/product/model';
-
-const ITEMS_PER_PAGE = 8;
+import ProductGrid from '@/widgets/ProductGrid';
+import FiltersSidebar from '@/widgets/FiltersSidebar/FiltersSidebar';
+import { useFilters } from '@/features/filters/useFilters';
+import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
 
 const ProductListPage = memo(() => {
   const { category, subcategory } = useParams<{
@@ -17,14 +13,14 @@ const ProductListPage = memo(() => {
     subcategory?: string;
   }>();
 
-  const { items, addToCart, updateQuantity, removeFromCart } = useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { activeFilters } = useFilters();
 
   const currentCategory = useMemo(
     () =>
       category ? categories.find((cat) => cat.id === category) : undefined,
     [category]
   );
+
   const currentSubcategory = useMemo(
     () =>
       subcategory
@@ -33,71 +29,51 @@ const ProductListPage = memo(() => {
     [subcategory, currentCategory]
   );
 
-  const filteredProducts = useMemo(() => {
-    let prods = products;
-    if (category) {
-      prods = prods.filter((p) => p.categoryId === category);
-    }
+  // 1. Determine the most specific product set BEFORE generating filters.
+  const baseProducts = useMemo(() => {
     if (subcategory) {
-      prods = prods.filter((p) => p.subcategoryId === subcategory);
+      return products.filter((p) => p.subcategoryId === subcategory);
     }
-    return prods;
+    if (category) {
+      return products.filter((p) => p.categoryId === category);
+    }
+    return []; // Should not happen on this page
   }, [category, subcategory]);
 
-  const { currentData, currentPage, totalPages, goToPage } = usePagination({
-    data: filteredProducts,
-    itemsPerPage: ITEMS_PER_PAGE,
-  });
+  // 2. Generate available filters from the specific product set.
+  const availableFilters = useMemo(
+    () => getAvailableFilters(baseProducts),
+    [baseProducts]
+  );
 
-  const getQuantityInCart = (productId: string) => {
-    return items.find((item) => item.id === productId)?.quantity || 0;
-  };
+  // 3. Apply active filters to the same specific set for display.
+  const displayProducts = useMemo(
+    () => applyFilters(baseProducts, activeFilters),
+    [baseProducts, activeFilters]
+  );
 
-  const handleAddProduct = (product: Product) => {
-    addToCart(product);
-  };
+  const title =
+    currentSubcategory?.name || currentCategory?.name || 'Все товары';
 
-  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-    updateQuantity(productId, newQuantity);
-  };
-
-  const handleRemoveProduct = (productId: string) => {
-    removeFromCart(productId);
-  };
+  // Subcategory filter is shown only when a category is selected but not a subcategory.
+  const subcategoryFilterOptions =
+    currentCategory && !currentSubcategory
+      ? currentCategory.subcategories
+      : undefined;
 
   return (
-    <>
-      <h1 className='mb-4 text-2xl font-bold'>
-        {currentSubcategory?.name || currentCategory?.name || 'Все товары'}
-      </h1>
-
-      <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {currentData.length > 0 ? (
-          currentData.map((product) => (
-            <ProductCard
-              key={product.id}
-              {...product}
-              quantityInCart={getQuantityInCart(product.id)}
-              isFavorite={isFavorite(product.id)}
-              onAddProduct={() => handleAddProduct(product)}
-              onUpdateQuantity={(newQuantity) =>
-                handleUpdateQuantity(product.id, newQuantity)
-              }
-              onRemoveProduct={() => handleRemoveProduct(product.id)}
-              onToggleFavorite={() => toggleFavorite(product.id)}
-            />
-          ))
-        ) : (
-          <p>Пока нет товаров.</p>
-        )}
+    <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
+      <div className='col-span-1 min-w-0'>
+        <FiltersSidebar
+          availableFilters={availableFilters}
+          category={currentCategory}
+          subcategories={subcategoryFilterOptions}
+        />
       </div>
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        goToPage={goToPage}
-      />
-    </>
+      <div className='col-span-1 md:col-span-3'>
+        <ProductGrid title={title} products={displayProducts} />
+      </div>
+    </div>
   );
 });
 

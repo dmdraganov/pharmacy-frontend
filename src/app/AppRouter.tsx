@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom'; // Added Outlet
+import { Routes, Route, Outlet } from 'react-router-dom';
 import Spinner from '@/shared/ui/Spinner';
-import PageLayout from '@/app/layouts/PageLayout'; // Imported PageLayout
+import PageLayout from '@/app/layouts/PageLayout';
 
 // Eagerly loaded pages
 import HomePage from '@/pages/HomePage';
@@ -12,6 +12,8 @@ import CartPage from '@/pages/CartPage';
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
 const DeliveryPage = lazy(() => import('@/pages/DeliveryPage'));
 const ProductListPage = lazy(() => import('@/pages/ProductListPage'));
+const SearchPage = lazy(() => import('@/pages/SearchPage'));
+const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 
 const AppRouter = () => {
   return (
@@ -32,6 +34,7 @@ const AppRouter = () => {
           }
         >
           <Route index element={<HomePage />} />
+          <Route path='catalog' element={<CatalogPage />} />
           <Route path='catalog/:category' element={<ProductListPage />} />
           <Route
             path='catalog/:category/:subcategory'
@@ -41,6 +44,7 @@ const AppRouter = () => {
           <Route path='favorites' element={<FavoritesPage />} />
           <Route path='delivery' element={<DeliveryPage />} />
           <Route path='product/:id' element={<ProductPage />} />
+          <Route path='search' element={<SearchPage />} />
         </Route>
       </Routes>
     </Suspense>

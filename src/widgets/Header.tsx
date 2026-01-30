@@ -1,71 +1,35 @@
-import { useState, useRef, useEffect, memo } from 'react';
+import { memo } from 'react';
 import Logo from '@/shared/ui/Logo';
-import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
-import { Link } from 'react-router-dom';
-import { useSearch, SearchResults } from '@/features/search';
-import { useRegion } from '@/features/region'; // New import
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { SearchInput } from '@/features/search';
+import { useRegion } from '@/features/region';
 
-const Header = memo(({ onToggleCatalog }: { onToggleCatalog: () => void }) => {
-  const { searchTerm, setSearchTerm, searchResults } = useSearch();
-  const [showResults, setShowResults] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const { region, setRegion } = useRegion(); // Using the region context
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setShowResults(true); // Show results when typing
-  };
-
-  const handleResultClick = () => {
-    setShowResults(false); // Hide results when a result is clicked
-    setSearchTerm(''); // Clear search term after selection
-  };
+const Header = memo(() => {
+  const { region, setRegion } = useRegion();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRegion(e.target.value);
   };
 
-  // Close search results when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowResults(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [searchRef]);
+  const handleCatalogToggle = () => {
+    if (location.pathname === '/catalog') {
+      navigate(-1);
+    } else {
+      navigate('/catalog');
+    }
+  };
 
   return (
-    <header className='border-b'>
+    <header className='sticky top-0 z-50 border-b bg-white'>
       <div className='container mx-auto flex items-center justify-between p-4'>
         <Logo />
 
-        <div
-          className='relative flex flex-1 items-center justify-center gap-4 px-8'
-          ref={searchRef}
-        >
-          <Button onClick={onToggleCatalog}>Каталог</Button>
-          <div className='w-full max-w-sm'>
-            <Input
-              placeholder='Поиск...'
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onFocus={() => searchResults.length > 0 && setShowResults(true)} // Show results if there are any, on focus
-            />
-            {searchTerm && showResults && (
-              <SearchResults
-                results={searchResults}
-                onResultClick={handleResultClick}
-              />
-            )}
-          </div>
+        <div className='flex flex-1 items-center justify-center gap-4 px-8'>
+          <Button onClick={handleCatalogToggle}>Каталог</Button>
+          <SearchInput />
         </div>
 
         <nav className='flex items-center space-x-4'>

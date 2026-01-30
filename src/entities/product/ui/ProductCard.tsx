@@ -5,40 +5,40 @@ import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product/model';
 
-interface ProductCardProps extends Product {
+interface ProductCardProps {
+  product: Product;
   isFavorite: boolean;
-  quantityInCart: number; // New prop: 0 if not in cart, >0 if in cart
-  onAddProduct: () => void; // For initial add to cart
-  onUpdateQuantity: (newQuantity: number) => void; // For quantity control
-  onRemoveProduct: () => void; // For removing product when quantity is 0
-  onToggleFavorite: () => void;
+  quantityInCart: number;
+  onAddToCart: (product: Product) => void;
+  onUpdateQuantity: (productId: string, newQuantity: number) => void;
+  onRemoveFromCart: (productId: string) => void;
+  onToggleFavorite: (productId: string) => void;
 }
 
 const ProductCard = memo((props: ProductCardProps) => {
   const {
-    id,
-    name,
-    brand,
-    price,
-    oldPrice,
-    isPrescription,
-    image,
+    product,
     isFavorite,
     quantityInCart,
-    onAddProduct,
+    onAddToCart,
     onUpdateQuantity,
-    onRemoveProduct,
+    onRemoveFromCart,
     onToggleFavorite,
   } = props;
 
-  const handleIncrement = () => onUpdateQuantity(quantityInCart + 1);
+  const { id, name, brand, price, oldPrice, isPrescription, image } = product;
+
+  const handleIncrement = () => onUpdateQuantity(id, quantityInCart + 1);
   const handleDecrement = () => {
-    if (quantityInCart - 1 <= 0) {
-      onRemoveProduct();
+    const newQuantity = quantityInCart - 1;
+    if (newQuantity <= 0) {
+      onRemoveFromCart(id);
     } else {
-      onUpdateQuantity(quantityInCart - 1);
+      onUpdateQuantity(id, newQuantity);
     }
   };
+  const handleAdd = () => onAddToCart(product);
+  const handleToggleFavorite = () => onToggleFavorite(id);
 
   return (
     <div className='flex flex-col overflow-hidden rounded border shadow-lg'>
@@ -67,9 +67,9 @@ const ProductCard = memo((props: ProductCardProps) => {
         </div>
         <div className='flex flex-col gap-2'>
           {!quantityInCart ? (
-            <Button onClick={onAddProduct}>Добавить в корзину</Button>
+            <Button onClick={handleAdd}>Добавить в корзину</Button>
           ) : (
-            <div className='flex items-center justify-between'>
+            <div className='flex items-center justify-between gap-3'>
               <QuantityControl
                 quantity={quantityInCart}
                 onIncrement={handleIncrement}
@@ -80,7 +80,7 @@ const ProductCard = memo((props: ProductCardProps) => {
               </Button>
             </div>
           )}
-          <Button onClick={onToggleFavorite}>
+          <Button onClick={handleToggleFavorite}>
             {isFavorite ? 'В избранном' : 'В избранное'}
           </Button>
         </div>

@@ -9,5 +9,3 @@ interface FavoritesContextValue {
 export const FavoritesContext = createContext<
   FavoritesContextValue | undefined
 >(undefined);
-
-

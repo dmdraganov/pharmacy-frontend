@@ -1,2 +1,2 @@
 export { useSearch } from './useSearch';
-export { default as SearchResults } from './SearchResults';
+export { SearchInput } from './ui/SearchInput';

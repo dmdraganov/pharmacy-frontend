@@ -2,7 +2,7 @@ import { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '@/data/categories';
 
-const CatalogLayout = memo(({ onNavigate }: { onNavigate: () => void }) => {
+const CatalogPage = memo(() => {
   const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(
     null
   );
@@ -13,23 +13,18 @@ const CatalogLayout = memo(({ onNavigate }: { onNavigate: () => void }) => {
   );
 
   return (
-    <div
-      className='flex flex-col md:flex-row min-h-125'
-      // onMouseLeave={() => setHoveredCategoryId(null)} // Removed onMouseLeave
-    >
+    <div className='flex flex-col md:flex-row min-h-125'>
       {/* Categories List */}
       <div className='w-full md:w-1/4 p-4 border-r'>
-        <h2 className='mb-4 text-xl font-bold'>Категории</h2>
         <ul>
           {categories.map((cat) => (
             <li
               key={cat.id}
               className='mb-2'
-              onMouseEnter={() => setHoveredCategoryId(cat.id)} // Only set, no leave here
+              onMouseEnter={() => setHoveredCategoryId(cat.id)}
             >
               <Link
-                to={`/catalog/${cat.id}`} // Link to product list page for category
-                onClick={onNavigate}
+                to={`/catalog/${cat.id}`}
                 className={`block text-lg hover:text-blue-600 ${
                   hoveredCategoryId === cat.id ? 'font-bold text-blue-700' : ''
                 }`}
@@ -51,8 +46,7 @@ const CatalogLayout = memo(({ onNavigate }: { onNavigate: () => void }) => {
                 <li key={sub.id} className='mb-2'>
                   <Link
                     to={`/catalog/${hoveredCategory.id}/${sub.id}`}
-                    onClick={onNavigate}
-                className='hover:text-blue-600'
+                    className='hover:text-blue-600'
                   >
                     {sub.name}
                   </Link>
@@ -74,4 +68,4 @@ const CatalogLayout = memo(({ onNavigate }: { onNavigate: () => void }) => {
   );
 });
 
-export default CatalogLayout;
+export default CatalogPage;

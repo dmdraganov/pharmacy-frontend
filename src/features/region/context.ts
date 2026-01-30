@@ -8,5 +8,3 @@ interface RegionContextValue {
 export const RegionContext = createContext<RegionContextValue | undefined>(
   undefined
 );
-
-

@@ -2,11 +2,7 @@ import { memo } from 'react';
 import type { ProductCharacteristic } from '@/entities/product/model';
 
 export const ProductCharacteristics = memo(
-  ({
-    characteristics,
-  }: {
-    characteristics: ProductCharacteristic[];
-  }) => (
+  ({ characteristics }: { characteristics: ProductCharacteristic[] }) => (
     <div className='mb-6'>
       <h2 className='mb-2 text-2xl font-bold'>Характеристики</h2>
       <ul className='divide-y divide-gray-200'>

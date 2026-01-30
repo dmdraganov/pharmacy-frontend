@@ -5,7 +5,8 @@ import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 
 const HomePage = memo(() => {
-  const { items, addToCart, updateQuantity, removeFromCart } = useCart();
+  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
+    useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
 
   // For demonstration, let's pick some "popular" and "promotional" products
@@ -14,22 +15,6 @@ const HomePage = memo(() => {
     () => products.filter((p) => p.oldPrice).slice(0, 4),
     []
   );
-
-  const getQuantityInCart = (productId: string) => {
-    return items.find((item) => item.id === productId)?.quantity || 0;
-  };
-
-  const handleAddProduct = (product: typeof products[0]) => {
-    addToCart(product);
-  };
-
-  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-    updateQuantity(productId, newQuantity);
-  };
-
-  const handleRemoveProduct = (productId: string) => {
-    removeFromCart(productId);
-  };
 
   return (
     <>
@@ -46,15 +31,13 @@ const HomePage = memo(() => {
           {popularProducts.map((product) => (
             <ProductCard
               key={product.id}
-              {...product}
+              product={product}
               quantityInCart={getQuantityInCart(product.id)}
               isFavorite={isFavorite(product.id)}
-              onAddProduct={() => handleAddProduct(product)}
-              onUpdateQuantity={(newQuantity) =>
-                handleUpdateQuantity(product.id, newQuantity)
-              }
-              onRemoveProduct={() => handleRemoveProduct(product.id)}
-              onToggleFavorite={() => toggleFavorite(product.id)}
+              onAddToCart={addToCart}
+              onUpdateQuantity={updateQuantity}
+              onRemoveFromCart={removeFromCart}
+              onToggleFavorite={toggleFavorite}
             />
           ))}
         </div>
@@ -67,15 +50,13 @@ const HomePage = memo(() => {
             {promotionalProducts.map((product) => (
               <ProductCard
                 key={product.id}
-                {...product}
+                product={product}
                 quantityInCart={getQuantityInCart(product.id)}
                 isFavorite={isFavorite(product.id)}
-                onAddProduct={() => handleAddProduct(product)}
-                onUpdateQuantity={(newQuantity) =>
-                  handleUpdateQuantity(product.id, newQuantity)
-                }
-                onRemoveProduct={() => handleRemoveProduct(product.id)}
-                onToggleFavorite={() => toggleFavorite(product.id)}
+                onAddToCart={addToCart}
+                onUpdateQuantity={updateQuantity}
+                onRemoveFromCart={removeFromCart}
+                onToggleFavorite={toggleFavorite}
               />
             ))}
           </div>

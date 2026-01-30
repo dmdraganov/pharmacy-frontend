@@ -2,10 +2,11 @@ import { useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { FavoritesContext } from '@/features/favorites';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/shared/config/constants';
 
 const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const [favoriteIds, setFavoriteIds] = useLocalStorage<string[]>(
-    'favorites',
+    STORAGE_KEYS.FAVORITES,
     []
   );
 

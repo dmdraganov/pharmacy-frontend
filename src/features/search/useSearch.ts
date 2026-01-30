@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { products } from '@/data/products';
 
 export const useSearch = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get('q') || '';
 
   const searchResults = useMemo(() => {
     if (!searchTerm) {
@@ -16,5 +18,5 @@ export const useSearch = () => {
     );
   }, [searchTerm]);
 
-  return { searchTerm, setSearchTerm, searchResults };
+  return { searchTerm, searchResults };
 };

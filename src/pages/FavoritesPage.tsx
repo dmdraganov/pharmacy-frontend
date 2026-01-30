@@ -5,32 +5,16 @@ import ProductCard from '@/entities/product/ui/ProductCard';
 import Button from '@/shared/ui/Button';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart';
-import type { Product } from '@/entities/product/model'; // Assuming Product type is needed
 
 const FavoritesPage = memo(() => {
-  const { favoriteIds, toggleFavorite } = useFavorites();
-  const { items, addToCart, updateQuantity, removeFromCart } = useCart();
+  const { favoriteIds, isFavorite, toggleFavorite } = useFavorites();
+  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
+    useCart();
 
   const favoriteProducts = useMemo(
     () => products.filter((p) => favoriteIds.includes(p.id)),
     [favoriteIds]
   );
-
-  const getQuantityInCart = (productId: string) => {
-    return items.find((item) => item.id === productId)?.quantity || 0;
-  };
-
-  const handleAddProduct = (product: Product) => {
-    addToCart(product);
-  };
-
-  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
-    updateQuantity(productId, newQuantity);
-  };
-
-  const handleRemoveProduct = (productId: string) => {
-    removeFromCart(productId);
-  };
 
   if (favoriteProducts.length === 0) {
     return (
@@ -53,15 +37,13 @@ const FavoritesPage = memo(() => {
         {favoriteProducts.map((product) => (
           <ProductCard
             key={product.id}
-            {...product}
+            product={product}
             quantityInCart={getQuantityInCart(product.id)}
-            isFavorite={true} // All products on this page are favorites
-            onAddProduct={() => handleAddProduct(product)}
-            onUpdateQuantity={(newQuantity) =>
-              handleUpdateQuantity(product.id, newQuantity)
-            }
-            onRemoveProduct={() => handleRemoveProduct(product.id)}
-            onToggleFavorite={() => toggleFavorite(product.id)}
+            isFavorite={isFavorite(product.id)}
+            onAddToCart={addToCart}
+            onUpdateQuantity={updateQuantity}
+            onRemoveFromCart={removeFromCart}
+            onToggleFavorite={toggleFavorite}
           />
         ))}
       </div>

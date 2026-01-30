@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { RegionContext } from '@/features/region';
 
-const RegionProvider = memo(({ children }: { children: ReactNode }) => {
+const RegionProvider = ({ children }: { children: ReactNode }) => {
   const [region, setRegion] = useState<string>('Москва'); // Default region
 
   const value = {
@@ -13,6 +13,6 @@ const RegionProvider = memo(({ children }: { children: ReactNode }) => {
   return (
     <RegionContext.Provider value={value}>{children}</RegionContext.Provider>
   );
-});
+};
 
 export default RegionProvider;

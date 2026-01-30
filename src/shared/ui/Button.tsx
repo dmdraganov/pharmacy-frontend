@@ -18,15 +18,13 @@ interface BaseButtonProps {
 
 // Overload for 'as' prop being 'button' (default)
 interface ButtonAsButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    BaseButtonProps {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, BaseButtonProps {
   as?: 'button';
 }
 
 // Overload for 'as' prop being 'a'
 interface ButtonAsAnchorProps
-  extends AnchorHTMLAttributes<HTMLAnchorElement>,
-    BaseButtonProps {
+  extends AnchorHTMLAttributes<HTMLAnchorElement>, BaseButtonProps {
   as: 'a';
 }
 
@@ -36,7 +34,10 @@ interface ButtonAsLinkProps extends LinkProps, BaseButtonProps {
 }
 
 // Combined ButtonProps type
-type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps | ButtonAsLinkProps;
+type ButtonProps =
+  | ButtonAsButtonProps
+  | ButtonAsAnchorProps
+  | ButtonAsLinkProps;
 
 const Button = ({
   children,
@@ -77,4 +78,3 @@ const Button = ({
 };
 
 export default Button;
-

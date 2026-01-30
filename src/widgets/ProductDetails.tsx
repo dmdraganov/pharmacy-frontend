@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product/model';
 import { useCart } from '@/features/cart';
@@ -12,13 +12,11 @@ interface ProductDetailsProps {
 }
 
 export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
-  const { items, addToCart, updateQuantity, removeFromCart } = useCart();
+  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
+    useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
 
-  const quantityInCart = useMemo(
-    () => items.find((item) => item.id === product.id)?.quantity || 0,
-    [items, product.id]
-  );
+  const quantityInCart = getQuantityInCart(product.id);
 
   const handleAddProduct = () => {
     addToCart(product);
@@ -39,7 +37,11 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   return (
     <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
       <div>
-        <img src={product.image} alt={product.name} className='w-full rounded-lg' />
+        <img
+          src={product.image}
+          alt={product.name}
+          className='w-full rounded-lg'
+        />
       </div>
       <div>
         <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
