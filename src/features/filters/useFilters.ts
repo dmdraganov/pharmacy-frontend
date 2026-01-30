@@ -5,7 +5,7 @@ export type FilterParams = {
   minPrice?: number;
   maxPrice?: number;
   brands?: string[];
-  subcategories?: string[];
+  categories?: string[];
   isPrescription?: boolean;
 };
 
@@ -16,14 +16,14 @@ export const useFilters = () => {
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
     const brands = searchParams.getAll('brand');
-    const subcategories = searchParams.getAll('subcategory');
+    const categories = searchParams.getAll('category');
     const isPrescription = searchParams.get('isPrescription');
 
     return {
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
       brands: brands.length > 0 ? brands : undefined,
-      subcategories: subcategories.length > 0 ? subcategories : undefined,
+      categories: categories.length > 0 ? categories : undefined,
       isPrescription: isPrescription ? isPrescription === 'true' : undefined,
     };
   }, [searchParams]);

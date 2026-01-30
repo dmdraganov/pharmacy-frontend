@@ -1,44 +1,43 @@
 import { memo, useMemo } from 'react';
 import { products } from '@/data/products';
 import { useParams } from 'react-router-dom';
-import { categories } from '@/data/categories';
+import { sections } from '@/data/sections';
 import ProductGrid from '@/widgets/ProductGrid';
 import FiltersSidebar from '@/widgets/FiltersSidebar/FiltersSidebar';
 import { useFilters } from '@/features/filters/useFilters';
 import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
 
 const ProductListPage = memo(() => {
-  const { category, subcategory } = useParams<{
+  const { section, category } = useParams<{
+    section?: string;
     category?: string;
-    subcategory?: string;
   }>();
 
   const { activeFilters } = useFilters();
 
-  const currentCategory = useMemo(
-    () =>
-      category ? categories.find((cat) => cat.id === category) : undefined,
-    [category]
+  const currentSection = useMemo(
+    () => (section ? sections.find((sec) => sec.id === section) : undefined),
+    [section]
   );
 
-  const currentSubcategory = useMemo(
+  const currentCategory = useMemo(
     () =>
-      subcategory
-        ? currentCategory?.subcategories.find((sub) => sub.id === subcategory)
+      category
+        ? currentSection?.categories.find((cat) => cat.id === category)
         : undefined,
-    [subcategory, currentCategory]
+    [category, currentSection]
   );
 
   // 1. Determine the most specific product set BEFORE generating filters.
   const baseProducts = useMemo(() => {
-    if (subcategory) {
-      return products.filter((p) => p.subcategoryId === subcategory);
-    }
     if (category) {
       return products.filter((p) => p.categoryId === category);
     }
+    if (section) {
+      return products.filter((p) => p.sectionId === section);
+    }
     return []; // Should not happen on this page
-  }, [category, subcategory]);
+  }, [section, category]);
 
   // 2. Generate available filters from the specific product set.
   const availableFilters = useMemo(
@@ -52,25 +51,27 @@ const ProductListPage = memo(() => {
     [baseProducts, activeFilters]
   );
 
-  const title =
-    currentSubcategory?.name || currentCategory?.name || 'Все товары';
+  const title = currentCategory?.name || currentSection?.name || 'Все товары';
 
-  // Subcategory filter is shown only when a category is selected but not a subcategory.
-  const subcategoryFilterOptions =
-    currentCategory && !currentSubcategory
-      ? currentCategory.subcategories
-      : undefined;
+  // Category filter is shown only when a section is selected but not a category.
+  const categoryFilterOptions =
+    currentSection && !currentCategory ? currentSection.categories : undefined;
+
+  const gridColsClass = baseProducts.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-1';
+  const productGridColSpanClass = baseProducts.length > 0 ? 'md:col-span-3' : 'md:col-span-1';
 
   return (
-    <div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
-      <div className='col-span-1 min-w-0'>
-        <FiltersSidebar
-          availableFilters={availableFilters}
-          category={currentCategory}
-          subcategories={subcategoryFilterOptions}
-        />
-      </div>
-      <div className='col-span-1 md:col-span-3'>
+    <div className={`grid grid-cols-1 gap-8 ${gridColsClass}`}>
+      {baseProducts.length > 0 && (
+        <div className='col-span-1 min-w-0'>
+          <FiltersSidebar
+            availableFilters={availableFilters}
+            section={currentSection}
+            categories={categoryFilterOptions}
+          />
+        </div>
+      )}
+      <div className={`col-span-1 ${productGridColSpanClass}`}>
         <ProductGrid title={title} products={displayProducts} />
       </div>
     </div>

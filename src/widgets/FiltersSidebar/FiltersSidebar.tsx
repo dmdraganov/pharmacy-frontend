@@ -4,20 +4,20 @@ import Checkbox from '@/shared/ui/Checkbox';
 import RangeInput from '@/shared/ui/RangeInput';
 import { useFilters } from '@/features/filters/useFilters';
 import type { AvailableFilters } from '@/features/filters/lib';
-import type { Category, Subcategory } from '@/entities/category/model';
+import type { Section, Category } from '@/entities/section/model';
 import { Link } from 'react-router-dom';
 
 type FiltersSidebarProps = {
   availableFilters: AvailableFilters;
-  category?: Category;
-  subcategories?: Subcategory[];
+  section?: Section;
+  categories?: Category[];
   className?: string;
 };
 
 const FiltersSidebar = ({
   availableFilters,
-  category,
-  subcategories,
+  section,
+  categories,
   className,
 }: FiltersSidebarProps) => {
   const { activeFilters, setFilter, toggleFilter, removeFilter } = useFilters();
@@ -47,16 +47,16 @@ const FiltersSidebar = ({
     <aside className={className}>
       <h2 className='mb-4 text-xl font-bold'>Фильтры</h2>
 
-      {category && subcategories && subcategories.length > 0 && (
-        <Accordion title='Подкатегории'>
+      {section && categories && categories.length > 0 && (
+        <Accordion title='Категории'>
           <div className='flex flex-col gap-2'>
-            {subcategories.map((sc) => (
+            {categories.map((cat) => (
               <Link
-                key={sc.id}
-                to={`/catalog/${category.id}/${sc.id}`}
+                key={cat.id}
+                to={`/catalog/${section.id}/${cat.id}`}
                 className='text-sm text-blue-600 hover:underline'
               >
-                {sc.name}
+                {cat.name}
               </Link>
             ))}
           </div>

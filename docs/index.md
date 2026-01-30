@@ -29,14 +29,14 @@ Feature-based архитектура со строгими границами о
 - `pages/` — страницы приложения
 - `widgets/` — независимые и композитные блоки для страниц
 - `features/` — бизнес-функциональность (catalog, cart, favorites, search)
-- `entities/` — доменные сущности (product, category)
+- `entities/` — доменные сущности (product, section)
 - `shared/` — переиспользуемые компоненты, утилиты, UI
 - `data/` — статические массивы данных
 
 ## Layer Responsibilities
 
 - app: сборка приложения, маршруты, глобальные провайдеры
-- pages: страницы, собранные из виджетов и фич
+- pages: страницы, собранные из виджетов и фич (например, главная, каталог, о нас)
 - widgets: композитные UI-блоки (Header, Sidebar), собранные из фич и сущностей
 - features: пользовательские сценарии и бизнес-логика
 - entities: модели данных и логика сущностей
@@ -124,23 +124,23 @@ Static data (data/)
 
 ## Core Entities
 
+### Section
+
+```ts
+type Section = {
+  id: string;
+  name: string;
+  categories: Category[];
+};
+```
+
 ### Category
 
 ```ts
 type Category = {
   id: string;
   name: string;
-  subcategories: Subcategory[];
-};
-```
-
-### Subcategory
-
-```ts
-type Subcategory = {
-  id: string;
-  name: string;
-  categoryId: string;
+  sectionId: string;
 };
 ```
 
@@ -151,8 +151,8 @@ type Product = {
   id: string;
   name: string;
   brand: string;
+  sectionId: string;
   categoryId: string;
-  subcategoryId: string;
   price: number;
   oldPrice?: number;
   isPrescription: boolean;
@@ -162,10 +162,10 @@ type Product = {
 
 ## Relationships
 
-- Category 1 → N Subcategory
-- Subcategory 1 → N Product
-- Product принадлежит одной подкатегории
-- Каталог использует иерархию Category → Subcategory → Product
+- Section 1 → N Category
+- Category 1 → N Product
+- Product принадлежит одной категории
+- Каталог использует иерархию Section → Category → Product
 
 ## Data Rules
 
@@ -187,12 +187,14 @@ Client-side SPA routing
 ## Routes List
 
 - `/` — главная страница
-- `/catalog` — страница выбора категорий
-- `/catalog/:category` — список товаров категории
-- `/catalog/:category/:subcategory` — список товаров подкатегории
+- `/catalog` — страница выбора разделов
+- `/catalog/:section` — список товаров раздела
+- `/catalog/:section/:category` — список товаров категории
 - `/cart` — корзина
 - `/favorites` — избранное
 - `/delivery` — доставка и оплата
+- `/about` — страница "О нас"
+- `/contacts` — страница "Контакты"
 - `/product/:id` — страница товара
 - `/search` – страница поиска
 
@@ -223,8 +225,8 @@ Client-side SPA routing
 
 ## Catalog UX
 
-- Desktop: категории слева, подкатегории справа
-- Mobile: отдельный экран с категориями
+- Desktop: разделы слева, категории справа
+- Mobile: отдельный экран с разделами
 - Переходы без перезагрузки
 
 ## Cards
@@ -272,7 +274,7 @@ Client-side SPA routing
 ## Основные возможности
 
 - Просмотр популярных товаров, акций и скидок на главной странице
-- Каталог лекарств с категориями и подкатегориями
+- Каталог лекарств с разделами и категориями
 - Страница товаров с фильтрацией и поиском
 - Карточки товаров с ценой, скидкой и пометкой рецептурности
 - Добавление товаров в корзину и избранное

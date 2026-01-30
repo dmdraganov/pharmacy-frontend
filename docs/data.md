@@ -7,23 +7,23 @@
 
 ## Core Entities
 
+### Section
+
+```ts
+type Section = {
+  id: string;
+  name: string;
+  categories: Category[];
+};
+```
+
 ### Category
 
 ```ts
 type Category = {
   id: string;
   name: string;
-  subcategories: Subcategory[];
-};
-```
-
-### Subcategory
-
-```ts
-type Subcategory = {
-  id: string;
-  name: string;
-  categoryId: string;
+  sectionId: string;
 };
 ```
 
@@ -34,8 +34,8 @@ type Product = {
   id: string;
   name: string;
   brand: string;
+  sectionId: string;
   categoryId: string;
-  subcategoryId: string;
   price: number;
   oldPrice?: number;
   isPrescription: boolean;
@@ -58,10 +58,10 @@ type ProductCharacteristic = {
 
 ## Relationships
 
-- Category 1 → N Subcategory
-- Subcategory 1 → N Product
-- Product принадлежит одной подкатегории
-- Каталог использует иерархию Category → Subcategory → Product
+- Section 1 → N Category
+- Category 1 → N Product
+- Product принадлежит одной категории
+- Каталог использует иерархию Section → Category → Product
 
 ## Data Rules
 

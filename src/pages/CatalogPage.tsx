@@ -1,15 +1,13 @@
 import { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
-import { categories } from '@/data/categories';
+import { sections } from '@/data/sections';
 
 const CatalogPage = memo(() => {
-  const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(
-    null
-  );
+  const [hoveredSectionId, setHoveredSectionId] = useState<string | null>(null);
 
-  const hoveredCategory = useMemo(
-    () => categories.find((cat) => cat.id === hoveredCategoryId),
-    [hoveredCategoryId]
+  const hoveredSection = useMemo(
+    () => sections.find((sec) => sec.id === hoveredSectionId),
+    [hoveredSectionId]
   );
 
   return (
@@ -17,19 +15,19 @@ const CatalogPage = memo(() => {
       {/* Categories List */}
       <div className='w-full md:w-1/4 p-4 border-r'>
         <ul>
-          {categories.map((cat) => (
+          {sections.map((sec) => (
             <li
-              key={cat.id}
+              key={sec.id}
               className='mb-2'
-              onMouseEnter={() => setHoveredCategoryId(cat.id)}
+              onMouseEnter={() => setHoveredSectionId(sec.id)}
             >
               <Link
-                to={`/catalog/${cat.id}`}
+                to={`/catalog/${sec.id}`}
                 className={`block text-lg hover:text-blue-600 ${
-                  hoveredCategoryId === cat.id ? 'font-bold text-blue-700' : ''
+                  hoveredSectionId === sec.id ? 'font-bold text-blue-700' : ''
                 }`}
               >
-                {cat.name}
+                {sec.name}
               </Link>
             </li>
           ))}
@@ -38,17 +36,17 @@ const CatalogPage = memo(() => {
 
       {/* Subcategories on hover, moved to the right pane */}
       <div className='relative w-full md:w-3/4 p-4'>
-        {hoveredCategory ? (
+        {hoveredSection ? (
           <div>
-            <h3 className='mb-4 text-xl font-bold'>{hoveredCategory.name}</h3>
+            <h3 className='mb-4 text-xl font-bold'>{hoveredSection.name}</h3>
             <ul>
-              {hoveredCategory.subcategories.map((sub) => (
-                <li key={sub.id} className='mb-2'>
+              {hoveredSection.categories.map((cat) => (
+                <li key={cat.id} className='mb-2'>
                   <Link
-                    to={`/catalog/${hoveredCategory.id}/${sub.id}`}
+                    to={`/catalog/${hoveredSection.id}/${cat.id}`}
                     className='hover:text-blue-600'
                   >
-                    {sub.name}
+                    {cat.name}
                   </Link>
                 </li>
               ))}
@@ -56,10 +54,9 @@ const CatalogPage = memo(() => {
           </div>
         ) : (
           <div>
-            <h1 className='mb-4 text-2xl font-bold'>Выберите категорию</h1>
+            <h1 className='mb-4 text-2xl font-bold'>Выберите раздел</h1>
             <p className='text-gray-600'>
-              Наведите курсор на категорию слева, чтобы просмотреть
-              подкатегории.
+              Наведите курсор на раздел слева, чтобы просмотреть категории.
             </p>
           </div>
         )}

@@ -50,9 +50,9 @@ export const applyFilters = (
       filters.brands!.includes(p.brand)
     );
   }
-  if (filters.subcategories && filters.subcategories.length > 0) {
+  if (filters.categories && filters.categories.length > 0) {
     filteredProducts = filteredProducts.filter((p) =>
-      filters.subcategories!.includes(p.subcategoryId)
+      filters.categories!.includes(p.categoryId)
     );
   }
   if (filters.isPrescription !== undefined) {

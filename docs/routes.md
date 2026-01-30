@@ -7,12 +7,14 @@ Client-side SPA routing
 ## Routes List
 
 - `/` — главная страница
-- `/catalog` — страница выбора категорий
-- `/catalog/:category` — список товаров категории
-- `/catalog/:category/:subcategory` — список товаров подкатегории
+- `/catalog` — страница выбора разделов
+- `/catalog/:section` — список товаров раздела
+- `/catalog/:section/:category` — список товаров категории
 - `/cart` — корзина
 - `/favorites` — избранное
 - `/delivery` — доставка и оплата
+- `/about` — страница "О нас"
+- `/contacts` — страница "Контакты"
 - `/product/:id` — страница товара
 - `/search` – страница поиска
 

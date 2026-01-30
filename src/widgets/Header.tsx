@@ -48,9 +48,6 @@ const Header = memo(() => {
           <Link to='/cart' className='text-gray-500 hover:text-gray-900'>
             Корзина
           </Link>
-          <Link to='/delivery' className='text-gray-500 hover:text-gray-900'>
-            Доставка
-          </Link>
         </nav>
       </div>
     </header>

@@ -60,9 +60,6 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
             <Button onClick={handleAddProduct}>Добавить в корзину</Button>
           ) : (
             <div className='flex items-center justify-between'>
-              <Button as={Link} to='/cart' variant='primary'>
-                К корзине
-              </Button>
               <QuantityControl
                 quantity={quantityInCart}
                 onIncrement={() => handleUpdateQuantity(quantityInCart + 1)}
@@ -74,6 +71,9 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
                   }
                 }}
               />
+              <Button as={Link} to='/cart' variant='primary'>
+                К корзине
+              </Button>
             </div>
           )}
           <Button onClick={handleToggleFavorite}>
