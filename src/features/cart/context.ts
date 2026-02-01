@@ -15,6 +15,9 @@ interface CartContextValue {
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  addItemsToCart: (
+    items: Array<{ product: Product; quantity: number }>
+  ) => void;
   clearCart: () => void;
   getQuantityInCart: (productId: string) => number;
   toggleSelectItem: (productId: string) => void;

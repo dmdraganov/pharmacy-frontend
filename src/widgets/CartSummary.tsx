@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '@/shared/ui/Button';
 
 interface CartSummaryProps {
@@ -44,7 +45,9 @@ const CartSummary = memo((props: CartSummaryProps) => {
           <span>{selectedItemsTotal} ₽</span>
         </div>
       </div>
-      <Button className='mt-4 w-full'>Перейти к оформлению</Button>
+      <Button as={Link} to='/checkout' className='mt-4 w-full'>
+        Перейти к оформлению
+      </Button>
     </div>
   );
 });

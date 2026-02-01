@@ -1,4 +1,4 @@
-import { memo, useState, Children } from 'react';
+import { memo, useState, Children, type ReactElement } from 'react';
 
 type SliderProps = {
   children: React.ReactNode;
@@ -33,10 +33,11 @@ const ProductSlider = memo(({ children }: SliderProps) => {
         >
           {Children.map(children, (child) => (
             <div
-              className='flex-shrink-0'
+              key={(child as ReactElement).key}
+              className='shrink-0 p-2'
               style={{ width: `${100 / visibleItems}%` }}
             >
-              <div className='p-2'>{child}</div>
+              {child}
             </div>
           ))}
         </div>

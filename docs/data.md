@@ -60,6 +60,42 @@ type ProductCharacteristic = {
 };
 ```
 
+### User
+
+```ts
+type User = {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+};
+```
+
+### Order
+
+```ts
+type OrderStatus =
+  | 'processing'
+  | 'shipping'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled';
+
+type OrderItem = {
+  product: Product;
+  quantity: number;
+  price: number; // Price at the time of order
+};
+
+type Order = {
+  id: string;
+  date: string; // ISO 8601 format
+  status: OrderStatus;
+  items: OrderItem[];
+  total: number;
+};
+```
+
 ## Relationships
 
 - Section 1 → N Category

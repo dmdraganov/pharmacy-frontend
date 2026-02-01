@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { RegionContext } from '@/features/region';
+import { RegionContext } from '../context';
+import { REGIONS } from '../lib/constants';
 
 const RegionProvider = ({ children }: { children: ReactNode }) => {
-  const [region, setRegion] = useState<string>('Москва'); // Default region
+  const [region, setRegion] = useState<string>(REGIONS[0]); // Default region
 
   const value = {
     region,

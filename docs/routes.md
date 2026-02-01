@@ -17,6 +17,7 @@ Client-side SPA routing
 - `/contacts` — страница "Контакты"
 - `/product/:id` — страница товара
 - `/search` – страница поиска
+- `/account` – личный кабинет
 
 ## Navigation Rules
 

@@ -17,7 +17,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard = memo((props: ProductCardProps) => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const {
     product,
@@ -49,15 +49,21 @@ export const ProductCard = memo((props: ProductCardProps) => {
 
   return (
     <div className='flex flex-col overflow-hidden rounded border shadow-lg'>
-      <Link to={`/product/${id}`} className='group block'>
+      <Link
+        to={`/product/${id}`}
+        className='group block flex flex-grow flex-col'
+      >
         <img
           className='w-full transition-transform duration-300 group-hover:scale-105'
-          src={imageUrl}
+          src={imageUrl ?? undefined}
           alt={name}
           loading='lazy'
         />
         <div className='px-6 py-4'>
-          <div className='mb-2 truncate text-xl font-bold' title={name}>
+          <div
+            className='mb-2 min-h-16 text-xl font-bold'
+            title={name}
+          >
             {name}
           </div>
           <p className='text-base text-gray-700'>{brand}</p>

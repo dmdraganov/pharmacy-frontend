@@ -2,9 +2,8 @@ import { memo, useMemo } from 'react';
 import { useFavorites } from '@/features/favorites';
 import { products } from '@/data/products';
 import { ProductCard } from '@/entities/product/';
-import Button from '@/shared/ui/Button';
-import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart';
+import EmptyState from '@/shared/ui/EmptyState';
 
 const FavoritesPage = memo(() => {
   const { favoriteIds, isFavorite, toggleFavorite } = useFavorites();
@@ -18,15 +17,12 @@ const FavoritesPage = memo(() => {
 
   if (favoriteProducts.length === 0) {
     return (
-      <div className='text-center'>
-        <h1 className='mb-4 text-2xl font-bold'>В избранном пусто</h1>
-        <p className='mb-6 text-gray-600'>
-          Добавляйте товары в избранное, чтобы не потерять их.
-        </p>
-        <Link to='/'>
-          <Button>Перейти к покупкам</Button>
-        </Link>
-      </div>
+      <EmptyState
+        title='В избранном пусто'
+        description='Добавляйте товары в избранное, чтобы не потерять их.'
+        buttonText='Перейти к покупкам'
+        linkTo='/'
+      />
     );
   }
 

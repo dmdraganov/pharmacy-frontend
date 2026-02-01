@@ -52,7 +52,11 @@ const ContactsPage = memo(() => {
           <div className='aspect-h-3 aspect-w-4 rounded-lg bg-gray-200'>
             {/* A real map component would go here */}
             <div className='flex items-center justify-center'>
-              <p className='text-gray-500'>Карта будет здесь</p>
+              <iframe
+                src='https://yandex.ru/map-widget/v1/?um=constructor%3A3da04c2d7e41bc9f3ebde9ccad5ab4ec11fe69e8db639a7c3d0bd9e62522468f&amp;source=constructor'
+                width='930'
+                height='560'
+              ></iframe>
             </div>
           </div>
         </div>

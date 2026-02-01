@@ -110,6 +110,33 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     [setCartItems, removeFromCart]
   );
 
+  const addItemsToCart = useCallback(
+    (items: Array<{ product: Product; quantity: number }>) => {
+      setCartItems((prevCartItems) => {
+        const newCartItems = { ...prevCartItems };
+        items.forEach((item) => {
+          const { product, quantity } = item;
+          const existingItem = newCartItems[product.id];
+          if (existingItem) {
+            newCartItems[product.id] = {
+              ...existingItem,
+              quantity: existingItem.quantity + quantity,
+            };
+          } else {
+            newCartItems[product.id] = { ...product, quantity };
+          }
+        });
+        return newCartItems;
+      });
+      // Also select the newly added items
+      const newItemIds = items.map((item) => item.product.id);
+      setSelectedItemIds((prevSelected) => [
+        ...new Set([...prevSelected, ...newItemIds]),
+      ]);
+    },
+    [setCartItems, setSelectedItemIds]
+  );
+
   const clearCart = useCallback(() => {
     setCartItems({});
     setSelectedItemIds([]);
@@ -165,6 +192,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
       addToCart,
       removeFromCart,
       updateQuantity,
+      addItemsToCart,
       clearCart,
       getQuantityInCart,
       toggleSelectItem,
@@ -181,6 +209,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
       addToCart,
       removeFromCart,
       updateQuantity,
+      addItemsToCart,
       clearCart,
       getQuantityInCart,
       toggleSelectItem,

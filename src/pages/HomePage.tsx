@@ -21,10 +21,13 @@ const HomePage = memo(() => {
     [isMobile]
   );
 
-  const renderProductList = (productList: typeof popularProducts) => {
+  const renderProductList = (
+    productList: typeof popularProducts,
+    keyPrefix: string
+  ) => {
     const productCardList = productList.map((product) => (
       <ProductCard
-        key={product.id}
+        key={`${keyPrefix}-${product.id}`}
         product={product}
         quantityInCart={getQuantityInCart(product.id)}
         isFavorite={isFavorite(product.id)}
@@ -50,13 +53,13 @@ const HomePage = memo(() => {
     <>
       <section className='my-12'>
         <h2 className='mb-6 text-3xl font-bold'>Популярные товары</h2>
-        {renderProductList(popularProducts)}
+        {renderProductList(popularProducts, 'popular')}
       </section>
 
       {promotionalProducts.length > 0 && (
         <section className='mb-12'>
           <h2 className='mb-6 text-3xl font-bold'>Акции и скидки</h2>
-          {renderProductList(promotionalProducts)}
+          {renderProductList(promotionalProducts, 'promo')}
         </section>
       )}
     </>

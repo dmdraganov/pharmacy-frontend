@@ -121,6 +121,16 @@ data/ → entities → features → widgets → pages → app
 - State managers (Redux, Zustand и т.д.) запрещены
 - UI-библиотеки (MUI, Ant, Chakra и т.д.) запрещены
 
+### Typescript
+
+- Использование interface приоритетнее, чем type
+- Не использовать React.FC для типизации компонентов
+
+### React
+
+- Компоненты - стрелочные функции
+- По возможности использовать export default
+
 ## Functional Constraints
 
 - Нельзя оформлять реальные заказы
@@ -180,6 +190,14 @@ type Category = {
 ### Product
 
 ```ts
+interface ProductInfo {
+  composition?: string[]; // состав / ингредиенты
+  usage?: string[]; // как применять / дозировка / инструкции
+  indications?: string[]; // для чего предназначен товар
+  warnings?: string[]; // противопоказания, побочки, предостережения
+  storage?: string[]; // условия хранения
+}
+
 type Product = {
   id: string;
   name: string;
@@ -188,22 +206,53 @@ type Product = {
   categoryId: string;
   price: number;
   oldPrice?: number;
-  isPopular?: boolean;
-  isPrescription?: boolean;
   image: string;
-  description: string[]; //массив абзацев
-  composition: string[]; //массив элементов списка
-  indications: string[]; //массив элементов списка
-  contraindications?: string[]; //массив элементов списка
-  sideEffects?: string[]; //массив абзацев
-  dosage: string[]; //массив абзацев
-  storage: string[]; //массив абзацев
-  characteristics: ProductCharacteristic[];
+  description?: string[]; // маркетинговое описание
+  characteristics?: ProductCharacteristic[];
+  isPopular?: boolean;
+  isPrescription?: boolean; // только для лекарств
+  info?: ProductInfo;
 };
 
 type ProductCharacteristic = {
   label: string;
   value: string;
+};
+```
+
+### User
+
+```ts
+type User = {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+};
+```
+
+### Order
+
+```ts
+type OrderStatus =
+  | 'processing'
+  | 'shipping'
+  | 'delivered'
+  | 'completed'
+  | 'cancelled';
+
+type OrderItem = {
+  product: Product;
+  quantity: number;
+  price: number; // Price at the time of order
+};
+
+type Order = {
+  id: string;
+  date: string; // ISO 8601 format
+  status: OrderStatus;
+  items: OrderItem[];
+  total: number;
 };
 ```
 
@@ -244,6 +293,7 @@ Client-side SPA routing
 - `/contacts` — страница "Контакты"
 - `/product/:id` — страница товара
 - `/search` – страница поиска
+- `/account` – личный кабинет
 
 ## Navigation Rules
 
@@ -295,16 +345,16 @@ Client-side SPA routing
 ## Accessibility
 
 - Семантическая разметка
-- Клавиатурная навигация
-- Контраст текста не ниже WCAG AA
 
 ## Performance
 
-- Lazy loading страниц
+- Lazy loading редко используемых страниц
 - Preload главных маршрутов
 - Минимизация re-render
 
-### readme.md
+---
+
+### README.md
 
 # Интернет-аптека (Frontend)
 
@@ -321,18 +371,19 @@ Client-side SPA routing
 ## Основные возможности
 
 - Просмотр популярных товаров, акций и скидок на главной странице
-- Каталог лекарств с разделами и категориями
-- Страница товаров с фильтрацией и поиском
+- Страница каталога для выбора категорий и подкатегорий
+- Страница товаров с фильтрацией, поиском и пагинацией
 - Карточки товаров с ценой, скидкой и пометкой рецептурности
 - Добавление товаров в корзину и избранное
 - Сохранение корзины и избранного между перезагрузками
 - Выбор региона (как UI-элемент)
 - Страницы корзины, избранного и доставки
+- Личный кабинет для просмотра истории заказов
 
 ## Ограничения проекта
 
 - Пользователь всегда является гостем
-- Авторизация и личный кабинет отсутствуют
+- Авторизация отсутствует; личный кабинет реализован с использованием статических mock-данных
 - Оформление реальных заказов не реализовано
 - Онлайн-оплата и доставка отсутствуют
 - Приложение работает только в рамках РФ (логически)

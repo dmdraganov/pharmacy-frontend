@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
+import { getProductImage } from '@/entities/product';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 import Badge from '@/shared/ui/Badge';
@@ -15,8 +16,13 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const quantityInCart = getQuantityInCart(product.id);
+
+  useEffect(() => {
+    getProductImage(product.image).then(setImageUrl);
+  }, [product.image]);
 
   const handleAddProduct = () => {
     addToCart(product);
@@ -38,7 +44,7 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
     <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
       <div>
         <img
-          src={product.image}
+          src={imageUrl ?? undefined}
           alt={product.name}
           className='w-full rounded-lg'
         />
@@ -84,3 +90,4 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
     </div>
   );
 });
+

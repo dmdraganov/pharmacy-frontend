@@ -17,6 +17,9 @@ const SearchPage = lazy(() => import('@/pages/SearchPage'));
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const ContactsPage = lazy(() => import('@/pages/ContactsPage'));
+const AccountPage = lazy(() => import('@/pages/AccountPage'));
+const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'));
 
 const AppRouter = () => {
   return (
@@ -52,6 +55,9 @@ const AppRouter = () => {
             <Route path='contacts' element={<ContactsPage />} />
             <Route path='product/:id' element={<ProductPage />} />
             <Route path='search' element={<SearchPage />} />
+            <Route path='account' element={<AccountPage />} />
+            <Route path='checkout' element={<CheckoutPage />} />
+            <Route path='privacy-policy' element={<PrivacyPolicyPage />} />
           </Route>
         </Routes>
       </Suspense>

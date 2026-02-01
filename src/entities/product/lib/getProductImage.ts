@@ -4,7 +4,9 @@ interface Module {
 
 const images = import.meta.glob<Module>('../assets/*');
 
-export async function getProductImage(filename: string) {
+export async function getProductImage(
+  filename: string
+): Promise<string | null> {
   try {
     const path = `../assets/${filename}`;
     const importer = images[path];
@@ -13,6 +15,6 @@ export async function getProductImage(filename: string) {
     return imageUrl;
   } catch (e) {
     console.error(e);
-    return '';
+    return null;
   }
 }
