@@ -60,10 +60,7 @@ export const ProductCard = memo((props: ProductCardProps) => {
           loading='lazy'
         />
         <div className='px-6 py-4'>
-          <div
-            className='mb-2 min-h-16 text-xl font-bold'
-            title={name}
-          >
+          <div className='mb-2 min-h-16 text-xl font-bold' title={name}>
             {name}
           </div>
           <p className='text-base text-gray-700'>{brand}</p>

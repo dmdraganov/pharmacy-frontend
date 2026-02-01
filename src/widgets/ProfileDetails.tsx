@@ -28,8 +28,10 @@ export const ProfileDetails = memo(() => {
 
   const validateForm = () => {
     const newErrors: Partial<User> = {};
-    if (!formData.firstName) newErrors.firstName = 'Имя обязательно для заполнения';
-    if (!formData.lastName) newErrors.lastName = 'Фамилия обязательна для заполнения';
+    if (!formData.firstName)
+      newErrors.firstName = 'Имя обязательно для заполнения';
+    if (!formData.lastName)
+      newErrors.lastName = 'Фамилия обязательна для заполнения';
 
     if (!formData.email) {
       newErrors.email = 'Email обязателен для заполнения';
@@ -40,7 +42,8 @@ export const ProfileDetails = memo(() => {
     if (!formData.phone) {
       newErrors.phone = 'Телефон обязателен для заполнения';
     } else if (!/^[-\d\s() +]+$/.test(formData.phone)) {
-      newErrors.phone = 'Номер телефона может содержать только цифры и символы +, -, (, )';
+      newErrors.phone =
+        'Номер телефона может содержать только цифры и символы +, -, (, )';
     }
 
     setErrors(newErrors);
@@ -78,7 +81,9 @@ export const ProfileDetails = memo(() => {
             onChange={handleChange}
             className={errors.firstName ? 'border-red-500' : ''}
           />
-          {errors.firstName && <p className='mt-1 text-xs text-red-600'>{errors.firstName}</p>}
+          {errors.firstName && (
+            <p className='mt-1 text-xs text-red-600'>{errors.firstName}</p>
+          )}
         </div>
         <div>
           <label
@@ -94,7 +99,9 @@ export const ProfileDetails = memo(() => {
             onChange={handleChange}
             className={errors.lastName ? 'border-red-500' : ''}
           />
-          {errors.lastName && <p className='mt-1 text-xs text-red-600'>{errors.lastName}</p>}
+          {errors.lastName && (
+            <p className='mt-1 text-xs text-red-600'>{errors.lastName}</p>
+          )}
         </div>
         <div>
           <label
@@ -111,7 +118,9 @@ export const ProfileDetails = memo(() => {
             onChange={handleChange}
             className={errors.phone ? 'border-red-500' : ''}
           />
-          {errors.phone && <p className='mt-1 text-xs text-red-600'>{errors.phone}</p>}
+          {errors.phone && (
+            <p className='mt-1 text-xs text-red-600'>{errors.phone}</p>
+          )}
         </div>
         <div>
           <label
@@ -128,7 +137,9 @@ export const ProfileDetails = memo(() => {
             onChange={handleChange}
             className={errors.email ? 'border-red-500' : ''}
           />
-          {errors.email && <p className='mt-1 text-xs text-red-600'>{errors.email}</p>}
+          {errors.email && (
+            <p className='mt-1 text-xs text-red-600'>{errors.email}</p>
+          )}
         </div>
       </div>
       <div className='mt-6 flex items-center gap-4'>

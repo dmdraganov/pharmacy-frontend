@@ -90,4 +90,3 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
     </div>
   );
 });
-

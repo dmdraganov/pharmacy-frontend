@@ -42,7 +42,12 @@ const PickupSelector = () => (
         key={pharmacy.id}
         className='flex cursor-pointer items-start gap-3 rounded-lg border p-3 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50'
       >
-        <input type='radio' name='pickupPoint' value={pharmacy.id} className='mt-1' />
+        <input
+          type='radio'
+          name='pickupPoint'
+          value={pharmacy.id}
+          className='mt-1'
+        />
         <div>
           <p className='font-semibold'>{pharmacy.name}</p>
           <p className='text-sm text-gray-600'>{pharmacy.address}</p>

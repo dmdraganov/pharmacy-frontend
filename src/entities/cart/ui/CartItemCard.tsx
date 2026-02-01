@@ -18,9 +18,7 @@ interface CartItemCardProps {
 }
 
 const CartItemCard = memo((props: CartItemCardProps) => {
-
   const {
-
     item,
 
     isSelected,
@@ -34,62 +32,39 @@ const CartItemCard = memo((props: CartItemCardProps) => {
     onRemoveFromCart,
 
     onToggleFavorite,
-
   } = props;
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-
-
   useEffect(() => {
-
     getProductImage(item.image).then(setImageUrl);
-
   }, [item.image]);
 
-
-
   return (
-
     <div className='flex items-stretch rounded border p-4 shadow-sm'>
-
       <div className='mr-4 flex items-center'>
-
         <Checkbox
-
           id={`select-${item.id}`}
-
           label=''
-
           checked={isSelected}
-
           onChange={() => onSelectItem(item.id)}
-
         />
-
       </div>
 
       <img
-
         src={imageUrl ?? undefined}
-
         alt={item.name}
-
         className='mr-4 h-24 w-24 object-cover'
-
       />
 
       <div className='flex flex-grow flex-col'>
-
         <div>
-
           <Link
-
             to={`/product/${item.id}`}
-
             className='text-lg font-bold hover:underline'
-
-          >            {item.name}
+          >
+            {' '}
+            {item.name}
           </Link>
           <p className='text-sm text-gray-600'>{item.brand}</p>
           {item.isPrescription && <Badge className='mt-2'>Рецептурный</Badge>}

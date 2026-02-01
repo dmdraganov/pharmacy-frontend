@@ -70,9 +70,7 @@ export const CheckoutOrderSummary = memo(() => {
       </div>
       <div className='mt-6 border-t pt-4'>
         <div className='flex justify-between'>
-          <span>
-            Товары ({totalItems} шт.)
-          </span>
+          <span>Товары ({totalItems} шт.)</span>
           <span>{selectedItemsTotal} ₽</span>
         </div>
         <div className='mt-4 flex justify-between font-bold'>

@@ -29,7 +29,13 @@ const NavButton = ({
   </button>
 );
 
-const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+const NavLink = ({
+  to,
+  children,
+}: {
+  to: string;
+  children: React.ReactNode;
+}) => (
   <Link
     to={to}
     className='w-full rounded-md px-4 py-2 text-left font-medium text-gray-700 transition-colors hover:bg-gray-100'

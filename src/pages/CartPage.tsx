@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
-import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import CartItemCard from '@/entities/cart/ui/CartItemCard';
 import CartSummary from '@/widgets/CartSummary';
+import EmptyState from '@/shared/ui/EmptyState';
+import Button from '@/shared/ui/Button'; // Keep Button for the clearCart button
 
 const CartPage = memo(() => {
   const {
@@ -27,15 +27,12 @@ const CartPage = memo(() => {
 
   if (cartItemValues.length === 0) {
     return (
-      <div className='text-center'>
-        <h1 className='mb-4 text-2xl font-bold'>Корзина пуста</h1>
-        <p className='mb-6 text-gray-600'>
-          Добавьте товары, чтобы совершить покупку.
-        </p>
-        <Link to='/'>
-          <Button>Перейти к покупкам</Button>
-        </Link>
-      </div>
+      <EmptyState
+        title='Корзина пуста'
+        description='Добавьте товары, чтобы совершить покупку.'
+        buttonText='Перейти к покупкам'
+        linkTo='/'
+      />
     );
   }
 

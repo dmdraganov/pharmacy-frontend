@@ -1,10 +1,7 @@
 import { memo, useMemo } from 'react';
 import { orders } from '@/data/orders';
 import Badge from '@/shared/ui/Badge';
-import {
-  type OrderStatus,
-  OrderItemRow,
-} from '@/entities/order';
+import { type OrderStatus, OrderItemRow } from '@/entities/order';
 
 const statusMap: Record<OrderStatus, { text: string; className: string }> = {
   processing: { text: 'Собирается', className: 'bg-blue-100 text-blue-800' },
@@ -21,8 +18,7 @@ export const CurrentOrder = memo(() => {
   const currentOrder = useMemo(
     () =>
       orders.find(
-        (order) =>
-          order.status === 'processing' || order.status === 'shipping'
+        (order) => order.status === 'processing' || order.status === 'shipping'
       ),
     []
   );
