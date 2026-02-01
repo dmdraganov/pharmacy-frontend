@@ -30,6 +30,14 @@ type Category = {
 ### Product
 
 ```ts
+interface ProductInfo {
+  composition?: string[]; // состав / ингредиенты
+  usage?: string[]; // как применять / дозировка / инструкции
+  indications?: string[]; // для чего предназначен товар
+  warnings?: string[]; // противопоказания, побочки, предостережения
+  storage?: string[]; // условия хранения
+}
+
 type Product = {
   id: string;
   name: string;
@@ -38,16 +46,12 @@ type Product = {
   categoryId: string;
   price: number;
   oldPrice?: number;
-  isPrescription: boolean;
   image: string;
-  description: string[]; //массив абзацев
-  composition: string[]; //массив абзацев
-  indications: string[]; //массив абзацев
-  contraindications?: string[]; //массив абзацев
-  sideEffects?: string[]; //массив элементов списка
-  dosage: string[]; //массив абзацев
-  storage: string[]; //массив абзацев
-  characteristics: ProductCharacteristic[];
+  description?: string[]; // маркетинговое описание
+  characteristics?: ProductCharacteristic[];
+  isPopular?: boolean;
+  isPrescription?: boolean; // только для лекарств
+  info?: ProductInfo;
 };
 
 type ProductCharacteristic = {

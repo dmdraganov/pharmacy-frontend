@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import type { Product } from '@/entities/product/model';
+import type { Product } from '@/entities/product';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 import Badge from '@/shared/ui/Badge';

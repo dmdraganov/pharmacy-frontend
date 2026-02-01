@@ -1,9 +1,10 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
-import type { Product } from '@/entities/product/model';
+import type { Product } from '@/entities/product';
+import { getProductImage } from '../lib/getProductImage';
 
 interface ProductCardProps {
   product: Product;
@@ -15,7 +16,9 @@ interface ProductCardProps {
   onToggleFavorite: (productId: string) => void;
 }
 
-const ProductCard = memo((props: ProductCardProps) => {
+export const ProductCard = memo((props: ProductCardProps) => {
+  const [imageUrl, setImageUrl] = useState('');
+
   const {
     product,
     isFavorite,
@@ -27,6 +30,10 @@ const ProductCard = memo((props: ProductCardProps) => {
   } = props;
 
   const { id, name, brand, price, oldPrice, isPrescription, image } = product;
+
+  useEffect(() => {
+    getProductImage(image).then((url) => setImageUrl(url));
+  }, [image]);
 
   const handleIncrement = () => onUpdateQuantity(id, quantityInCart + 1);
   const handleDecrement = () => {
@@ -45,8 +52,9 @@ const ProductCard = memo((props: ProductCardProps) => {
       <Link to={`/product/${id}`} className='group block'>
         <img
           className='w-full transition-transform duration-300 group-hover:scale-105'
-          src={image}
+          src={imageUrl}
           alt={name}
+          loading='lazy'
         />
         <div className='px-6 py-4'>
           <div className='mb-2 truncate text-xl font-bold' title={name}>
@@ -88,5 +96,3 @@ const ProductCard = memo((props: ProductCardProps) => {
     </div>
   );
 });
-
-export default ProductCard;

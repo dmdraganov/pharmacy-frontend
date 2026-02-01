@@ -4,7 +4,7 @@ import Checkbox from '@/shared/ui/Checkbox';
 import RangeInput from '@/shared/ui/RangeInput';
 import { useFilters } from '@/features/filters/useFilters';
 import type { AvailableFilters } from '@/features/filters/lib';
-import type { Section, Category } from '@/entities/section/model';
+import type { Section, Category } from '@/entities/section/types';
 import { Link } from 'react-router-dom';
 
 type FiltersSidebarProps = {

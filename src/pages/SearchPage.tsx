@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSearch } from '@/features/search';
 import ProductGrid from '@/widgets/ProductGrid';
-import FiltersSidebar from '@/widgets/FiltersSidebar/FiltersSidebar';
+import FiltersSidebar from '@/widgets/FiltersSidebar';
 import { useFilters } from '@/features/filters/useFilters';
 import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
 
@@ -21,8 +21,10 @@ const SearchPage = () => {
 
   const title = searchTerm ? `Результаты поиска: "${searchTerm}"` : 'Поиск';
 
-  const gridColsClass = searchResults.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-1';
-  const productGridColSpanClass = searchResults.length > 0 ? 'md:col-span-3' : 'md:col-span-1';
+  const gridColsClass =
+    searchResults.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-1';
+  const productGridColSpanClass =
+    searchResults.length > 0 ? 'md:col-span-3' : 'md:col-span-1';
 
   return (
     <div className={`grid grid-cols-1 gap-8 ${gridColsClass}`}>

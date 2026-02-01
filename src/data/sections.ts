@@ -1,60 +1,161 @@
-import type { Section } from '@/entities/section/model';
+import type { Section } from '@/entities/section/types';
 
 export const sections: Section[] = [
+  // 1) Лекарственные средства
   {
     id: 'medicines',
     name: 'Лекарственные средства',
     categories: [
+      { id: 'pain-relief', name: 'Обезболивающие', sectionId: 'medicines' },
+      { id: 'cold-flu', name: 'Простуда и грипп', sectionId: 'medicines' },
+      { id: 'allergy', name: 'Аллергия', sectionId: 'medicines' },
       {
-        id: 'painkillers',
-        name: 'Обезболивающие',
+        id: 'cardio-gastro',
+        name: 'Сердце, сосуды и ЖКТ',
         sectionId: 'medicines',
       },
       {
-        id: 'cold',
-        name: 'Простуда и грипп',
+        id: 'respiratory-derm',
+        name: 'Дыхание и кожа',
         sectionId: 'medicines',
       },
       {
-        id: 'digestive',
-        name: 'Пищеварение',
+        id: 'neuro-endocrine',
+        name: 'Нервная и эндокринная системы',
         sectionId: 'medicines',
       },
+      { id: 'children', name: 'Препараты для детей', sectionId: 'medicines' },
+    ],
+  },
+
+  // 2) Витамины и БАД
+  {
+    id: 'supplements',
+    name: 'Витамины и БАД',
+    categories: [
+      { id: 'vitamins', name: 'Витамины и минералы', sectionId: 'supplements' },
       {
-        id: 'allergy',
-        name: 'Аллергия',
-        sectionId: 'medicines',
+        id: 'omega-herbal',
+        name: 'Омега и растительные добавки',
+        sectionId: 'supplements',
+      },
+      { id: 'probiotics', name: 'Пробиотики', sectionId: 'supplements' },
+      { id: 'sports', name: 'Спортивное питание', sectionId: 'supplements' },
+    ],
+  },
+
+  // 3) Медицинские изделия и техника
+  {
+    id: 'medical-devices',
+    name: 'Медицинские изделия и техника',
+    categories: [
+      {
+        id: 'diagnostics-bp',
+        name: 'Диагностика и давление',
+        sectionId: 'medical-devices',
       },
       {
-        id: 'heart',
-        name: 'Сердечно-сосудистые',
-        sectionId: 'medicines',
+        id: 'glucose-inhalers',
+        name: 'Глюкометры и ингаляторы',
+        sectionId: 'medical-devices',
       },
       {
-        id: 'vitamins',
-        name: 'Витамины и БАД',
-        sectionId: 'medicines',
+        id: 'orthopedics-bandages',
+        name: 'Ортопедия и перевязка',
+        sectionId: 'medical-devices',
+      },
+      {
+        id: 'disinfection-first-aid',
+        name: 'Антисептики и аптечки',
+        sectionId: 'medical-devices',
       },
     ],
   },
+
+  // 4) Гигиена и уход
   {
-    id: 'medical-devices',
-    name: 'Медицинские изделия',
+    id: 'personal-care',
+    name: 'Гигиена и уход',
     categories: [
       {
-        id: 'thermometers',
-        name: 'Термометры',
-        sectionId: 'medical-devices',
+        id: 'oral-body',
+        name: 'Полость рта и тело',
+        sectionId: 'personal-care',
       },
       {
-        id: 'bandages',
-        name: 'Перевязочные материалы',
-        sectionId: 'medical-devices',
+        id: 'hair-intimate',
+        name: 'Волосы и интимная гигиена',
+        sectionId: 'personal-care',
       },
       {
-        id: 'diagnostics',
-        name: 'Диагностические приборы',
-        sectionId: 'medical-devices',
+        id: 'men-feminine',
+        name: 'Мужская и женская гигиена',
+        sectionId: 'personal-care',
+      },
+      {
+        id: 'diapers-sun',
+        name: 'Подгузники и солнцезащита',
+        sectionId: 'personal-care',
+      },
+    ],
+  },
+
+  // 5) Мама и ребёнок
+  {
+    id: 'mother-baby',
+    name: 'Мама и ребёнок',
+    categories: [
+      {
+        id: 'baby-food-health',
+        name: 'Питание и здоровье ребёнка',
+        sectionId: 'mother-baby',
+      },
+      {
+        id: 'pregnancy-feeding',
+        name: 'Беременность и кормление',
+        sectionId: 'mother-baby',
+      },
+      {
+        id: 'safety',
+        name: 'Безопасность и аксессуары',
+        sectionId: 'mother-baby',
+      },
+    ],
+  },
+
+  // 6) Красота и косметика
+  {
+    id: 'beauty',
+    name: 'Красота и косметика',
+    categories: [
+      {
+        id: 'face-hair-body',
+        name: 'Уход за лицом, волосами и телом',
+        sectionId: 'beauty',
+      },
+      {
+        id: 'makeup-nails',
+        name: 'Декоративная косметика и ногти',
+        sectionId: 'beauty',
+      },
+      {
+        id: 'perfume-tools',
+        name: 'Парфюмерия и аксессуары',
+        sectionId: 'beauty',
+      },
+    ],
+  },
+
+  // 7) Оптика
+  {
+    id: 'optics',
+    name: 'Оптика',
+    categories: [
+      { id: 'lenses-glasses', name: 'Линзы и очки', sectionId: 'optics' },
+      {
+        id: 'lens-care',
+        name: 'Средства для ухода за глазами и линзами',
+        sectionId: 'optics',
       },
     ],
   },

@@ -1,8 +1,8 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { CartContext, type CartItemsMap, type CartItem } from '@/features/cart';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
-import type { Product } from '@/entities/product/model';
+import type { Product } from '@/entities/product';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 
 const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -10,9 +10,55 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     STORAGE_KEYS.CART,
     {}
   );
+  const [selectedItemIds, setSelectedItemIds] = useLocalStorage<string[]>(
+    STORAGE_KEYS.CART_SELECTION,
+    []
+  );
+
+  useEffect(() => {
+    // Sync selection with cart items.
+    // This removes selected IDs that are no longer in the cart.
+    const cartItemIds = Object.keys(cartItems);
+    const newSelectedIds = selectedItemIds.filter((id) =>
+      cartItemIds.includes(id)
+    );
+
+    if (newSelectedIds.length !== selectedItemIds.length) {
+      setSelectedItemIds(newSelectedIds);
+    }
+  }, [cartItems, selectedItemIds, setSelectedItemIds]);
+
+  const toggleSelectItem = useCallback(
+    (productId: string) => {
+      setSelectedItemIds((prevSelected) =>
+        prevSelected.includes(productId)
+          ? prevSelected.filter((id) => id !== productId)
+          : [...prevSelected, productId]
+      );
+    },
+    [setSelectedItemIds]
+  );
+
+  const toggleSelectAll = useCallback(
+    (forceSelect?: boolean) => {
+      const allItemIds = Object.keys(cartItems);
+      const areAllItemsSelected =
+        selectedItemIds.length === allItemIds.length && allItemIds.length > 0;
+
+      const shouldSelect = forceSelect ?? !areAllItemsSelected;
+
+      if (shouldSelect) {
+        setSelectedItemIds(allItemIds);
+      } else {
+        setSelectedItemIds([]);
+      }
+    },
+    [cartItems, selectedItemIds, setSelectedItemIds]
+  );
 
   const addToCart = useCallback(
     (product: Product) => {
+      const isNewItem = !cartItems[product.id];
       setCartItems((prevItems: CartItemsMap) => {
         const existingItem = prevItems[product.id];
         const newItems = { ...prevItems };
@@ -26,8 +72,11 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         return newItems;
       });
+      if (isNewItem) {
+        setSelectedItemIds((prevSelected) => [...prevSelected, product.id]);
+      }
     },
-    [setCartItems]
+    [cartItems, setCartItems, setSelectedItemIds]
   );
 
   const removeFromCart = useCallback(
@@ -37,8 +86,11 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         delete newItems[productId];
         return newItems;
       });
+      setSelectedItemIds((prevSelected) =>
+        prevSelected.filter((id) => id !== productId)
+      );
     },
-    [setCartItems]
+    [setCartItems, setSelectedItemIds]
   );
 
   const updateQuantity = useCallback(
@@ -60,7 +112,8 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = useCallback(() => {
     setCartItems({});
-  }, [setCartItems]);
+    setSelectedItemIds([]);
+  }, [setCartItems, setSelectedItemIds]);
 
   const getQuantityInCart = useCallback(
     (productId: string) => {
@@ -76,23 +129,69 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     );
   }, [cartItems]);
 
-  const cartTotal = useMemo(() => {
-    return Object.values(cartItems).reduce(
-      (acc: number, item: CartItem) => acc + item.price * item.quantity,
+  const selectedItemsCount = useMemo(() => {
+    return selectedItemIds.reduce(
+      (acc, id) => acc + (cartItems[id]?.quantity || 0),
       0
     );
-  }, [cartItems]);
+  }, [selectedItemIds, cartItems]);
 
-  const value = {
-    cartItems,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    getQuantityInCart,
-    totalItems,
-    cartTotal,
-  };
+  const selectedItemsTotal = useMemo(() => {
+    return selectedItemIds.reduce(
+      (acc, id) =>
+        acc + (cartItems[id]?.price || 0) * (cartItems[id]?.quantity || 0),
+      0
+    );
+  }, [selectedItemIds, cartItems]);
+
+  const selectedItemsOriginalTotal = useMemo(() => {
+    return selectedItemIds.reduce((acc, id) => {
+      const item = cartItems[id];
+      if (!item) return acc;
+      const price = item.oldPrice ?? item.price;
+      return acc + price * item.quantity;
+    }, 0);
+  }, [selectedItemIds, cartItems]);
+
+  const selectedItemsDiscount = useMemo(
+    () => selectedItemsOriginalTotal - selectedItemsTotal,
+    [selectedItemsOriginalTotal, selectedItemsTotal]
+  );
+
+  const value = useMemo(
+    () => ({
+      cartItems,
+      selectedItemIds,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      getQuantityInCart,
+      toggleSelectItem,
+      toggleSelectAll,
+      totalItems,
+      selectedItemsCount,
+      selectedItemsTotal,
+      selectedItemsOriginalTotal,
+      selectedItemsDiscount,
+    }),
+    [
+      cartItems,
+      selectedItemIds,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      getQuantityInCart,
+      toggleSelectItem,
+      toggleSelectAll,
+      totalItems,
+      selectedItemsCount,
+      selectedItemsTotal,
+      selectedItemsOriginalTotal,
+      selectedItemsDiscount,
+    ]
+  );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

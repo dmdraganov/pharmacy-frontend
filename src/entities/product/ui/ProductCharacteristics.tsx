@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { ProductCharacteristic } from '@/entities/product/model';
+import type { ProductCharacteristic } from '@/entities/product';
 
 export const ProductCharacteristics = memo(
   ({ characteristics }: { characteristics: ProductCharacteristic[] }) => (

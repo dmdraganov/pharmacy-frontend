@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import ProductCard from '@/entities/product/ui/ProductCard';
-import type { Product } from '@/entities/product/model';
+import { ProductCard } from '@/entities/product/';
+import type { Product } from '@/entities/product';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 import { usePagination } from '@/shared/hooks/usePagination';

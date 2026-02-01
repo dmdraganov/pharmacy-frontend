@@ -1,4 +1,4 @@
-import type { Product } from '@/entities/product/model';
+import type { Product } from '@/entities/product';
 
 export type AvailableFilters = {
   minPrice: number;
@@ -57,7 +57,7 @@ export const applyFilters = (
   }
   if (filters.isPrescription !== undefined) {
     filteredProducts = filteredProducts.filter(
-      (p) => p.isPrescription === filters.isPrescription
+      (p) => !!p.isPrescription === filters.isPrescription
     );
   }
 
