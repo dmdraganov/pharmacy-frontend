@@ -18,7 +18,7 @@ const CartSummary = memo((props: CartSummaryProps) => {
   } = props;
 
   return (
-    <div className='h-fit rounded border p-4 shadow-sm lg:col-span-1'>
+    <div className='relative z-10 h-fit rounded border p-4 shadow-sm lg:col-span-1 overflow-hidden'>
       <h2 className='mb-4 text-xl font-bold'>Ваша корзина</h2>
       <div className='space-y-2'>
         {selectedItemsDiscount > 0 ? (

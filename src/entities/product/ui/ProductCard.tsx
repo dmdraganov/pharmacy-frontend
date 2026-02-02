@@ -54,7 +54,7 @@ export const ProductCard = memo((props: ProductCardProps) => {
         className='group block flex flex-grow flex-col'
       >
         <img
-          className='w-full transition-transform duration-300 group-hover:scale-105'
+          className='w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105'
           src={imageUrl ?? undefined}
           alt={name}
           loading='lazy'

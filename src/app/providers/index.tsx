@@ -4,11 +4,22 @@ import FavoritesProvider from '@/features/favorites/providers/FavoritesProvider'
 import RegionProvider from '@/features/region/providers/RegionProvider';
 import { UserProvider } from '@/features/user-profile';
 import { composeProviders } from '@/app/providers/composeProviders';
+import type { ReactNode } from 'react';
 
-export const AppProvider = composeProviders(
-  BrowserRouter,
+interface AppProviderProps {
+  children: ReactNode;
+}
+
+const CombinedProviders = composeProviders(
   RegionProvider,
   FavoritesProvider,
   CartProvider,
   UserProvider
 );
+
+export const AppProvider = ({ children }: AppProviderProps) => {
+  return(
+  <BrowserRouter basename="/sites/pharmacy/">
+    <CombinedProviders>{children}</CombinedProviders>
+  </BrowserRouter>)
+};
