@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { CartContext, type CartItemsMap, type CartItem } from '@/features/cart';
+import { CartContext } from '@/features/cart';
+import type { CartItemsMap, CartItem } from '@/entities/cart';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Product } from '@/entities/product';
 import { STORAGE_KEYS } from '@/shared/config/constants';

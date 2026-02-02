@@ -12,6 +12,19 @@ const findProduct = (slug: string) => {
 
 export const orders: Order[] = [
   {
+    id: 'ORDER-1026',
+    date: '2024-07-22T10:00:00Z',
+    status: 'new',
+    items: [
+      {
+        product: findProduct('theraflu'),
+        quantity: 1,
+        price: 450,
+      },
+    ],
+    total: 450,
+  },
+  {
     id: 'ORDER-1025',
     date: '2024-07-21T14:30:00Z',
     status: 'shipping',

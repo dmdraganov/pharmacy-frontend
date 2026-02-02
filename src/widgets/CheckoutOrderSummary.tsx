@@ -1,9 +1,10 @@
 import { memo, useState, useEffect } from 'react';
-import { useCart, type CartItem } from '@/features/cart';
+import { useCart } from '@/features/cart';
+import type { CartItem } from '@/entities/cart';
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
-import { getProductImage } from '@/entities/product';
+import { getProductImage } from '@/shared/lib/getProductImage';
 
 // Sub-component to handle async image loading for each item
 const CheckoutItem = memo(({ item }: { item: CartItem }) => {

@@ -17,12 +17,14 @@ const FavoritesPage = memo(() => {
 
   if (favoriteProducts.length === 0) {
     return (
-      <EmptyState
-        title='В избранном пусто'
-        description='Добавляйте товары в избранное, чтобы не потерять их.'
-        buttonText='Перейти к покупкам'
-        linkTo='/'
-      />
+      <div className='flex grow items-center justify-center'>
+        <EmptyState
+          title='В избранном пусто'
+          description='Добавляйте товары в избранное, чтобы не потерять их.'
+          buttonText='Перейти к покупкам'
+          linkTo='/'
+        />
+      </div>
     );
   }
 

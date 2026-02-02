@@ -12,23 +12,43 @@ interface ProductInfo {
 }
 
 export interface Product {
+
   id: string;
+
   name: string;
+
   brand: string;
 
+
+
   sectionId: string;
+
   categoryId: string;
 
+
+
   price: number;
+
   oldPrice?: number;
+
+
 
   image: string;
 
+
+
   description?: string[]; // маркетинговое описание
+
   characteristics?: ProductCharacteristic[];
 
+
+
   isPopular?: boolean;
+
   isPrescription?: boolean; // только для лекарств
 
+
+
   info?: ProductInfo;
+
 }

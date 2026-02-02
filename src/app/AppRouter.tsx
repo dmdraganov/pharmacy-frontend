@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Spinner from '@/shared/ui/Spinner';
 import PageLayout from '@/app/layouts/PageLayout';
+import AdminLayout from '@/app/layouts/AdminLayout';
 import ScrollToTop from '@/shared/lib/router/ScrollToTop';
 
 // Eagerly loaded pages
@@ -20,6 +21,18 @@ const ContactsPage = lazy(() => import('@/pages/ContactsPage'));
 const AccountPage = lazy(() => import('@/pages/AccountPage'));
 const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'));
+
+// Admin Pages
+const AdminDashboardPage = lazy(
+  () => import('@/pages/admin/AdminDashboardPage')
+);
+const AdminProductsPage = lazy(
+  () => import('@/pages/admin/AdminProductsPage')
+);
+const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
+const AdminCategoriesPage = lazy(
+  () => import('@/pages/admin/AdminCategoriesPage')
+);
 
 const AppRouter = () => {
   return (
@@ -58,6 +71,20 @@ const AppRouter = () => {
             <Route path='account' element={<AccountPage />} />
             <Route path='checkout' element={<CheckoutPage />} />
             <Route path='privacy-policy' element={<PrivacyPolicyPage />} />
+          </Route>
+          <Route
+            path='/admin'
+            element={
+              <AdminLayout>
+                <Outlet />
+              </AdminLayout>
+            }
+          >
+            <Route index element={<Navigate to='dashboard' replace />} />
+            <Route path='dashboard' element={<AdminDashboardPage />} />
+            <Route path='products' element={<AdminProductsPage />} />
+            <Route path='orders' element={<AdminOrdersPage />} />
+            <Route path='categories' element={<AdminCategoriesPage />} />
           </Route>
         </Routes>
       </Suspense>

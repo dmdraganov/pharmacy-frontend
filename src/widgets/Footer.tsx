@@ -46,7 +46,7 @@ const Footer = memo(() => {
             </ul>
           </div>
           <div>
-            <h3 className='mb-4 text-lg font-semibold'>Контакты</h3>
+            <h3 className='mb-4 text-lg font-semibold'>Обратная связь</h3>
             <ul className='space-y-2 text-gray-600'>
               <li>
                 Телефон:{' '}

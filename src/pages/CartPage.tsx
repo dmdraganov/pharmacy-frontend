@@ -27,12 +27,14 @@ const CartPage = memo(() => {
 
   if (cartItemValues.length === 0) {
     return (
-      <EmptyState
-        title='Корзина пуста'
-        description='Добавьте товары, чтобы совершить покупку.'
-        buttonText='Перейти к покупкам'
-        linkTo='/'
-      />
+      <div className='flex grow items-center justify-center'>
+        <EmptyState
+          title='Корзина пуста'
+          description='Добавьте товары, чтобы совершить покупку.'
+          buttonText='Перейти к покупкам'
+          linkTo='/'
+        />
+      </div>
     );
   }
 

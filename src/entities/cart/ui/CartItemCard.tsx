@@ -1,11 +1,11 @@
 import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import type { CartItem } from '@/features/cart';
+import type { CartItem } from '@/entities/cart';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Badge from '@/shared/ui/Badge';
-import { getProductImage } from '@/entities/product';
+import { getProductImage } from '@/shared/lib/getProductImage';
 
 interface CartItemCardProps {
   item: CartItem;

@@ -4,6 +4,7 @@ import Badge from '@/shared/ui/Badge';
 import { type OrderStatus, OrderItemRow } from '@/entities/order';
 
 const statusMap: Record<OrderStatus, { text: string; className: string }> = {
+  new: { text: 'Новый', className: 'bg-gray-100 text-gray-800' },
   processing: { text: 'Собирается', className: 'bg-blue-100 text-blue-800' },
   shipping: {
     text: 'Передан в доставку',

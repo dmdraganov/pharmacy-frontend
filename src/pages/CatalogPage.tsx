@@ -24,7 +24,7 @@ const CatalogPage = memo(() => {
               <Link
                 to={`/catalog/${sec.id}`}
                 className={`block text-lg hover:text-blue-600 ${
-                  hoveredSectionId === sec.id ? 'font-bold text-blue-700' : ''
+                  hoveredSectionId === sec.id ? 'text-blue-700' : ''
                 }`}
               >
                 {sec.name}

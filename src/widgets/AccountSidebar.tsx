@@ -55,7 +55,7 @@ export const AccountSidebar = memo(
           <p className='text-lg font-bold'>
             {user.firstName} {user.lastName}
           </p>
-          <p className='text-sm text-gray-500'>{user.email}</p>
+          <p className='text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap'>{user.email}</p>
         </div>
 
         {/* Navigation */}

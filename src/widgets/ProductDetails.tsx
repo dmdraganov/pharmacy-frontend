@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
-import { getProductImage } from '@/entities/product';
+import { getProductImage } from '@/shared/lib/getProductImage';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 import Badge from '@/shared/ui/Badge';

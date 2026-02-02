@@ -4,7 +4,7 @@ import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product';
-import { getProductImage } from '../lib/getProductImage';
+import { getProductImage } from '@/shared/lib/getProductImage';
 
 interface ProductCardProps {
   product: Product;
@@ -48,7 +48,7 @@ export const ProductCard = memo((props: ProductCardProps) => {
   const handleToggleFavorite = () => onToggleFavorite(id);
 
   return (
-    <div className='flex flex-col overflow-hidden rounded border shadow-lg'>
+    <div className='flex h-full flex-col overflow-hidden rounded border shadow-lg'>
       <Link
         to={`/product/${id}`}
         className='group block flex flex-grow flex-col'

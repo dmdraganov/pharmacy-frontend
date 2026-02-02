@@ -1,22 +1,17 @@
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { Order } from '@/entities/order';
-import { useCart } from '@/features/cart';
 import Button from '@/shared/ui/Button';
 
 interface RepeatOrderButtonProps {
   order: Order;
   className?: string;
+  onRepeatOrder: (order: Order) => void;
 }
 
 export const RepeatOrderButton = memo(
-  ({ order, className }: RepeatOrderButtonProps) => {
-    const { addItemsToCart } = useCart();
-    const navigate = useNavigate();
-
+  ({ order, className, onRepeatOrder }: RepeatOrderButtonProps) => {
     const handleRepeatOrder = () => {
-      addItemsToCart(order.items);
-      navigate('/cart');
+      onRepeatOrder(order);
     };
 
     return (

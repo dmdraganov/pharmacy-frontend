@@ -1,7 +1,7 @@
 import { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { OrderItem } from '@/entities/order';
-import { getProductImage } from '@/entities/product';
+import { getProductImage } from '@/shared/lib/getProductImage';
 
 export const OrderItemRow = memo(({ item }: { item: OrderItem }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);

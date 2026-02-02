@@ -40,7 +40,7 @@ export const RegionSelectWithSearch = memo(() => {
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center gap-1 rounded-md border-none bg-gray-100 text-sm text-gray-700 outline-none hover:cursor-pointer'
+        className='flex items-center gap-1 rounded-md border-none text-sm text-gray-700 outline-none hover:cursor-pointer'
       >
         <span>{region}</span>
         <svg
