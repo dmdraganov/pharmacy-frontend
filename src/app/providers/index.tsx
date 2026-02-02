@@ -18,8 +18,9 @@ const CombinedProviders = composeProviders(
 );
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  return(
-  <BrowserRouter basename="/sites/pharmacy/">
-    <CombinedProviders>{children}</CombinedProviders>
-  </BrowserRouter>)
+  return (
+    <BrowserRouter basename='/works/sites/pharmacy/'>
+      <CombinedProviders>{children}</CombinedProviders>
+    </BrowserRouter>
+  );
 };

@@ -2,11 +2,11 @@ import { NavLink } from 'react-router-dom';
 
 const AdminSidebar = () => {
   return (
-    <div className="w-64 bg-gray-800 text-white flex flex-col">
-      <div className="p-4 text-2xl font-bold">Панель администратора</div>
-      <nav className="flex-1 px-2 py-4 space-y-2">
+    <div className='w-64 bg-gray-800 text-white flex flex-col'>
+      <div className='p-4 text-2xl font-bold'>Панель администратора</div>
+      <nav className='flex-1 px-2 py-4 space-y-2'>
         <NavLink
-          to="/admin/dashboard"
+          to='/admin/dashboard'
           className={({ isActive }) =>
             `block px-4 py-2 rounded-md ${
               isActive ? 'bg-gray-700' : 'hover:bg-gray-700'
@@ -16,7 +16,7 @@ const AdminSidebar = () => {
           Дашборд
         </NavLink>
         <NavLink
-          to="/admin/products"
+          to='/admin/products'
           className={({ isActive }) =>
             `block px-4 py-2 rounded-md ${
               isActive ? 'bg-gray-700' : 'hover:bg-gray-700'
@@ -26,7 +26,7 @@ const AdminSidebar = () => {
           Товары
         </NavLink>
         <NavLink
-          to="/admin/orders"
+          to='/admin/orders'
           className={({ isActive }) =>
             `block px-4 py-2 rounded-md ${
               isActive ? 'bg-gray-700' : 'hover:bg-gray-700'
@@ -36,7 +36,7 @@ const AdminSidebar = () => {
           Заказы
         </NavLink>
         <NavLink
-          to="/admin/categories"
+          to='/admin/categories'
           className={({ isActive }) =>
             `block px-4 py-2 rounded-md ${
               isActive ? 'bg-gray-700' : 'hover:bg-gray-700'
@@ -46,10 +46,10 @@ const AdminSidebar = () => {
           Категории
         </NavLink>
       </nav>
-      <div className="mt-auto p-2">
+      <div className='mt-auto p-2'>
         <NavLink
-          to="/"
-          className="block px-4 py-2 rounded-md text-center hover:bg-gray-700"
+          to='/'
+          className='block px-4 py-2 rounded-md text-center hover:bg-gray-700'
         >
           Вернуться на сайт
         </NavLink>

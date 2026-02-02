@@ -39,47 +39,49 @@ const AdminDashboardPage = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Дашборд</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Всего заказов</h2>
-          <p className="text-3xl font-bold text-gray-900 mt-2">
-            {totalOrders}
-          </p>
+      <h1 className='text-3xl font-bold mb-6'>Дашборд</h1>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+        <div className='bg-white p-6 rounded-lg shadow-md'>
+          <h2 className='text-lg font-semibold text-gray-700'>Всего заказов</h2>
+          <p className='text-3xl font-bold text-gray-900 mt-2'>{totalOrders}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Общая выручка</h2>
-          <p className="text-3xl font-bold text-gray-900 mt-2">
+        <div className='bg-white p-6 rounded-lg shadow-md'>
+          <h2 className='text-lg font-semibold text-gray-700'>Общая выручка</h2>
+          <p className='text-3xl font-bold text-gray-900 mt-2'>
             {totalSales.toFixed(2)} ₽
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Новые пользователи</h2>
-          <p className="text-3xl font-bold text-gray-900 mt-2">
+        <div className='bg-white p-6 rounded-lg shadow-md'>
+          <h2 className='text-lg font-semibold text-gray-700'>
+            Новые пользователи
+          </h2>
+          <p className='text-3xl font-bold text-gray-900 mt-2'>
             {fakeData.newUsers}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Процент отказов</h2>
-          <p className="text-3xl font-bold text-gray-900 mt-2">
+        <div className='bg-white p-6 rounded-lg shadow-md'>
+          <h2 className='text-lg font-semibold text-gray-700'>
+            Процент отказов
+          </h2>
+          <p className='text-3xl font-bold text-gray-900 mt-2'>
             {fakeData.bounceRate}
           </p>
         </div>
       </div>
 
-      <div className="mt-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+      <div className='mt-8'>
+        <div className='bg-white p-6 rounded-lg shadow-md'>
+          <h2 className='text-lg font-semibold text-gray-700 mb-4'>
             Топ продаваемых товаров
           </h2>
           <ul>
             {topProducts.map((product, index) => (
               <li
                 key={index}
-                className="flex justify-between items-center py-2 border-b"
+                className='flex justify-between items-center py-2 border-b'
               >
-                <span className="text-gray-600">{product.name}</span>
-                <span className="font-bold text-gray-800">
+                <span className='text-gray-600'>{product.name}</span>
+                <span className='font-bold text-gray-800'>
                   {product.count} шт.
                 </span>
               </li>

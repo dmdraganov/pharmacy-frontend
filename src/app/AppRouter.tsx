@@ -26,9 +26,7 @@ const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'));
 const AdminDashboardPage = lazy(
   () => import('@/pages/admin/AdminDashboardPage')
 );
-const AdminProductsPage = lazy(
-  () => import('@/pages/admin/AdminProductsPage')
-);
+const AdminProductsPage = lazy(() => import('@/pages/admin/AdminProductsPage'));
 const AdminOrdersPage = lazy(() => import('@/pages/admin/AdminOrdersPage'));
 const AdminCategoriesPage = lazy(
   () => import('@/pages/admin/AdminCategoriesPage')
