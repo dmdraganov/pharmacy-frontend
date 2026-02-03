@@ -1,9 +1,9 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/shared/lib/getProductImage';
 import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
+import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
@@ -15,7 +15,6 @@ interface ProductDetailsProps {
 export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
-  const { toggleFavorite, isFavorite } = useFavorites();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const quantityInCart = getQuantityInCart(product.id);
@@ -24,21 +23,22 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
     getProductImage(product.image).then(setImageUrl);
   }, [product.image]);
 
-  const handleAddProduct = () => {
+  const handleAddProduct = useCallback(() => {
     addToCart(product);
-  };
+  }, [addToCart, product]);
 
-  const handleUpdateQuantity = (newQuantity: number) => {
-    updateQuantity(product.id, newQuantity);
-  };
+  const handleIncrement = useCallback(() => {
+    updateQuantity(product.id, quantityInCart + 1);
+  }, [quantityInCart, product.id, updateQuantity]);
 
-  const handleRemoveProduct = () => {
-    removeFromCart(product.id);
-  };
-
-  const handleToggleFavorite = () => {
-    toggleFavorite(product.id);
-  };
+  const handleDecrement = useCallback(() => {
+    const newQuantity = quantityInCart - 1;
+    if (newQuantity <= 0) {
+      removeFromCart(product.id);
+    } else {
+      updateQuantity(product.id, newQuantity);
+    }
+  }, [quantityInCart, product.id, removeFromCart, updateQuantity]);
 
   return (
     <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
@@ -50,7 +50,10 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
         />
       </div>
       <div>
-        <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
+        <div className='flex items-start gap-4'>
+          <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
+          <FavoriteButton productId={product.id} className='shrink-0 mt-2' />
+        </div>
         <p className='mb-4 text-lg text-text-muted'>{product.brand}</p>
         {product.isPrescription && (
           <Badge variant='warning' className='mb-4'>
@@ -72,23 +75,14 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
             <div className='flex items-center justify-between'>
               <QuantityControl
                 quantity={quantityInCart}
-                onIncrement={() => handleUpdateQuantity(quantityInCart + 1)}
-                onDecrement={() => {
-                  if (quantityInCart - 1 <= 0) {
-                    handleRemoveProduct();
-                  } else {
-                    handleUpdateQuantity(quantityInCart - 1);
-                  }
-                }}
+                onIncrement={handleIncrement}
+                onDecrement={handleDecrement}
               />
               <Button as={Link} to='/cart' variant='primary'>
                 К корзине
               </Button>
             </div>
           )}
-          <Button onClick={handleToggleFavorite}>
-            {isFavorite(product.id) ? 'В избранном' : 'В избранное'}
-          </Button>
         </div>
       </div>
     </div>

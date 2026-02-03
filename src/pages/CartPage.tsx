@@ -1,11 +1,10 @@
 import { memo } from 'react';
 import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
 import Checkbox from '@/shared/ui/Checkbox';
 import CartItemCard from '@/entities/cart/ui/CartItemCard';
 import CartSummary from '@/widgets/CartSummary';
 import EmptyState from '@/shared/ui/EmptyState';
-import Button from '@/shared/ui/Button'; // Keep Button for the clearCart button
+import Button from '@/shared/ui/Button';
 
 const CartPage = memo(() => {
   const {
@@ -18,7 +17,6 @@ const CartPage = memo(() => {
     toggleSelectAll,
     ...summaryProps
   } = useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
 
   const cartItemValues = Object.values(cartItems);
   const areAllSelected =
@@ -43,7 +41,7 @@ const CartPage = memo(() => {
       <h1 className='mb-6 text-2xl font-bold text-text-heading'>Корзина</h1>
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
         <div className='lg:col-span-2'>
-          <div className='mb-6 flex items-center justify-between rounded border border-border-subtle bg-background-default p-4'>
+          <div className='mb-6 flex items-center justify-between rounded'>
             <Checkbox
               id='select-all'
               label='Выбрать все'
@@ -60,11 +58,9 @@ const CartPage = memo(() => {
                 key={item.id}
                 item={item}
                 isSelected={selectedItemIds.includes(item.id)}
-                isFavorite={isFavorite(item.id)}
                 onSelectItem={toggleSelectItem}
                 onUpdateQuantity={updateQuantity}
                 onRemoveFromCart={removeFromCart}
-                onToggleFavorite={toggleFavorite}
               />
             ))}
           </div>

@@ -63,7 +63,7 @@ export const ProfileDetails = memo(() => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'
+      className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'
     >
       <h2 className='mb-4 text-2xl font-bold text-text-heading'>
         Личные данные

@@ -51,7 +51,7 @@ export const CheckoutOrderSummary = memo(() => {
 
   if (items.length === 0) {
     return (
-      <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+      <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
         <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
         <p>Ваша корзина пуста.</p>
         <Button as={Link} to='/' className='mt-4 w-full'>
@@ -62,14 +62,14 @@ export const CheckoutOrderSummary = memo(() => {
   }
 
   return (
-    <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+    <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
-      <div className='flex flex-col gap-4 divide-y divide-border-subtle'>
+      <div className='flex flex-col gap-4 divide-y divide-border-default'>
         {items.map((item) => (
           <CheckoutItem key={item.id} item={item} />
         ))}
       </div>
-      <div className='mt-6 border-t border-border-subtle pt-4'>
+      <div className='mt-6 border-t border-border-default pt-4'>
         <div className='flex justify-between'>
           <span>Товары ({totalItems} шт.)</span>
           <span>{selectedItemsTotal} ₽</span>

@@ -11,10 +11,10 @@ const CatalogPage = memo(() => {
   );
 
   return (
-    <div className='flex min-h-[600px]'>
+    <div className='flex min-h-[600px] gap-6'>
       {/* Categories List */}
       <div className='w-full md:w-1/4'>
-        <ul className='p-4'>
+        <ul className='py-12'>
           {sections.map((sec) => (
             <li key={sec.id} onMouseEnter={() => setHoveredSectionId(sec.id)}>
               <Link
@@ -33,7 +33,7 @@ const CatalogPage = memo(() => {
       </div>
 
       {/* Subcategories on hover */}
-      <div className='relative flex w-full items-start justify-center md:w-3/4 p-6'>
+      <div className='relative flex w-full items-start justify-center md:w-3/4 py-12'>
         {hoveredSection ? (
           <div className='w-full'>
             <h3 className='mb-6 text-2xl font-semibold'>

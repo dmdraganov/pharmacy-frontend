@@ -40,7 +40,7 @@ const PickupSelector = () => (
     {pharmacies.map((pharmacy) => (
       <label
         key={pharmacy.id}
-        className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
+        className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
       >
         <input
           type='radio'
@@ -64,7 +64,7 @@ export const CheckoutDelivery = memo(() => {
   );
 
   return (
-    <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+    <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>
         Способ получения
       </h2>

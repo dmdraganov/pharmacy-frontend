@@ -8,7 +8,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'oral-body',
     price: 250,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Зубная паста Colgate Total 12 обеспечивает комплексную защиту полости рта от всех основных проблем в течение 12 часов. Формула с активными компонентами борется с налетом, зубным камнем, кариесом, гингивитом, неприятным запахом изо рта, а также укрепляет эмаль и десны.',
@@ -56,7 +56,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'oral-body',
     price: 180,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Зубная щетка Oral-B Complete 5-Way Clean обеспечивает тщательную очистку всей полости рта благодаря пяти зонам чистки. Ее уникальная конструкция включает Power Tip щетинки для чистки труднодоступных мест, массажеры для десен, полирующие чашечки и обычные щетинки для удаления налета и отбеливания зубов.',
@@ -99,7 +99,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'oral-body',
     price: 100,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Крем-мыло Dove Красота и уход — это не просто мыло, а нежный очищающий и увлажняющий средство для лица и тела. Оно на ¼ состоит из увлажняющего крема, что позволяет сохранять естественный уровень увлажненности кожи, делая ее мягкой, гладкой и сияющей. Мыло не сушит кожу, как обычное мыло, и подходит для ежедневного использования.',
@@ -145,7 +145,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'oral-body',
     price: 150,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Гель для душа Nivea Men Заряд свежести разработан специально для мужчин, обеспечивая ощущение чистоты и свежести на весь день. Универсальная формула подходит для очищения тела, лица и волос, что делает его идеальным выбором для использования в душе после тренировки или в путешествиях.',
@@ -191,7 +191,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'hair-intimate',
     price: 350,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Шампунь Head & Shoulders Основной уход разработан для эффективной борьбы с перхотью и ухода за волосами. Его формула Derma&Pure обогащена микроэлементами, которые питают кожу головы, обеспечивая до 72 часов защиты от перхоти, зуда и сухости. Делает волосы мягкими, красивыми и до 100% свободными от перхоти.',
@@ -233,7 +233,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'hair-intimate',
     price: 200,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Бальзам для волос Garnier Fructis Укрепляющий, Тройное восстановление, разработан для ухода за ослабленными и поврежденными волосами. Его формула, обогащенная активным концентратом фруктов, маслами оливы, авокадо и карите, интенсивно питает и укрепляет волосы по всей длине, возвращая им силу и блеск.',
@@ -276,7 +276,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'hair-intimate',
     price: 400,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Гель для интимной гигиены Lactacyd Pharma с антибактериальными компонентами разработан для ежедневного бережного очищения и защиты интимной зоны от бактериальных инфекций. Его формула обогащена натуральной молочной кислотой и тимьяном, которые помогают поддерживать естественный баланс микрофлоры и предотвращают развитие патогенных бактерий.',
@@ -325,7 +325,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'hair-intimate',
     price: 120,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Ежедневные прокладки Libresse Dailyfresh Normal обеспечивают ощущение свежести и комфорта в течение всего дня. Ультратонкие и гибкие, они идеально повторяют контуры тела, оставаясь незаметными под одеждой. Дышащий верхний слой позволяет коже дышать, предотвращая появление раздражений.',
@@ -376,7 +376,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'men-feminine',
     price: 600,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Бритвенные станки Gillette Mach3 обеспечивают гладкое и комфортное бритье благодаря трем высококачественным лезвиям. Усовершенствованная система лезвий с антифрикционным покрытием мягко скользит по коже, уменьшая раздражение и обеспечивая более чистое бритье с меньшим количеством проходов.',
@@ -425,7 +425,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'men-feminine',
     price: 280,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Гель для бритья Nivea Men Увлажняющий, обогащенный экстрактом алоэ вера и витаминами, обеспечивает гладкое и комфортное бритье, защищая кожу от раздражения и сухости. Густая пена смягчает щетину, обеспечивая легкое скольжение лезвия и предотвращая порезы.',
@@ -469,7 +469,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'men-feminine',
     price: 200,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Дезодорант-антиперспирант Old Spice Original обеспечивает надежную защиту от пота и неприятного запаха до 48 часов. Его классический, мужественный аромат дарит ощущение свежести и уверенности в течение всего дня. Твердая формула легко наносится, не оставляя следов на одежде.',
@@ -513,7 +513,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'men-feminine',
     price: 220,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Гигиенические прокладки Always Ultra Normal Plus с крылышками обеспечивают надежную защиту и комфорт во время менструации. Ультратонкий дизайн и мягкий верхний слой делают их практически незаметными и приятными к телу. Внутренний абсорбирующий слой надежно удерживает влагу, а технология "Голубая защита" предотвращает протекания.',
@@ -564,7 +564,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'diapers-sun',
     price: 700,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Подгузники Huggies Elite Soft созданы для максимально нежного ухода за кожей новорожденного. Они обладают ультрамягким слоем из натурального хлопка, который обеспечивает комфорт и предотвращает натирание. Специальные впитывающие каналы быстро распределяют влагу, оставляя кожу сухой до 12 часов.',
@@ -618,7 +618,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'diapers-sun',
     price: 300,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Крем под подгузник Bubchen Защитный — это эффективное средство для профилактики и лечения опрелостей и раздражений кожи в области подгузника. Его формула с оксидом цинка и экстрактом ромашки создает надежный барьер, защищающий нежную кожу младенца от влаги и вредных воздействий.',
@@ -668,7 +668,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'diapers-sun',
     price: 1500,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Солнцезащитный крем La Roche-Posay Anthelios Dermo-Pediatrics SPF 50+ разработан для очень чувствительной детской кожи и обеспечивает очень высокую степень защиты от UVA/UVB лучей. Его формула устойчива к воде и песку, не оставляет белых следов и подходит даже для атопичной кожи.',
@@ -719,7 +719,7 @@ export const personalCare: Product[] = [
     sectionId: 'personal-care',
     categoryId: 'diapers-sun',
     price: 180,
-    isPopular: true,
+
     image: 'personal-care.jpg',
     description: [
       'Влажные салфетки Pampers Sensitive специально разработаны для бережного очищения чувствительной кожи младенцев. Они не содержат отдушек, спирта и парабенов, что минимизирует риск возникновения аллергических реакций и раздражений. Ультрамягкая текстура салфеток обеспечивает деликатный уход.',

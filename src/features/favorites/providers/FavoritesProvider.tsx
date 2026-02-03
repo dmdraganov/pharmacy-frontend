@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { FavoritesContext } from '@/features/favorites';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
@@ -27,11 +27,14 @@ const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     [favoriteIds]
   );
 
-  const value = {
-    favoriteIds,
-    toggleFavorite,
-    isFavorite,
-  };
+  const value = useMemo(
+    () => ({
+      favoriteIds,
+      toggleFavorite,
+      isFavorite,
+    }),
+    [favoriteIds, isFavorite, toggleFavorite]
+  );
 
   return (
     <FavoritesContext.Provider value={value}>

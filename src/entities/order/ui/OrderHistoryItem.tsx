@@ -33,7 +33,7 @@ export const OrderHistoryItem = memo(
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-      <div className='rounded-lg border border-border-subtle bg-background-default p-4 shadow-sm'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4 shadow-sm'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>Заказ №{id}</span>
@@ -57,8 +57,8 @@ export const OrderHistoryItem = memo(
           </div>
         </div>
         {isExpanded && (
-          <div className='mt-4 border-t border-border-subtle pt-4'>
-            <div className='flex flex-col divide-y divide-border-subtle'>
+          <div className='mt-4 border-t border-border-default pt-4'>
+            <div className='flex flex-col divide-y divide-border-default'>
               {items.map((item) => (
                 <OrderItemRow key={item.product.id} item={item} />
               ))}

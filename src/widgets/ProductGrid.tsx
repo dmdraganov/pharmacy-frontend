@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { ProductCard } from '@/entities/product/';
 import type { Product } from '@/entities/product';
 import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
 import { usePagination } from '@/shared/hooks/usePagination';
 import Pagination from '@/shared/ui/Pagination';
 
@@ -16,7 +15,6 @@ interface ProductGridProps {
 const ProductGrid = ({ title, products }: ProductGridProps) => {
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
 
   const { currentData, currentPage, totalPages, goToPage } = usePagination({
     data: products,
@@ -33,11 +31,9 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
               key={product.id}
               product={product}
               quantityInCart={getQuantityInCart(product.id)}
-              isFavorite={isFavorite(product.id)}
               onAddToCart={addToCart}
               onUpdateQuantity={updateQuantity}
               onRemoveFromCart={removeFromCart}
-              onToggleFavorite={toggleFavorite}
             />
           ))
         ) : (

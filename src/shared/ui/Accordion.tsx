@@ -9,7 +9,7 @@ type AccordionProps = {
 const Accordion = ({ title, children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
-  const defaultClasses = 'border-b border-border-subtle';
+  const defaultClasses = 'border-b border-border-default';
   const combinedClasses = [defaultClasses, className].filter(Boolean).join(' ');
 
   return (

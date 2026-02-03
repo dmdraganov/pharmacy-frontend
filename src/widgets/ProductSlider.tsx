@@ -22,11 +22,14 @@ const ProductSlider = memo(({ children }: SliderProps) => {
     );
   };
 
+  const buttonClasses =
+    'absolute top-1/2 z-10 -translate-y-1/2 transform rounded-full border border-border-default bg-background-default p-2 text-text-default shadow-lg hover:bg-background-hover cursor-pointer';
+
   return (
-    <div className='relative -mx-4'>
-      <div className='overflow-hidden p-4'>
+    <div className='relative'>
+      <div className='overflow-hidden py-8'>
         <div
-          className='flex transition-transform duration-300 ease-in-out'
+          className='flex transition-transform duration-300 ease-in-out -mx-2'
           style={{
             transform: `translateX(-${currentIndex * (100 / visibleItems)}%)`,
           }}
@@ -34,7 +37,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
           {Children.map(children, (child) => (
             <div
               key={(child as ReactElement).key}
-              className='shrink-0 p-2'
+              className='shrink-0 px-2'
               style={{ width: `${100 / visibleItems}%` }}
             >
               {child}
@@ -44,10 +47,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
       </div>
 
       {canGoPrev && (
-        <button
-          onClick={handlePrev}
-          className='absolute -left-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-background-default/80 p-2 shadow-lg backdrop-blur-sm hover:bg-background-default cursor-pointer'
-        >
+        <button onClick={handlePrev} className={`${buttonClasses} -left-5`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6'
@@ -65,10 +65,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
         </button>
       )}
       {canGoNext && (
-        <button
-          onClick={handleNext}
-          className='absolute -right-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-background-default/80 p-2 shadow-lg backdrop-blur-sm hover:bg-background-default cursor-pointer'
-        >
+        <button onClick={handleNext} className={`${buttonClasses} -right-5`}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6'

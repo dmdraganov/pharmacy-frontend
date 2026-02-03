@@ -8,7 +8,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'diagnostics-bp',
     price: 3500,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Автоматический тонометр Omron M2 Basic предназначен для точного и комфортного измерения артериального давления и частоты пульса на плече в домашних условиях. Прибор оснащен уникальной технологией интеллектуального управления Intellisense, которая обеспечивает индивидуальный процесс измерения для каждого пользователя, контролируя нагнетание воздуха в манжету до оптимального уровня. Это гарантирует не только точность, но и безболезненность процедуры.',
@@ -74,7 +74,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'diagnostics-bp',
     price: 1800,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Глюкометр Accu-Chek Performa Nano — это компактный и простой в использовании прибор для измерения уровня глюкозы в крови. Он предназначен для самоконтроля у людей с сахарным диабетом, обеспечивая быстрый и точный результат всего за 5 секунд. Прибор использует электрохимический метод измерения и требует минимальное количество крови.',
@@ -126,7 +126,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'diagnostics-bp',
     price: 500,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Электронный термометр B.Well WT-03 — это современное и безопасное устройство для точного измерения температуры тела. Изготовлен из безопасных материалов, не содержит ртути и стекла, что делает его идеальным для использования в домашних условиях, особенно для детей. Позволяет измерять температуру тремя способами: аксиллярным (подмышечным), оральным (в полости рта) и ректальным (в прямой кишке).',
@@ -188,7 +188,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'diagnostics-bp',
     price: 1500,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Пульсоксиметр Armed YX301 — это компактный и простой в использовании медицинский прибор для неинвазивного измерения уровня насыщения крови кислородом (SpO2) и частоты пульса. Он является надёжным средством контроля жизненно важных показателей как в медицинских учреждениях, так и в домашних условиях.',
@@ -305,7 +305,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'orthopedics-bandages',
     price: 350,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Эластичный компрессионный бинт предназначен для создания дозированного давления на определенные участки тела, обеспечивая поддержку и фиксацию. Широко используется в травматологии, ортопедии, флебологии и спортивной медицине для профилактики и лечения различных состояний.',
@@ -364,7 +364,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'orthopedics-bandages',
     price: 1200,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Эластичный бандаж на коленный сустав Orlett обеспечивает легкую фиксацию, компрессию и стабилизацию колена. Изготовлен из высококачественных эластичных материалов, которые обеспечивают комфортное ношение, воздухопроницаемость и не вызывают раздражения кожи.',
@@ -422,7 +422,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'orthopedics-bandages',
     price: 120,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Медицинский фиксирующий пластырь на тканевой основе предназначен для надежной фиксации перевязочных средств, медицинских приспособлений (катетеров, зондов, канюль) и защиты небольших повреждений кожи. Благодаря тканевой основе, пластырь обладает высокой прочностью и воздухопроницаемостью, что позволяет коже "дышать" и предотвращает мацерацию.',
@@ -478,7 +478,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'orthopedics-bandages',
     price: 250,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Стерильная самоклеящаяся повязка на рану Космопор предназначена для эффективной защиты поврежденной кожи от инфекций и механических воздействий. Состоит из мягкой нетканой основы, гипоаллергенного клеевого слоя и впитывающей подушечки с микросеткой, которая предотвращает прилипание к ране.',
@@ -541,7 +541,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'glucose-inhalers',
     price: 900,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Тест-полоски Accu-Chek Performa предназначены для использования с глюкометрами Accu-Chek Performa/Performa Nano для определения уровня глюкозы в цельной капиллярной крови. Обеспечивают высокую точность и надежность результатов, что критически важно для эффективного контроля сахарного диабета.',
@@ -601,7 +601,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'disinfection-first-aid',
     price: 50,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Перекись водорода — антисептическое средство для наружного применения и полосканий. При контакте с поврежденной кожей и слизистыми оболочками высвобождает активный кислород, который механически очищает рану от гноя, крови и омертвевших тканей, способствуя дезинфекции. Обладает дезодорирующим эффектом.',
@@ -652,7 +652,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'disinfection-first-aid',
     price: 70,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Хлоргексидин биглюконат — антисептическое средство широкого спектра действия, активное в отношении грамположительных и грамотрицательных бактерий, дрожжей, дерматофитов и липофильных вирусов. Действует преимущественно на поверхности, не повреждая кожу и слизистые оболочки.',
@@ -708,7 +708,7 @@ export const medicalDevices: Product[] = [
     sectionId: 'medical-devices',
     categoryId: 'disinfection-first-aid',
     price: 80,
-    isPopular: true,
+
     image: 'medical-devices.jpeg',
     description: [
       'Бактерицидный пластырь предназначен для защиты мелких повреждений кожи (порезов, ссадин, царапин) от загрязнения и инфекций. Основа из нетканого материала обеспечивает воздухообмен, а впитывающая подушечка, пропитанная антисептическим раствором, предотвращает размножение бактерий на раневой поверхности.',

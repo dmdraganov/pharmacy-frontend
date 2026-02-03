@@ -1,21 +1,18 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/shared/lib/getProductImage';
-
-import HeartIcon from '@/shared/ui/HeartIcon';
+import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 
 interface ProductCardProps {
   product: Product;
-  isFavorite: boolean;
   quantityInCart: number;
   onAddToCart: (product: Product) => void;
   onUpdateQuantity: (productId: string, newQuantity: number) => void;
   onRemoveFromCart: (productId: string) => void;
-  onToggleFavorite: (productId: string) => void;
 }
 
 export const ProductCard = memo((props: ProductCardProps) => {
@@ -23,12 +20,10 @@ export const ProductCard = memo((props: ProductCardProps) => {
 
   const {
     product,
-    isFavorite,
     quantityInCart,
     onAddToCart,
     onUpdateQuantity,
     onRemoveFromCart,
-    onToggleFavorite,
   } = props;
 
   const { id, name, brand, price, oldPrice, isPrescription, image } = product;
@@ -37,34 +32,33 @@ export const ProductCard = memo((props: ProductCardProps) => {
     getProductImage(image).then((url) => setImageUrl(url));
   }, [image]);
 
-  const handleIncrement = () => onUpdateQuantity(id, quantityInCart + 1);
-  const handleDecrement = () => {
+  const handleIncrement = useCallback(
+    () => onUpdateQuantity(id, quantityInCart + 1),
+    [id, onUpdateQuantity, quantityInCart]
+  );
+
+  const handleDecrement = useCallback(() => {
     const newQuantity = quantityInCart - 1;
     if (newQuantity <= 0) {
       onRemoveFromCart(id);
     } else {
       onUpdateQuantity(id, newQuantity);
     }
-  };
-  const handleAdd = () => onAddToCart(product);
-  const handleToggleFavorite = () => onToggleFavorite(id);
+  }, [id, onRemoveFromCart, onUpdateQuantity, quantityInCart]);
+
+  const handleAdd = useCallback(
+    () => onAddToCart(product),
+    [onAddToCart, product]
+  );
 
   return (
-    <div className='relative flex h-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-background-default p-4 transition-all duration-300 hover:shadow-xl min-h-[320px]'>
-      <button
-        onClick={handleToggleFavorite}
-        className='absolute top-3 right-3 z-10'
-      >
-        <HeartIcon
-          className={`h-6 w-6 transition-colors ${
-            isFavorite ? 'text-danger' : 'text-border-default hover:text-danger'
-          }`}
-        />
-      </button>
-      <Link
-        to={`/product/${id}`}
-        className='group block flex flex-grow flex-col'
-      >
+    <div
+      className={`relative flex h-full flex-col overflow-hidden rounded-lg border border-border-default 
+        bg-background-default p-4 transition-all duration-300 hover:shadow-[0_5px_30px_rgba(0,0,0,0.20)] min-h-80`}
+    >
+      <FavoriteButton productId={id} className='absolute top-3 right-3' />
+
+      <Link to={`/product/${id}`} className='group flex grow flex-col'>
         <img
           className='w-full aspect-square object-cover transition-transform duration-300'
           src={imageUrl ?? undefined}

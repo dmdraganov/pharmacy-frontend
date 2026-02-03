@@ -6,33 +6,19 @@ import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Badge from '@/shared/ui/Badge';
 import { getProductImage } from '@/shared/lib/getProductImage';
+import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 
 interface CartItemCardProps {
   item: CartItem;
   isSelected: boolean;
-  isFavorite: boolean;
   onSelectItem: (id: string) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveFromCart: (id: string) => void;
-  onToggleFavorite: (id: string) => void;
 }
 
 const CartItemCard = memo((props: CartItemCardProps) => {
-  const {
-    item,
-
-    isSelected,
-
-    isFavorite,
-
-    onSelectItem,
-
-    onUpdateQuantity,
-
-    onRemoveFromCart,
-
-    onToggleFavorite,
-  } = props;
+  const { item, isSelected, onSelectItem, onUpdateQuantity, onRemoveFromCart } =
+    props;
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -41,7 +27,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
   }, [item.image]);
 
   return (
-    <div className='flex items-stretch rounded border p-4 shadow-sm'>
+    <div className='flex items-stretch rounded border border-border-default p-4 shadow-sm'>
       <div className='mr-4 flex items-center'>
         <Checkbox
           id={`select-${item.id}`}
@@ -74,13 +60,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
           )}
         </div>
         <div className='mt-auto flex items-center gap-4 pt-2'>
-          <Button
-            variant='secondary'
-            size='small'
-            onClick={() => onToggleFavorite(item.id)}
-          >
-            {isFavorite ? 'В избранном' : 'В избранное'}
-          </Button>
+          <FavoriteButton productId={item.id} />
           <Button
             variant='danger'
             size='small'

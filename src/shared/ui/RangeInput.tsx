@@ -189,7 +189,7 @@ const RangeInput = ({
         />
       </div>
 
-      <div className='relative mt-6 flex h-8 items-center'>
+      <div className='relative mt-6 flex h-8 items-center px-2'>
         <div
           ref={trackRef}
           onMouseDown={handleTrackMouseDown}

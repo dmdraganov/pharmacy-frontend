@@ -6,7 +6,7 @@ import { useCart } from '@/features/cart';
 import EmptyState from '@/shared/ui/EmptyState';
 
 const FavoritesPage = memo(() => {
-  const { favoriteIds, isFavorite, toggleFavorite } = useFavorites();
+  const { favoriteIds } = useFavorites();
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
 
@@ -37,11 +37,9 @@ const FavoritesPage = memo(() => {
             key={product.id}
             product={product}
             quantityInCart={getQuantityInCart(product.id)}
-            isFavorite={isFavorite(product.id)}
             onAddToCart={addToCart}
             onUpdateQuantity={updateQuantity}
             onRemoveFromCart={removeFromCart}
-            onToggleFavorite={toggleFavorite}
           />
         ))}
       </div>

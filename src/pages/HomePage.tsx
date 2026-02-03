@@ -2,14 +2,12 @@ import { memo, useMemo } from 'react';
 import { products } from '@/data/products';
 import { ProductCard } from '@/entities/product/';
 import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
 import ProductSlider from '@/widgets/ProductSlider';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 
 const HomePage = memo(() => {
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
   const isMobile = useMediaQuery('(max-width: 1023px)');
 
   const popularProducts = useMemo(
@@ -30,11 +28,9 @@ const HomePage = memo(() => {
         key={`${keyPrefix}-${product.id}`}
         product={product}
         quantityInCart={getQuantityInCart(product.id)}
-        isFavorite={isFavorite(product.id)}
         onAddToCart={addToCart}
         onUpdateQuantity={updateQuantity}
         onRemoveFromCart={removeFromCart}
-        onToggleFavorite={toggleFavorite}
       />
     ));
 

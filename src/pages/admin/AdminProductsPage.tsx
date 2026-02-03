@@ -46,7 +46,7 @@ const AdminProductsPage = () => {
             {productsWithFakeStock.map((product) => (
               <tr
                 key={product.id}
-                className='border-b border-border-subtle hover:bg-background-hover'
+                className='border-b border-border-default hover:bg-background-hover'
               >
                 <td className='py-3 px-6 text-left whitespace-nowrap text-text-default'>
                   {product.name}

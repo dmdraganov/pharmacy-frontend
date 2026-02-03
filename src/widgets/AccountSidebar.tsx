@@ -49,9 +49,9 @@ export const AccountSidebar = memo(
     const { user } = useUser();
 
     return (
-      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-subtle bg-background-default p-4 shadow-sm'>
+      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4 shadow-sm'>
         {/* User Info */}
-        <div className='border-b border-border-subtle pb-4'>
+        <div className='border-b border-border-default pb-4'>
           <p className='text-lg font-bold'>
             {user.firstName} {user.lastName}
           </p>

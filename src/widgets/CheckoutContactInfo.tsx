@@ -20,7 +20,7 @@ export const CheckoutContactInfo = memo(() => {
   };
 
   return (
-    <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+    <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>
         Контактные данные
       </h2>

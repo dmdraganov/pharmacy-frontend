@@ -45,16 +45,16 @@ export const CurrentOrder = memo(() => {
           {statusInfo.text}
         </Badge>
       </div>
-      <div className='my-4 border-t border-border-subtle'></div>
+      <div className='my-4 border-t border-border-default'></div>
       <div>
         <p className='mb-2 font-semibold'>Состав заказа:</p>
-        <div className='flex flex-col divide-y divide-border-subtle'>
+        <div className='flex flex-col divide-y divide-border-default'>
           {items.map((item) => (
             <OrderItemRow key={item.product.id} item={item} />
           ))}
         </div>
       </div>
-      <div className='mt-4 border-t border-border-subtle pt-4 text-right'>
+      <div className='mt-4 border-t border-border-default pt-4 text-right'>
         <p className='text-xl font-bold'>Итого: {total} ₽</p>
       </div>
     </div>

@@ -8,7 +8,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'baby-food-health',
     price: 1200,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Детская молочная смесь Nutrilon Premium 1 разработана для питания младенцев с рождения до 6 месяцев. Ее уникальная формула Pronutra+ содержит пребиотики GOS/FOS, необходимые для формирования здоровой микрофлоры кишечника и укрепления иммунитета, а также жирные кислоты LCP (ARA/DHA) для оптимального развития мозга и зрения.',
@@ -64,7 +64,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'baby-food-health',
     price: 180,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Каша молочная детская Nestle Овсяная с бананом — это вкусное и полезное питание для малышей с 6 месяцев. Она обогащена бифидобактериями BL для здорового пищеварения и укрепления иммунитета, а также витаминами и минералами, необходимыми для полноценного роста и развития ребенка. Натуральные хлопья овса и кусочки банана придают каше нежный вкус и приятную текстуру.',
@@ -115,7 +115,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'baby-food-health',
     price: 90,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Фруктовое пюре Gerber Яблоко — это натуральное и гипоаллергенное пюре из яблок, предназначенное для первого прикорма малышей с 4 месяцев. Изготовлено из тщательно отобранных, экологически чистых фруктов, не содержит сахара, крахмала, искусственных красителей, консервантов и ГМО.',
@@ -162,7 +162,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'baby-food-health',
     price: 550,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Бутылочка для кормления Philips Avent Anti-colic разработана для снижения колик и дискомфорта у младенцев. Ее уникальный антиколиковый клапан предотвращает попадание воздуха в животик ребенка, уменьшая срыгивания и вздутие. Соска для медленного потока идеально подходит для новорожденных и младенцев, обеспечивая комфортное и естественное кормление.',
@@ -215,7 +215,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'pregnancy-feeding',
     price: 1000,
-    isPopular: true,
+
     isPrescription: false, // Often recommended by doctors but available OTC
     image: 'mother-baby.jpg',
     description: [
@@ -277,7 +277,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'pregnancy-feeding',
     price: 1800,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Крем от растяжек Mustela Maternite, двойного действия, разработан специально для предотвращения появления и уменьшения уже существующих растяжек во время беременности и после родов. Его формула, на 96% состоящая из ингредиентов натурального происхождения, включает пептиды авокадо, галактоарабинан и масло маракуйи.',
@@ -325,7 +325,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'pregnancy-feeding',
     price: 450,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Чай для лактации Hipp Organic — это натуральный травяной напиток, специально разработанный для кормящих мам. Его формула содержит экстракты фенхеля, аниса и тмина, которые традиционно используются для стимуляции выработки грудного молока и улучшения пищеварения у младенца через молоко матери.',
@@ -375,7 +375,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'pregnancy-feeding',
     price: 600,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Одноразовые прокладки для груди Avent обеспечивают максимальную сухость и комфорт для кормящих мам. Их ультратонкий, но очень впитывающий внутренний слой надежно удерживает влагу, предотвращая протекания на одежду. Специальная форма и клейкая лента обеспечивают надежную фиксацию в бюстгальтере.',
@@ -427,7 +427,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'safety',
     price: 400,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Назальный аспиратор OTRIVIN BABY предназначен для мягкого и безопасного очищения носовых ходов младенцев и маленьких детей от слизистых выделений. Его использование помогает облегчить дыхание малыша при насморке, улучшить сон и кормление. Аспиратор состоит из анатомической насадки, мягкого абсорбирующего фильтра и гибкой трубки, через которую родитель отсасывает слизь.',
@@ -476,7 +476,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'safety',
     price: 150,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Термометр для воды Happy Baby в форме рыбки — это безопасный и точный инструмент для измерения температуры воды в ванночке перед купанием малыша. Его яркий и забавный дизайн в виде рыбки не только привлекает внимание ребенка, но и делает процесс купания более веселым.',
@@ -522,7 +522,7 @@ export const motherAndBaby: Product[] = [
     sectionId: 'mother-baby',
     categoryId: 'safety',
     price: 500,
-    isPopular: true,
+
     image: 'mother-baby.jpg',
     description: [
       'Детские ножницы Chicco с закругленными концами — это незаменимый аксессуар для безопасного и аккуратного ухода за ногтями малыша с первых дней жизни. Закругленные концы лезвий предотвращают случайные порезы, а тонкие и короткие лезвия из нержавеющей стали позволяют точно обрезать даже самые маленькие ноготки.',

@@ -29,7 +29,7 @@ const Header = memo(() => {
   };
 
   return (
-    <header className='sticky top-0 z-50 border-b border-border-subtle bg-background-default'>
+    <header className='sticky top-0 z-50 border-b border-border-default bg-background-default'>
       <div className='container max-w-[1280px] mx-auto px-3 md:px-4 lg:px-6'>
         {/* Top Row: Region Selector */}
         <div
