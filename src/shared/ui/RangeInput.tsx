@@ -175,7 +175,7 @@ const RangeInput = ({
           placeholder='От'
           className='w-full'
         />
-        <span className='text-gray-500'>-</span>
+        <span className='text-text-subtle'>-</span>
         <Input
           type='number'
           value={inputValueMax}
@@ -193,10 +193,10 @@ const RangeInput = ({
         <div
           ref={trackRef}
           onMouseDown={handleTrackMouseDown}
-          className='relative h-1 w-full cursor-pointer rounded-md bg-gray-200'
+          className='relative h-1 w-full cursor-pointer rounded-md bg-background-muted'
         >
           <div
-            className='absolute z-10 h-1 rounded-md bg-blue-500'
+            className='absolute z-10 h-1 rounded-md bg-primary'
             style={{
               left: `${minPercent}%`,
               width: `${maxPercent - minPercent}%`,
@@ -204,12 +204,12 @@ const RangeInput = ({
           ></div>
           <div
             ref={minThumbRef}
-            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-blue-600 active:cursor-grabbing'
+            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary-emphasis active:cursor-grabbing'
             style={{ left: `${minPercent}%` }}
           ></div>
           <div
             ref={maxThumbRef}
-            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-blue-600 active:cursor-grabbing'
+            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary-emphasis active:cursor-grabbing'
             style={{ left: `${maxPercent}%` }}
           ></div>
         </div>

@@ -30,7 +30,7 @@ const FavoritesPage = memo(() => {
 
   return (
     <>
-      <h1 className='mb-6 text-2xl font-bold'>Избранное</h1>
+      <h1 className='mb-6 text-2xl font-bold text-text-heading'>Избранное</h1>
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {favoriteProducts.map((product) => (
           <ProductCard

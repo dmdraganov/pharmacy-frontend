@@ -1,7 +1,53 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Inter';
+  src: url('../shared/assets/fonts/Inter-VariableFont.woff2');
+}
+
+@theme {
+  --font-inter: 'Inter';
+
+  /* Color Palette */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-emphasis: #2563eb;
+  --color-primary-subtle: #dbeafe;
+  --color-primary-ultrasubtle: #eff6ff;
+
+  --color-danger-hover: #b91c1c;
+  --color-danger: #dc2626;
+  --color-danger-subtle: #fee2e2;
+
+  --color-success-hover: #047857;
+  --color-success: #059669;
+  --color-success-subtle: #d1fae5;
+
+  --color-warning-subtle: #fef3c7;
+  --color-warning-border: #fbbf24;
+  --color-warning-text: #b45309;
+
+  --color-text-default: #1e293b;
+  --color-text-heading: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+  --color-text-on-primary: white;
+  --color-text-on-danger: white;
+
+  --color-background-default: white;
+  --color-background-subtle: #f8fafc;
+  --color-background-muted: #e2e8f0;
+  --color-background-muted-hover: #cbd5e1;
+  --color-background-hover: #f1f5f9;
+
+  --color-border-default: #cbd5e1;
+  --color-border-hover: #94a3b8;
+  --color-border-subtle: #e2e8f0;
+}
+
 @layer base {
   html {
+    font-family: theme('fontFamily.inter');
     scrollbar-gutter: stable;
   }
 }

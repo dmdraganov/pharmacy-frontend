@@ -23,8 +23,8 @@ const ProductSlider = memo(({ children }: SliderProps) => {
   };
 
   return (
-    <div className='relative'>
-      <div className='overflow-hidden'>
+    <div className='relative -mx-4'>
+      <div className='overflow-hidden p-4'>
         <div
           className='flex transition-transform duration-300 ease-in-out'
           style={{
@@ -46,7 +46,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
       {canGoPrev && (
         <button
           onClick={handlePrev}
-          className='absolute -left-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white/80 p-2 shadow-lg backdrop-blur-sm hover:bg-white'
+          className='absolute -left-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-background-default/80 p-2 shadow-lg backdrop-blur-sm hover:bg-background-default cursor-pointer'
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -67,7 +67,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
       {canGoNext && (
         <button
           onClick={handleNext}
-          className='absolute -right-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white/80 p-2 shadow-lg backdrop-blur-sm hover:bg-white'
+          className='absolute -right-2 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-background-default/80 p-2 shadow-lg backdrop-blur-sm hover:bg-background-default cursor-pointer'
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'

@@ -45,7 +45,7 @@ const FiltersSidebar = ({
 
   return (
     <aside className={className}>
-      <h2 className='mb-4 text-xl font-bold'>Фильтры</h2>
+      <h2 className='mb-4 text-xl font-bold text-text-heading'>Фильтры</h2>
 
       {section && categories && categories.length > 0 && (
         <Accordion title='Категории'>
@@ -54,7 +54,7 @@ const FiltersSidebar = ({
               <Link
                 key={cat.id}
                 to={`/catalog/${section.id}/${cat.id}`}
-                className='text-sm text-blue-600 hover:underline'
+                className='text-sm text-primary-emphasis hover:underline'
               >
                 {cat.name}
               </Link>

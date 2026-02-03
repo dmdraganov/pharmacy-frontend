@@ -29,15 +29,21 @@ export const OrderHistory = memo(() => {
   if (pastOrders.length === 0) {
     return (
       <div>
-        <h2 className='mb-4 text-2xl font-bold'>История заказов</h2>
-        <p>Здесь будет список ваших прошлых заказов.</p>
+        <h2 className='mb-4 text-2xl font-bold text-text-heading'>
+          История заказов
+        </h2>
+        <p className='text-text-default'>
+          Здесь будет список ваших прошлых заказов.
+        </p>
       </div>
     );
   }
 
   return (
     <div>
-      <h2 className='mb-4 text-2xl font-bold'>История заказов</h2>
+      <h2 className='mb-4 text-2xl font-bold text-text-heading'>
+        История заказов
+      </h2>
       <div className='flex flex-col gap-4'>
         {pastOrders.slice(0, 3).map((order) => (
           <OrderHistoryItem

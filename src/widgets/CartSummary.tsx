@@ -18,8 +18,8 @@ const CartSummary = memo((props: CartSummaryProps) => {
   } = props;
 
   return (
-    <div className='relative z-10 h-fit rounded border p-4 shadow-sm lg:col-span-1 overflow-hidden'>
-      <h2 className='mb-4 text-xl font-bold'>Ваша корзина</h2>
+    <div className='relative z-10 h-fit rounded border border-border-subtle bg-background-default p-4 shadow-sm lg:col-span-1 overflow-hidden'>
+      <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваша корзина</h2>
       <div className='space-y-2'>
         {selectedItemsDiscount > 0 ? (
           <>
@@ -29,7 +29,7 @@ const CartSummary = memo((props: CartSummaryProps) => {
                 {selectedItemsOriginalTotal} ₽
               </span>
             </div>
-            <div className='flex justify-between text-lg text-green-600'>
+            <div className='flex justify-between text-lg text-success'>
               <span>Скидка</span>
               <span>{selectedItemsDiscount} ₽</span>
             </div>

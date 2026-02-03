@@ -40,7 +40,7 @@ export const RegionSelectWithSearch = memo(() => {
       <button
         type='button'
         onClick={() => setIsOpen(!isOpen)}
-        className='flex items-center gap-1 rounded-md border-none text-sm text-gray-700 outline-none hover:cursor-pointer'
+        className='flex items-center gap-1 rounded-md border-none text-sm text-text-default outline-none cursor-pointer'
       >
         <span>{region}</span>
         <svg
@@ -62,7 +62,7 @@ export const RegionSelectWithSearch = memo(() => {
       </button>
 
       {isOpen && (
-        <div className='absolute left-0 mt-2 w-64 rounded-md border bg-white shadow-lg'>
+        <div className='absolute left-0 mt-2 w-64 rounded-md border border-border-default bg-background-default shadow-lg'>
           <div className='p-2'>
             <Input
               type='text'
@@ -78,14 +78,14 @@ export const RegionSelectWithSearch = memo(() => {
                     <button
                       type='button'
                       onClick={() => handleRegionSelect(r)}
-                      className='block w-full px-3 py-2 text-left hover:bg-gray-100'
+                      className='block w-full px-3 py-2 text-left hover:bg-background-hover cursor-pointer'
                     >
                       {r}
                     </button>
                   </li>
                 ))
               ) : (
-                <li className='px-3 py-2 text-gray-500'>Регион не найден</li>
+                <li className='px-3 py-2 text-text-subtle'>Регион не найден</li>
               )}
             </ul>
           </div>

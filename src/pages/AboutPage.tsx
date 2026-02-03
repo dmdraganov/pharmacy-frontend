@@ -3,7 +3,7 @@ import { memo } from 'react';
 const AboutPage = memo(() => {
   return (
     <div>
-      <h1 className='mb-8 text-3xl font-bold'>О нас</h1>
+      <h1 className='mb-8 text-3xl font-bold text-text-heading'>О нас</h1>
 
       <div className='prose max-w-none'>
         <p>
@@ -14,7 +14,9 @@ const AboutPage = memo(() => {
           здоровья, каждому клиенту.
         </p>
 
-        <h2 className='mt-8 text-2xl font-semibold'>Наша история</h2>
+        <h2 className='mt-8 text-2xl font-semibold text-text-heading'>
+          Наша история
+        </h2>
         <p>
           Наша аптека была основана в 2010 году с простой целью: создать
           надежный и удобный источник лекарственных средств для местного

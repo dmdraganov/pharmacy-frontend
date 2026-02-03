@@ -11,12 +11,12 @@ export const CheckoutActions = memo(
   ({ onConfirm, isProcessing }: CheckoutActionsProps) => {
     const { selectedItemsTotal } = useCart();
     return (
-      <div className='rounded-lg border bg-white p-6 shadow-sm'>
+      <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
         <div className='mb-4 flex justify-between font-bold'>
           <span>Итого к оплате</span>
           <span>{selectedItemsTotal} ₽</span>
         </div>
-        <p className='mb-4 text-xs text-gray-500'>
+        <p className='mb-4 text-xs text-text-subtle'>
           Нажимая кнопку «Подтвердить заказ», вы соглашаетесь с условиями
           продажи. После подтверждения заказ нельзя будет изменить.
         </p>

@@ -10,11 +10,11 @@ import { CheckoutActions } from '@/widgets/CheckoutActions';
 import Button from '@/shared/ui/Button';
 
 const OrderSuccessMessage = () => (
-  <div className='flex flex-col items-center justify-center rounded-lg border bg-white p-12 text-center shadow-sm'>
-    <h1 className='mb-4 text-3xl font-bold text-green-600'>
+  <div className='flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-background-default p-12 text-center shadow-sm'>
+    <h1 className='mb-4 text-3xl font-bold text-success'>
       Заказ успешно оформлен!
     </h1>
-    <p className='mb-6 text-gray-700'>
+    <p className='mb-6 text-text-default'>
       Спасибо за покупку! Информация о заказе отправлена на ваш e-mail.
     </p>
     <Button as={Link} to='/' variant='primary'>
@@ -43,7 +43,9 @@ const CheckoutPage = memo(() => {
 
   return (
     <>
-      <h1 className='mb-8 text-3xl font-bold'>Оформление заказа</h1>
+      <h1 className='mb-8 text-3xl font-bold text-text-heading'>
+        Оформление заказа
+      </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         {/* Main Content */}
         <main className='flex flex-col gap-6 lg:col-span-2'>

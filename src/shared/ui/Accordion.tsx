@@ -9,14 +9,14 @@ type AccordionProps = {
 const Accordion = ({ title, children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
-  const defaultClasses = 'border-b';
+  const defaultClasses = 'border-b border-border-subtle';
   const combinedClasses = [defaultClasses, className].filter(Boolean).join(' ');
 
   return (
     <div className={combinedClasses}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='flex w-full items-center justify-between py-4 text-left font-semibold'
+        className='flex w-full items-center justify-between py-4 text-left font-semibold text-text-default cursor-pointer'
       >
         <span>{title}</span>
         <svg

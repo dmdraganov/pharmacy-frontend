@@ -11,20 +11,18 @@ const CatalogPage = memo(() => {
   );
 
   return (
-    <div className='flex flex-col md:flex-row min-h-125'>
+    <div className='flex min-h-[600px]'>
       {/* Categories List */}
-      <div className='w-full md:w-1/4 p-4 border-r'>
-        <ul>
+      <div className='w-full md:w-1/4'>
+        <ul className='p-4'>
           {sections.map((sec) => (
-            <li
-              key={sec.id}
-              className='mb-2'
-              onMouseEnter={() => setHoveredSectionId(sec.id)}
-            >
+            <li key={sec.id} onMouseEnter={() => setHoveredSectionId(sec.id)}>
               <Link
                 to={`/catalog/${sec.id}`}
-                className={`block text-lg hover:text-blue-600 ${
-                  hoveredSectionId === sec.id ? 'text-blue-700' : ''
+                className={`block rounded-md px-3 py-2 text-base font-medium hover:bg-primary-subtle hover:text-primary-hover ${
+                  hoveredSectionId === sec.id
+                    ? 'bg-primary-subtle text-primary-hover'
+                    : ''
                 }`}
               >
                 {sec.name}
@@ -34,17 +32,19 @@ const CatalogPage = memo(() => {
         </ul>
       </div>
 
-      {/* Subcategories on hover, moved to the right pane */}
-      <div className='relative w-full md:w-3/4 p-4'>
+      {/* Subcategories on hover */}
+      <div className='relative flex w-full items-start justify-center md:w-3/4 p-6'>
         {hoveredSection ? (
-          <div>
-            <h3 className='mb-4 text-xl font-bold'>{hoveredSection.name}</h3>
-            <ul>
+          <div className='w-full'>
+            <h3 className='mb-6 text-2xl font-semibold'>
+              {hoveredSection.name}
+            </h3>
+            <ul className='grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-3'>
               {hoveredSection.categories.map((cat) => (
-                <li key={cat.id} className='mb-2'>
+                <li key={cat.id}>
                   <Link
                     to={`/catalog/${hoveredSection.id}/${cat.id}`}
-                    className='hover:text-blue-600'
+                    className='text-base hover:text-primary-emphasis hover:underline'
                   >
                     {cat.name}
                   </Link>
@@ -53,10 +53,13 @@ const CatalogPage = memo(() => {
             </ul>
           </div>
         ) : (
-          <div>
-            <h1 className='mb-4 text-2xl font-bold'>Выберите раздел</h1>
-            <p className='text-gray-600'>
-              Наведите курсор на раздел слева, чтобы просмотреть категории.
+          <div className='text-center'>
+            <h1 className='text-2xl font-semibold text-text-default'>
+              Каталог товаров
+            </h1>
+            <p className='mt-2 text-base text-text-muted'>
+              Выберите раздел в меню слева, чтобы посмотреть доступные
+              категории.
             </p>
           </div>
         )}

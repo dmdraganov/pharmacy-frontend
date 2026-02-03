@@ -11,8 +11,10 @@ const ProductPage = memo(() => {
   if (!product) {
     return (
       <div className='text-center'>
-        <h1 className='text-2xl font-bold'>Товар не найден</h1>
-        <Link to='/catalog' className='text-blue-500 hover:underline'>
+        <h1 className='text-2xl font-bold text-text-heading'>
+          Товар не найден
+        </h1>
+        <Link to='/catalog' className='text-primary hover:underline'>
           Вернуться в каталог
         </Link>
       </div>

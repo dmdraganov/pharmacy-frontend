@@ -14,10 +14,10 @@ const TabButton = ({
   <button
     type='button'
     onClick={onClick}
-    className={`flex-1 rounded-md px-4 py-2 text-center font-medium transition-colors ${
+    className={`flex-1 rounded-md px-4 py-2 text-center font-medium transition-colors cursor-pointer ${
       isActive
-        ? 'bg-blue-500 text-white shadow'
-        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+        ? 'bg-primary text-text-on-primary shadow'
+        : 'bg-background-muted text-text-default hover:bg-background-muted-hover'
     }`}
   >
     {children}
@@ -40,7 +40,7 @@ const PickupSelector = () => (
     {pharmacies.map((pharmacy) => (
       <label
         key={pharmacy.id}
-        className='flex cursor-pointer items-start gap-3 rounded-lg border p-3 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50'
+        className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
       >
         <input
           type='radio'
@@ -50,8 +50,8 @@ const PickupSelector = () => (
         />
         <div>
           <p className='font-semibold'>{pharmacy.name}</p>
-          <p className='text-sm text-gray-600'>{pharmacy.address}</p>
-          <p className='text-sm text-gray-500'>{pharmacy.workingHours}</p>
+          <p className='text-sm text-text-muted'>{pharmacy.address}</p>
+          <p className='text-sm text-text-subtle'>{pharmacy.workingHours}</p>
         </div>
       </label>
     ))}
@@ -64,10 +64,12 @@ export const CheckoutDelivery = memo(() => {
   );
 
   return (
-    <div className='rounded-lg border bg-white p-6 shadow-sm'>
-      <h2 className='mb-4 text-xl font-bold'>Способ получения</h2>
+    <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+      <h2 className='mb-4 text-xl font-bold text-text-heading'>
+        Способ получения
+      </h2>
 
-      <div className='mb-6 flex gap-2 rounded-lg bg-gray-200 p-1'>
+      <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
         <TabButton
           onClick={() => setDeliveryMethod('courier')}
           isActive={deliveryMethod === 'courier'}

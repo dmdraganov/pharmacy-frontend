@@ -48,12 +48,13 @@ const Button = ({
   ...props
 }: PropsWithChildren<ButtonProps>) => {
   const baseStyles =
-    'rounded font-bold transition-colors duration-200 hover:cursor-pointer';
+    'rounded font-bold transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
-    primary: 'bg-blue-500 text-white hover:bg-blue-700',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
-    danger: 'bg-red-500 text-white hover:bg-red-700',
+    primary: 'bg-primary text-text-on-primary hover:bg-primary-hover',
+    secondary:
+      'bg-background-muted text-text-default hover:bg-background-muted-hover',
+    danger: 'bg-danger text-text-on-danger hover:bg-danger-hover',
   };
 
   const sizeStyles = {

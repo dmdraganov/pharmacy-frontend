@@ -1,13 +1,39 @@
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 
-type BadgeProps = HTMLAttributes<HTMLSpanElement>;
+export type BadgeVariant =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'success'
+  | 'warning';
 
-const Badge = ({ children, ...props }: PropsWithChildren<BadgeProps>) => {
+interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+  variant?: BadgeVariant;
+}
+
+const Badge = ({
+  children,
+  className,
+  variant = 'secondary',
+  ...props
+}: PropsWithChildren<BadgeProps>) => {
+  const baseStyles =
+    'inline-block rounded-full px-2 py-1 text-xs font-semibold uppercase';
+
+  const variantStyles = {
+    primary: 'bg-primary-subtle text-primary-emphasis',
+    secondary: 'bg-background-muted text-text-default',
+    danger: 'bg-danger-subtle text-danger',
+    success: 'bg-success-subtle text-success',
+    warning: 'bg-warning-subtle text-warning-text',
+  };
+
+  const combinedClasses = [baseStyles, variantStyles[variant], className]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <span
-      {...props}
-      className='inline-block rounded-full bg-red-500 px-2 py-1 text-xs font-semibold uppercase text-white'
-    >
+    <span {...props} className={combinedClasses}>
       {children}
     </span>
   );

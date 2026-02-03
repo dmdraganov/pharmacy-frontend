@@ -14,7 +14,7 @@ const QuantityControl = memo(
         <Button onClick={onDecrement} variant='secondary' size='small'>
           -
         </Button>
-        <span className='w-8 text-center text-lg font-semibold'>
+        <span className='w-8 text-center text-lg font-semibold text-text-default'>
           {quantity}
         </span>
         <Button onClick={onIncrement} variant='secondary' size='small'>

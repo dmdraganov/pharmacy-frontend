@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useSearch } from '@/features/search';
-import ProductGrid from '@/widgets/ProductGrid';
 import FiltersSidebar from '@/widgets/FiltersSidebar';
 import { useFilters } from '@/features/filters/useFilters';
 import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
+import CatalogLayoutWidget from '@/widgets/CatalogLayoutWidget';
 
 const SearchPage = () => {
   const { searchTerm, searchResults } = useSearch();
@@ -21,22 +21,20 @@ const SearchPage = () => {
 
   const title = searchTerm ? `Результаты поиска: "${searchTerm}"` : 'Поиск';
 
-  const gridColsClass =
-    searchResults.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-1';
-  const productGridColSpanClass =
-    searchResults.length > 0 ? 'md:col-span-3' : 'md:col-span-1';
+  const sidebar = useMemo(
+    () =>
+      searchResults.length > 0 ? (
+        <FiltersSidebar availableFilters={availableFilters} />
+      ) : null,
+    [searchResults.length, availableFilters]
+  );
 
   return (
-    <div className={`grid grid-cols-1 gap-8 ${gridColsClass}`}>
-      {searchResults.length > 0 && (
-        <div className='col-span-1 min-w-0'>
-          <FiltersSidebar availableFilters={availableFilters} />
-        </div>
-      )}
-      <div className={`col-span-1 ${productGridColSpanClass}`}>
-        <ProductGrid title={title} products={displayProducts} />
-      </div>
-    </div>
+    <CatalogLayoutWidget
+      title={title}
+      products={displayProducts}
+      sidebar={sidebar}
+    />
   );
 };
 

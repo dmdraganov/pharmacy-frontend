@@ -29,36 +29,47 @@ const Header = memo(() => {
   };
 
   return (
-    <header className='sticky top-0 z-50 border-b bg-white'>
-      {/* Top Row: Region Selector */}
-      <div
-        className={`container mx-auto flex justify-start px-4 transition-all duration-300 ease-in-out ${
-          isScrolled ? 'max-h-0 pt-0 opacity-0' : 'max-h-16 pt-4 opacity-100'
-        }`}
-      >
-        <RegionSelectWithSearch />
-      </div>
-
-      {/* Bottom Row: Logo, Search, Navigation */}
-      <div className='container mx-auto flex items-center justify-between p-4'>
-        <Logo />
-
-        <div className='flex flex-1 items-center justify-center gap-4 px-8'>
-          <Button onClick={handleCatalogToggle}>Каталог</Button>
-          <SearchInput />
+    <header className='sticky top-0 z-50 border-b border-border-subtle bg-background-default'>
+      <div className='container max-w-[1280px] mx-auto px-3 md:px-4 lg:px-6'>
+        {/* Top Row: Region Selector */}
+        <div
+          className={`flex justify-start transition-all duration-300 ease-in-out ${
+            isScrolled ? 'max-h-0 pt-0 opacity-0' : 'max-h-16 pt-4 opacity-100'
+          }`}
+        >
+          <RegionSelectWithSearch />
         </div>
 
-        <nav className='flex items-center space-x-4'>
-          <Link to='/favorites' className='text-gray-500 hover:text-gray-900'>
-            Избранное
-          </Link>
-          <Link to='/cart' className='text-gray-500 hover:text-gray-900'>
-            Корзина
-          </Link>
-          <Link to='/account' className='text-gray-500 hover:text-gray-900'>
-            Личный кабинет
-          </Link>
-        </nav>
+        {/* Bottom Row: Logo, Search, Navigation */}
+        <div className='flex items-center justify-between py-4'>
+          <Logo />
+
+          <div className='flex flex-1 items-center justify-center gap-4 px-8'>
+            <Button onClick={handleCatalogToggle}>Каталог</Button>
+            <SearchInput />
+          </div>
+
+          <nav className='flex items-center space-x-4'>
+            <Link
+              to='/favorites'
+              className='text-text-subtle hover:text-text-heading'
+            >
+              Избранное
+            </Link>
+            <Link
+              to='/cart'
+              className='text-text-subtle hover:text-text-heading'
+            >
+              Корзина
+            </Link>
+            <Link
+              to='/account'
+              className='text-text-subtle hover:text-text-heading'
+            >
+              Личный кабинет
+            </Link>
+          </nav>
+        </div>
       </div>
     </header>
   );

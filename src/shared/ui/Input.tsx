@@ -4,7 +4,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({ className, ...props }: InputProps) => {
   const defaultClasses =
-    'focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none';
+    'w-full appearance-none rounded border border-border-subtle px-3 py-2 leading-tight text-text-default shadow focus:outline-none focus:ring-2 focus:ring-primary';
 
   const combinedClasses = [defaultClasses, className].filter(Boolean).join(' ');
 

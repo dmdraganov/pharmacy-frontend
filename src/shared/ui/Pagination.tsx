@@ -18,14 +18,9 @@ const Pagination = ({ currentPage, totalPages, goToPage }: PaginationProps) => {
       {pages.map((page) => (
         <Button
           key={page}
+          variant='primary'
           onClick={() => goToPage(page)}
           disabled={currentPage === page}
-          // Стили для активной и неактивной кнопки
-          className={`px-4 py-2 font-bold ${
-            currentPage === page
-              ? 'cursor-not-allowed rounded bg-blue-700 text-white'
-              : 'rounded bg-blue-500 text-white hover:bg-blue-600'
-          }`}
         >
           {page}
         </Button>

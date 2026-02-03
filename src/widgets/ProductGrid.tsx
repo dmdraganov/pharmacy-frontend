@@ -25,7 +25,7 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
 
   return (
     <>
-      <h1 className='mb-4 text-2xl font-bold'>{title}</h1>
+      <h1 className='mb-4 text-2xl font-bold text-text-heading'>{title}</h1>
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3'>
         {currentData.length > 0 ? (
           currentData.map((product) => (
@@ -41,7 +41,7 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
             />
           ))
         ) : (
-          <p>Пока нет товаров.</p>
+          <p className='text-text-default'>Пока нет товаров.</p>
         )}
       </div>
       {totalPages > 1 && (

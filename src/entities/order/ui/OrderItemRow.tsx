@@ -20,12 +20,12 @@ export const OrderItemRow = memo(({ item }: { item: OrderItem }) => {
       <div className='flex-grow'>
         <Link
           to={`/product/${item.product.id}`}
-          className='font-semibold hover:underline'
+          className='font-semibold text-text-default hover:text-primary hover:underline'
         >
           {item.product.name}
         </Link>
       </div>
-      <div className='text-right'>
+      <div className='text-right text-text-default'>
         <p>{item.quantity} шт.</p>
         <p className='font-semibold'>{item.price * item.quantity} ₽</p>
       </div>

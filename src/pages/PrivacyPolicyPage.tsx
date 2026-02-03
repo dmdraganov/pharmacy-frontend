@@ -2,8 +2,10 @@ import { memo } from 'react';
 
 const PrivacyPolicyPage = memo(() => {
   return (
-    <div className='container mx-auto p-4'>
-      <h1 className='mb-4 text-3xl font-bold'>Политика конфиденциальности</h1>
+    <div>
+      <h1 className='mb-4 text-3xl font-bold text-text-heading'>
+        Политика конфиденциальности
+      </h1>
       <div className='prose max-w-none'>
         <p>
           Мы ценим вашу конфиденциальность и стремимся защищать ваши личные

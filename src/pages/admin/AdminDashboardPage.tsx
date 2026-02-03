@@ -39,39 +39,41 @@ const AdminDashboardPage = () => {
 
   return (
     <div>
-      <h1 className='text-3xl font-bold mb-6'>Дашборд</h1>
+      <h1 className='text-3xl font-semibold mb-6'>Дашборд</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-lg font-semibold text-gray-700'>Всего заказов</h2>
-          <p className='text-3xl font-bold text-gray-900 mt-2'>{totalOrders}</p>
+        <div className='bg-background-default p-6 rounded-lg border'>
+          <h2 className='text-lg font-medium text-text-muted'>Всего заказов</h2>
+          <p className='text-3xl font-bold text-text-heading mt-2'>
+            {totalOrders}
+          </p>
         </div>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-lg font-semibold text-gray-700'>Общая выручка</h2>
-          <p className='text-3xl font-bold text-gray-900 mt-2'>
+        <div className='bg-background-default p-6 rounded-lg border'>
+          <h2 className='text-lg font-medium text-text-muted'>Общая выручка</h2>
+          <p className='text-3xl font-bold text-text-heading mt-2'>
             {totalSales.toFixed(2)} ₽
           </p>
         </div>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-lg font-semibold text-gray-700'>
+        <div className='bg-background-default p-6 rounded-lg border'>
+          <h2 className='text-lg font-medium text-text-muted'>
             Новые пользователи
           </h2>
-          <p className='text-3xl font-bold text-gray-900 mt-2'>
+          <p className='text-3xl font-bold text-text-heading mt-2'>
             {fakeData.newUsers}
           </p>
         </div>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-lg font-semibold text-gray-700'>
+        <div className='bg-background-default p-6 rounded-lg border'>
+          <h2 className='text-lg font-medium text-text-muted'>
             Процент отказов
           </h2>
-          <p className='text-3xl font-bold text-gray-900 mt-2'>
+          <p className='text-3xl font-bold text-text-heading mt-2'>
             {fakeData.bounceRate}
           </p>
         </div>
       </div>
 
       <div className='mt-8'>
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-lg font-semibold text-gray-700 mb-4'>
+        <div className='bg-background-default p-6 rounded-lg border'>
+          <h2 className='text-lg font-medium text-text-muted mb-4'>
             Топ продаваемых товаров
           </h2>
           <ul>
@@ -80,8 +82,8 @@ const AdminDashboardPage = () => {
                 key={index}
                 className='flex justify-between items-center py-2 border-b'
               >
-                <span className='text-gray-600'>{product.name}</span>
-                <span className='font-bold text-gray-800'>
+                <span className='text-text-muted'>{product.name}</span>
+                <span className='font-bold text-text-default'>
                   {product.count} шт.
                 </span>
               </li>

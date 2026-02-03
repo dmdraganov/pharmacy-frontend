@@ -40,10 +40,10 @@ const CartPage = memo(() => {
 
   return (
     <>
-      <h1 className='mb-6 text-2xl font-bold'>Корзина</h1>
+      <h1 className='mb-6 text-2xl font-bold text-text-heading'>Корзина</h1>
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
         <div className='lg:col-span-2'>
-          <div className='mb-6 flex items-center justify-between rounded border p-4'>
+          <div className='mb-6 flex items-center justify-between rounded border border-border-subtle bg-background-default p-4'>
             <Checkbox
               id='select-all'
               label='Выбрать все'

@@ -24,7 +24,7 @@ const CheckoutItem = memo(({ item }: { item: CartItem }) => {
       />
       <div className='flex-grow'>
         <p className='font-semibold'>{item.name}</p>
-        <p className='text-sm text-gray-500'>{item.price} ₽</p>
+        <p className='text-sm text-text-subtle'>{item.price} ₽</p>
       </div>
       <div className='flex flex-col items-end gap-2'>
         <QuantityControl
@@ -51,8 +51,8 @@ export const CheckoutOrderSummary = memo(() => {
 
   if (items.length === 0) {
     return (
-      <div className='rounded-lg border bg-white p-6 shadow-sm'>
-        <h2 className='mb-4 text-xl font-bold'>Ваш заказ</h2>
+      <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+        <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
         <p>Ваша корзина пуста.</p>
         <Button as={Link} to='/' className='mt-4 w-full'>
           Вернуться к покупкам
@@ -62,14 +62,14 @@ export const CheckoutOrderSummary = memo(() => {
   }
 
   return (
-    <div className='rounded-lg border bg-white p-6 shadow-sm'>
-      <h2 className='mb-4 text-xl font-bold'>Ваш заказ</h2>
-      <div className='flex flex-col gap-4 divide-y'>
+    <div className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'>
+      <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
+      <div className='flex flex-col gap-4 divide-y divide-border-subtle'>
         {items.map((item) => (
           <CheckoutItem key={item.id} item={item} />
         ))}
       </div>
-      <div className='mt-6 border-t pt-4'>
+      <div className='mt-6 border-t border-border-subtle pt-4'>
         <div className='flex justify-between'>
           <span>Товары ({totalItems} шт.)</span>
           <span>{selectedItemsTotal} ₽</span>

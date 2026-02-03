@@ -63,14 +63,16 @@ export const ProfileDetails = memo(() => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='rounded-lg border bg-white p-6 shadow-sm'
+      className='rounded-lg border border-border-subtle bg-background-default p-6 shadow-sm'
     >
-      <h2 className='mb-4 text-2xl font-bold'>Личные данные</h2>
+      <h2 className='mb-4 text-2xl font-bold text-text-heading'>
+        Личные данные
+      </h2>
       <div className='flex flex-col gap-4'>
         <div>
           <label
             htmlFor='firstName'
-            className='mb-1 block text-sm font-medium text-gray-700'
+            className='mb-1 block text-sm font-medium text-text-default'
           >
             Имя
           </label>
@@ -79,16 +81,16 @@ export const ProfileDetails = memo(() => {
             name='firstName'
             value={formData.firstName}
             onChange={handleChange}
-            className={errors.firstName ? 'border-red-500' : ''}
+            className={errors.firstName ? 'border-danger' : ''}
           />
           {errors.firstName && (
-            <p className='mt-1 text-xs text-red-600'>{errors.firstName}</p>
+            <p className='mt-1 text-xs text-danger'>{errors.firstName}</p>
           )}
         </div>
         <div>
           <label
             htmlFor='lastName'
-            className='mb-1 block text-sm font-medium text-gray-700'
+            className='mb-1 block text-sm font-medium text-text-default'
           >
             Фамилия
           </label>
@@ -97,16 +99,16 @@ export const ProfileDetails = memo(() => {
             name='lastName'
             value={formData.lastName}
             onChange={handleChange}
-            className={errors.lastName ? 'border-red-500' : ''}
+            className={errors.lastName ? 'border-danger' : ''}
           />
           {errors.lastName && (
-            <p className='mt-1 text-xs text-red-600'>{errors.lastName}</p>
+            <p className='mt-1 text-xs text-danger'>{errors.lastName}</p>
           )}
         </div>
         <div>
           <label
             htmlFor='phone'
-            className='mb-1 block text-sm font-medium text-gray-700'
+            className='mb-1 block text-sm font-medium text-text-default'
           >
             Телефон
           </label>
@@ -116,16 +118,16 @@ export const ProfileDetails = memo(() => {
             type='tel'
             value={formData.phone}
             onChange={handleChange}
-            className={errors.phone ? 'border-red-500' : ''}
+            className={errors.phone ? 'border-danger' : ''}
           />
           {errors.phone && (
-            <p className='mt-1 text-xs text-red-600'>{errors.phone}</p>
+            <p className='mt-1 text-xs text-danger'>{errors.phone}</p>
           )}
         </div>
         <div>
           <label
             htmlFor='email'
-            className='mb-1 block text-sm font-medium text-gray-700'
+            className='mb-1 block text-sm font-medium text-text-default'
           >
             E-mail
           </label>
@@ -135,10 +137,10 @@ export const ProfileDetails = memo(() => {
             type='email'
             value={formData.email}
             onChange={handleChange}
-            className={errors.email ? 'border-red-500' : ''}
+            className={errors.email ? 'border-danger' : ''}
           />
           {errors.email && (
-            <p className='mt-1 text-xs text-red-600'>{errors.email}</p>
+            <p className='mt-1 text-xs text-danger'>{errors.email}</p>
           )}
         </div>
       </div>
@@ -147,7 +149,7 @@ export const ProfileDetails = memo(() => {
           Сохранить изменения
         </Button>
         {isSaved && (
-          <span className='text-green-600'>Данные успешно сохранены!</span>
+          <span className='text-success'>Данные успешно сохранены!</span>
         )}
       </div>
     </form>

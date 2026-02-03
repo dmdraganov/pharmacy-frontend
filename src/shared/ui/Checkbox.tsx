@@ -6,7 +6,7 @@ type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
 
 const Checkbox = ({ className, label, id, ...props }: CheckboxProps) => {
   const defaultClasses =
-    'flex items-center gap-2 text-sm text-gray-700 cursor-pointer';
+    'flex items-center gap-2 text-sm text-text-default cursor-pointer';
   const combinedClasses = [defaultClasses, className].filter(Boolean).join(' ');
 
   return (
@@ -14,7 +14,7 @@ const Checkbox = ({ className, label, id, ...props }: CheckboxProps) => {
       <input
         type='checkbox'
         id={id}
-        className='size-4 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+        className='size-4 cursor-pointer rounded border-border-default text-primary-emphasis focus:ring-primary'
         {...props}
       />
       {label}

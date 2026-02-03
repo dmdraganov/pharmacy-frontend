@@ -66,8 +66,12 @@ const CartItemCard = memo((props: CartItemCardProps) => {
             {' '}
             {item.name}
           </Link>
-          <p className='text-sm text-gray-600'>{item.brand}</p>
-          {item.isPrescription && <Badge className='mt-2'>Рецептурный</Badge>}
+          <p className='text-sm text-text-muted'>{item.brand}</p>
+          {item.isPrescription && (
+            <Badge variant='warning' className='mt-2'>
+              Рецептурный
+            </Badge>
+          )}
         </div>
         <div className='mt-auto flex items-center gap-4 pt-2'>
           <Button
@@ -90,7 +94,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
         <div className='flex w-32 flex-col items-end'>
           <p className='text-lg font-bold'>{item.price * item.quantity} ₽</p>
           {item.oldPrice && (
-            <p className='text-sm text-gray-500 line-through'>
+            <p className='text-sm text-text-subtle line-through'>
               {item.oldPrice * item.quantity} ₽
             </p>
           )}

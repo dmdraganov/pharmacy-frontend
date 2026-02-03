@@ -6,6 +6,8 @@ import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/shared/lib/getProductImage';
 
+import HeartIcon from '@/shared/ui/HeartIcon';
+
 interface ProductCardProps {
   product: Product;
   isFavorite: boolean;
@@ -48,33 +50,43 @@ export const ProductCard = memo((props: ProductCardProps) => {
   const handleToggleFavorite = () => onToggleFavorite(id);
 
   return (
-    <div className='flex h-full flex-col overflow-hidden rounded border shadow-lg'>
+    <div className='relative flex h-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-background-default p-4 transition-all duration-300 hover:shadow-xl min-h-[320px]'>
+      <button
+        onClick={handleToggleFavorite}
+        className='absolute top-3 right-3 z-10'
+      >
+        <HeartIcon
+          className={`h-6 w-6 transition-colors ${
+            isFavorite ? 'text-danger' : 'text-border-default hover:text-danger'
+          }`}
+        />
+      </button>
       <Link
         to={`/product/${id}`}
         className='group block flex flex-grow flex-col'
       >
         <img
-          className='w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105'
+          className='w-full aspect-square object-cover transition-transform duration-300'
           src={imageUrl ?? undefined}
           alt={name}
           loading='lazy'
         />
-        <div className='px-6 py-4'>
-          <div className='mb-2 min-h-16 text-xl font-bold' title={name}>
+        <div className='py-4'>
+          <div className='mb-2 text-xl font-semibold line-clamp-2' title={name}>
             {name}
           </div>
-          <p className='text-base text-gray-700'>{brand}</p>
+          <p className='text-base text-text-muted'>{brand}</p>
         </div>
       </Link>
-      <div className='mt-auto px-6 pb-4 pt-2'>
+      <div className='mt-auto pt-2'>
         <div className='mb-4'>
-          <span className='text-lg font-bold'>{price} ₽</span>
+          <span className='text-xl font-semibold'>{price} ₽</span>
           {oldPrice && (
-            <span className='ml-2 text-sm text-gray-500 line-through'>
+            <span className='ml-2 text-sm text-text-subtle line-through'>
               {oldPrice} ₽
             </span>
           )}
-          {isPrescription && <Badge>Рецептурный</Badge>}
+          {isPrescription && <Badge variant='warning'>Рецептурный</Badge>}
         </div>
         <div className='flex flex-col gap-2'>
           {!quantityInCart ? (
@@ -91,9 +103,6 @@ export const ProductCard = memo((props: ProductCardProps) => {
               </Button>
             </div>
           )}
-          <Button onClick={handleToggleFavorite}>
-            {isFavorite ? 'В избранном' : 'В избранное'}
-          </Button>
         </div>
       </div>
     </div>

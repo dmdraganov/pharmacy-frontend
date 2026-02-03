@@ -19,10 +19,10 @@ const NavButton = ({
 }) => (
   <button
     onClick={onClick}
-    className={`w-full rounded-md px-4 py-2 text-left font-medium transition-colors ${
+    className={`w-full rounded-md px-4 py-2 text-left font-medium transition-colors cursor-pointer ${
       isActive
-        ? 'bg-blue-500 text-white'
-        : 'bg-transparent text-gray-700 hover:bg-gray-100'
+        ? 'bg-primary text-text-on-primary'
+        : 'bg-transparent text-text-default hover:bg-background-hover'
     }`}
   >
     {children}
@@ -38,7 +38,7 @@ const NavLink = ({
 }) => (
   <Link
     to={to}
-    className='w-full rounded-md px-4 py-2 text-left font-medium text-gray-700 transition-colors hover:bg-gray-100'
+    className='w-full rounded-md px-4 py-2 text-left font-medium text-text-default transition-colors hover:bg-background-hover cursor-pointer'
   >
     {children}
   </Link>
@@ -49,13 +49,13 @@ export const AccountSidebar = memo(
     const { user } = useUser();
 
     return (
-      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border bg-white p-4 shadow-sm'>
+      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-subtle bg-background-default p-4 shadow-sm'>
         {/* User Info */}
-        <div className='border-b pb-4'>
+        <div className='border-b border-border-subtle pb-4'>
           <p className='text-lg font-bold'>
             {user.firstName} {user.lastName}
           </p>
-          <p className='text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap'>
+          <p className='text-sm text-text-subtle overflow-hidden text-ellipsis whitespace-nowrap'>
             {user.email}
           </p>
         </div>

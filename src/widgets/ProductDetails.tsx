@@ -51,12 +51,16 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
       </div>
       <div>
         <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
-        <p className='mb-4 text-lg text-gray-600'>{product.brand}</p>
-        {product.isPrescription && <Badge className='mb-4'>Рецептурный</Badge>}
+        <p className='mb-4 text-lg text-text-muted'>{product.brand}</p>
+        {product.isPrescription && (
+          <Badge variant='warning' className='mb-4'>
+            Рецептурный
+          </Badge>
+        )}
         <div className='mb-6'>
           <span className='text-4xl font-bold'>{product.price} ₽</span>
           {product.oldPrice && (
-            <span className='ml-3 text-xl text-gray-500 line-through'>
+            <span className='ml-3 text-xl text-text-subtle line-through'>
               {product.oldPrice} ₽
             </span>
           )}
