@@ -77,18 +77,18 @@ const AdminOrdersPage = () => {
                 <td className='py-3 px-6 text-center'>
                   <div className='flex items-center justify-center'>
                     {order.status === 'new' && (
-                      <button className='bg-success hover:bg-success-hover text-text-on-primary text-xs font-bold py-1 px-2 rounded mr-2'>
+                      <button className='bg-success hover:bg-success-hover text-text-inverse text-xs font-bold py-1 px-2 rounded mr-2'>
                         Подтвердить
                       </button>
                     )}
                     {order.status === 'processing' && (
-                      <button className='bg-primary hover:bg-primary-hover text-text-on-primary text-xs font-bold py-1 px-2 rounded mr-2'>
+                      <button className='bg-primary hover:bg-primary-hover text-text-inverse text-xs font-bold py-1 px-2 rounded mr-2'>
                         Отгрузить
                       </button>
                     )}
                     {order.status !== 'completed' &&
                       order.status !== 'cancelled' && (
-                        <button className='bg-danger hover:bg-danger-hover text-text-on-danger text-xs font-bold py-1 px-2 rounded'>
+                        <button className='bg-danger hover:bg-danger-hover text-text-inverse text-xs font-bold py-1 px-2 rounded'>
                           Отменить
                         </button>
                       )}

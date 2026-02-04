@@ -6,7 +6,7 @@ import type {
 
 import type { LinkProps } from 'react-router-dom';
 
-type ButtonVariant = 'primary' | 'secondary' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
 type ButtonSize = 'small' | 'medium';
 
 // Base props for the button, excluding polymorphic 'as'
@@ -51,10 +51,11 @@ const Button = ({
     'rounded font-bold transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
-    primary: 'bg-primary text-text-on-primary hover:bg-primary-hover',
+    primary: 'bg-primary text-text-inverse hover:bg-primary-hover',
     secondary:
       'bg-background-muted text-text-default hover:bg-background-muted-hover',
-    danger: 'bg-danger text-text-on-danger hover:bg-danger-hover',
+    danger: 'bg-danger text-text-inverse hover:bg-danger-hover',
+    ghost: 'bg-transparent text-text-default hover:bg-background-muted',
   };
 
   const sizeStyles = {

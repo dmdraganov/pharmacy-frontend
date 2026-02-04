@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = memo(() => {
   return (
-    <footer className='border-t border-border-default bg-background-subtle'>
+    <footer className='border-t border-border-default bg-background-muted'>
       <div className='container max-w-[1280px] mx-auto px-3 md:px-4 lg:px-6 py-8'>
         <div className='flex flex-col gap-8 md:flex-row md:gap-19'>
           <div>
@@ -24,7 +24,7 @@ const Footer = memo(() => {
                   to='/contacts'
                   className='text-text-muted hover:text-primary'
                 >
-                  Обратная связь
+                  Контакты
                 </Link>
               </li>
             </ul>
@@ -79,7 +79,7 @@ const Footer = memo(() => {
             </ul>
           </div>
         </div>
-        <div className='mt-8 border-t border-border-default pt-4 text-center text-text-subtle'>
+        <div className='mt-8 border-t border-border-default pt-4 text-center text-text-muted'>
           <p>© 2026 DivMedica. Все права защищены.</p>
         </div>
       </div>

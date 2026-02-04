@@ -33,7 +33,7 @@ export const CurrentOrder = memo(() => {
   const statusInfo = statusMap[status];
 
   return (
-    <div className='rounded-lg border-2 border-primary bg-background-default p-6 shadow-md'>
+    <div className='rounded-lg border-2 border-primary bg-background-default p-6'>
       <div className='flex flex-wrap items-center justify-between gap-4'>
         <div>
           <h2 className='text-2xl font-bold'>Текущий заказ</h2>

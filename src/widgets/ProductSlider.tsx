@@ -23,7 +23,7 @@ const ProductSlider = memo(({ children }: SliderProps) => {
   };
 
   const buttonClasses =
-    'absolute top-1/2 z-10 -translate-y-1/2 transform rounded-full border border-border-default bg-background-default p-2 text-text-default shadow-lg hover:bg-background-hover cursor-pointer';
+    'absolute top-1/2 z-10 -translate-y-1/2 transform rounded-full border border-border-default bg-background-default p-2 text-text-default hover:bg-background-hover cursor-pointer';
 
   return (
     <div className='relative'>

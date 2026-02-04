@@ -85,7 +85,7 @@ export const RegionSelectWithSearch = memo(() => {
                   </li>
                 ))
               ) : (
-                <li className='px-3 py-2 text-text-subtle'>Регион не найден</li>
+                <li className='px-3 py-2 text-text-muted'>Регион не найден</li>
               )}
             </ul>
           </div>

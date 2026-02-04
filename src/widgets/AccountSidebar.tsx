@@ -21,7 +21,7 @@ const NavButton = ({
     onClick={onClick}
     className={`w-full rounded-md px-4 py-2 text-left font-medium transition-colors cursor-pointer ${
       isActive
-        ? 'bg-primary text-text-on-primary'
+        ? 'bg-primary text-text-inverse'
         : 'bg-transparent text-text-default hover:bg-background-hover'
     }`}
   >
@@ -49,13 +49,13 @@ export const AccountSidebar = memo(
     const { user } = useUser();
 
     return (
-      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4 shadow-sm'>
+      <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4'>
         {/* User Info */}
         <div className='border-b border-border-default pb-4'>
           <p className='text-lg font-bold'>
             {user.firstName} {user.lastName}
           </p>
-          <p className='text-sm text-text-subtle overflow-hidden text-ellipsis whitespace-nowrap'>
+          <p className='text-sm text-text-muted overflow-hidden text-ellipsis whitespace-nowrap'>
             {user.email}
           </p>
         </div>

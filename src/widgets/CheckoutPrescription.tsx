@@ -13,7 +13,7 @@ export const CheckoutPrescription = memo(() => {
   }
 
   return (
-    <div className='rounded-lg border border-warning-border bg-warning-subtle p-6 shadow-sm'>
+    <div className='rounded-lg border border-warning-border bg-warning-subtle p-6'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>
         Загрузка рецепта
       </h2>
@@ -25,10 +25,10 @@ export const CheckoutPrescription = memo(() => {
       <div className='flex flex-col gap-4'>
         <label
           htmlFor='prescription-upload'
-          className='flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border-default bg-background-default p-6 hover:border-border-hover'
+          className='flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border-default bg-background-default p-6'
         >
           <span>Нажмите, чтобы загрузить файл</span>
-          <span className='text-xs text-text-subtle'>PNG, JPG или PDF</span>
+          <span className='text-xs text-text-muted'>PNG, JPG или PDF</span>
           <input id='prescription-upload' type='file' className='sr-only' />
         </label>
         <label className='flex items-start gap-2'>

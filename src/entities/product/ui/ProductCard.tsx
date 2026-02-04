@@ -54,7 +54,7 @@ export const ProductCard = memo((props: ProductCardProps) => {
   return (
     <div
       className={`relative flex h-full flex-col overflow-hidden rounded-lg border border-border-default 
-        bg-background-default p-4 transition-all duration-300 hover:shadow-[0_5px_30px_rgba(0,0,0,0.20)] min-h-80`}
+        bg-background-default p-4 transition-all duration-300 shadow-shadow-default hover:shadow-[0_5px_10px_0] min-h-80`}
     >
       <FavoriteButton productId={id} className='absolute top-3 right-3' />
 
@@ -73,13 +73,15 @@ export const ProductCard = memo((props: ProductCardProps) => {
         </div>
       </Link>
       <div className='mt-auto pt-2'>
-        <div className='mb-4'>
-          <span className='text-xl font-semibold'>{price} ₽</span>
-          {oldPrice && (
-            <span className='ml-2 text-sm text-text-subtle line-through'>
-              {oldPrice} ₽
-            </span>
-          )}
+        <div className='mb-4 flex gap-4 items-center justify-between'>
+          <div>
+            <span className='text-xl font-semibold'>{price} ₽</span>
+            {oldPrice && (
+              <span className='ml-2 text-sm text-text-muted line-through'>
+                {oldPrice} ₽
+              </span>
+            )}
+          </div>
           {isPrescription && <Badge variant='warning'>Рецептурный</Badge>}
         </div>
         <div className='flex flex-col gap-2'>

@@ -27,7 +27,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
   }, [item.image]);
 
   return (
-    <div className='flex items-stretch rounded border border-border-default p-4 shadow-sm'>
+    <div className='flex items-stretch rounded border border-border-default p-4'>
       <div className='mr-4 flex items-center'>
         <Checkbox
           id={`select-${item.id}`}
@@ -74,7 +74,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
         <div className='flex w-32 flex-col items-end'>
           <p className='text-lg font-bold'>{item.price * item.quantity} ₽</p>
           {item.oldPrice && (
-            <p className='text-sm text-text-subtle line-through'>
+            <p className='text-sm text-text-muted line-through'>
               {item.oldPrice * item.quantity} ₽
             </p>
           )}

@@ -10,7 +10,7 @@ import { CheckoutActions } from '@/widgets/CheckoutActions';
 import Button from '@/shared/ui/Button';
 
 const OrderSuccessMessage = () => (
-  <div className='flex flex-col items-center justify-center rounded-lg border border-border-default bg-background-default p-12 text-center shadow-sm'>
+  <div className='flex flex-col items-center justify-center rounded-lg border border-border-default bg-background-default p-12 text-center'>
     <h1 className='mb-4 text-3xl font-bold text-success'>
       Заказ успешно оформлен!
     </h1>

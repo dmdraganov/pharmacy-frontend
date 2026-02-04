@@ -23,25 +23,23 @@
   --color-success: #059669;
   --color-success-subtle: #d1fae5;
 
-  --color-warning-subtle: #fef3c7;
-  --color-warning-border: #fbbf24;
-  --color-warning-text: #b45309;
+  --color-warning-subtle: #fff2e3;
+  --color-warning-border: #fdba74;
+  --color-warning-text: #9a3412;
 
   --color-text-default: #1e293b;
   --color-text-heading: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-subtle: #64748b;
-  --color-text-on-primary: white;
-  --color-text-on-danger: white;
+  --color-text-muted: #64748b;
+  --color-text-inverse: white;
 
   --color-background-default: white;
-  --color-background-subtle: #f8fafc;
   --color-background-muted: #e2e8f0;
-  --color-background-muted-hover: #cbd5e1;
   --color-background-hover: #f1f5f9;
+  --color-background-muted-hover: #cbd5e1;
 
-  --color-border-default: #cbd5e1;
-  --color-border-hover: #94a3b8;
+  --color-border-default: #b6c2d1;
+
+  --color-shadow-default: rgb(15, 23, 42, 0.1);
 }
 
 @layer base {

@@ -18,7 +18,7 @@ const Badge = ({
   ...props
 }: PropsWithChildren<BadgeProps>) => {
   const baseStyles =
-    'inline-block rounded-full px-2 py-1 text-xs font-semibold uppercase';
+    'inline-block h-fit rounded-full px-2 py-1 text-xs font-semibold uppercase';
 
   const variantStyles = {
     primary: 'bg-primary-subtle text-primary-emphasis',

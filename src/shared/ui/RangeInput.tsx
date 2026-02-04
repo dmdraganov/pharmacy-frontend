@@ -175,7 +175,7 @@ const RangeInput = ({
           placeholder='От'
           className='w-full'
         />
-        <span className='text-text-subtle'>-</span>
+        <span className='text-text-muted'>-</span>
         <Input
           type='number'
           value={inputValueMax}

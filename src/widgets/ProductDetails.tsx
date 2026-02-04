@@ -63,7 +63,7 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
         <div className='mb-6'>
           <span className='text-4xl font-bold'>{product.price} ₽</span>
           {product.oldPrice && (
-            <span className='ml-3 text-xl text-text-subtle line-through'>
+            <span className='ml-3 text-xl text-text-muted line-through'>
               {product.oldPrice} ₽
             </span>
           )}

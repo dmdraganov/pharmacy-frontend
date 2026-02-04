@@ -52,19 +52,19 @@ const Header = memo(() => {
           <nav className='flex items-center space-x-4'>
             <Link
               to='/favorites'
-              className='text-text-subtle hover:text-text-heading'
+              className='text-text-muted hover:text-text-heading'
             >
               Избранное
             </Link>
             <Link
               to='/cart'
-              className='text-text-subtle hover:text-text-heading'
+              className='text-text-muted hover:text-text-heading'
             >
               Корзина
             </Link>
             <Link
               to='/account'
-              className='text-text-subtle hover:text-text-heading'
+              className='text-text-muted hover:text-text-heading'
             >
               Личный кабинет
             </Link>

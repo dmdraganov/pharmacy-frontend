@@ -10,7 +10,7 @@ const AdminCategoriesPage = () => {
     <div>
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-2xl font-bold text-text-heading'>Категории</h1>
-        <button className='bg-primary hover:bg-primary-hover text-text-on-primary font-bold py-2 px-4 rounded'>
+        <button className='bg-primary hover:bg-primary-hover text-text-inverse font-bold py-2 px-4 rounded'>
           Добавить категорию
         </button>
       </div>
@@ -33,7 +33,7 @@ const AdminCategoriesPage = () => {
                 </td>
                 <td className='py-3 px-6 text-center'>
                   <div className='flex items-center justify-center'>
-                    <button className='w-8 h-8 rounded-full bg-danger text-text-on-danger flex items-center justify-center'>
+                    <button className='w-8 h-8 rounded-full bg-danger text-text-inverse flex items-center justify-center'>
                       У
                     </button>
                   </div>

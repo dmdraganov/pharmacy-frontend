@@ -16,7 +16,7 @@ const TabButton = ({
     onClick={onClick}
     className={`flex-1 rounded-md px-4 py-2 text-center font-medium transition-colors cursor-pointer ${
       isActive
-        ? 'bg-primary text-text-on-primary shadow'
+        ? 'bg-primary text-text-inverse shadow'
         : 'bg-background-muted text-text-default hover:bg-background-muted-hover'
     }`}
   >
@@ -51,7 +51,7 @@ const PickupSelector = () => (
         <div>
           <p className='font-semibold'>{pharmacy.name}</p>
           <p className='text-sm text-text-muted'>{pharmacy.address}</p>
-          <p className='text-sm text-text-subtle'>{pharmacy.workingHours}</p>
+          <p className='text-sm text-text-muted'>{pharmacy.workingHours}</p>
         </div>
       </label>
     ))}
@@ -64,7 +64,7 @@ export const CheckoutDelivery = memo(() => {
   );
 
   return (
-    <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
+    <div className='rounded-lg border border-border-default bg-background-default p-6'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>
         Способ получения
       </h2>

@@ -12,7 +12,7 @@ export const CheckoutPayment = memo(() => {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
 
   return (
-    <div className='rounded-lg border border-border-default bg-background-default p-6 shadow-sm'>
+    <div className='rounded-lg border border-border-default bg-background-default p-6'>
       <h2 className='mb-4 text-xl font-bold text-text-heading'>
         Способ оплаты
       </h2>

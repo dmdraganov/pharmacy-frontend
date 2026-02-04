@@ -48,7 +48,7 @@ const ContactsPage = memo(() => {
             <p className='mt-2 text-lg text-text-default'>
               Круглосуточно, без выходных
             </p>
-            <p className='text-md text-text-subtle'>
+            <p className='text-md text-text-muted'>
               (Онлайн-заказы принимаются 24/7)
             </p>
           </div>

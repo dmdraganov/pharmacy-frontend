@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SearchIcon } from '@/shared/ui/SearchIcon';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
 
@@ -15,15 +16,19 @@ export const SearchInput = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className='flex w-full max-w-sm'>
+    <form onSubmit={handleSearch} className='relative w-full max-w-sm'>
       <Input
-        placeholder='Поиск...'
+        placeholder='Поиск'
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className='rounded-r-none'
+        className='pr-12'
       />
-      <Button type='submit' className='rounded-l-none'>
-        Найти
+      <Button
+        type='submit'
+        variant='ghost'
+        className='absolute inset-y-0 right-0 rounded-l-none px-4'
+      >
+        <SearchIcon className='h-5 w-5 text-muted-foreground' />
       </Button>
     </form>
   );

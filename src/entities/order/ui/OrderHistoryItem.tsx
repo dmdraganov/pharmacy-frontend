@@ -33,11 +33,11 @@ export const OrderHistoryItem = memo(
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-      <div className='rounded-lg border border-border-default bg-background-default p-4 shadow-sm'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>Заказ №{id}</span>
-            <span className='text-sm text-text-subtle'>
+            <span className='text-sm text-text-muted'>
               от {new Date(date).toLocaleDateString('ru-RU')}
             </span>
           </div>
