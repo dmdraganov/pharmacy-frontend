@@ -18,6 +18,12 @@ Client-side SPA routing
 - `/product/:id` — страница товара
 - `/search` – страница поиска
 - `/account` – личный кабинет
+- `/checkout` – оформление заказа
+- `/privacy-policy` – политика конфиденциальности
+- `/admin/dashboard` – дашборд
+- `/admin/products` – управление товарами
+- `/admin/orders` – управление заказами
+- `/admin/categories` – управление категориями
 
 ## Navigation Rules
 
