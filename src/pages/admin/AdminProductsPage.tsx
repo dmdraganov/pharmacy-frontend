@@ -30,8 +30,9 @@ const AdminProductsPage = () => {
           Добавить товар
         </button>
       </div>
-      <div className='bg-background-default shadow-md rounded my-6'>
-        <table className='min-w-full table-auto'>
+      <div className='bg-background-default shadow-md rounded my-6 overflow-x-auto'>
+        {/* Desktop Table */}
+        <table className='min-w-full table-auto hidden md:table'>
           <thead>
             <tr className='bg-background-muted text-text-muted uppercase text-sm leading-normal'>
               <th className='py-3 px-6 text-left'>Название</th>
@@ -65,10 +66,10 @@ const AdminProductsPage = () => {
                 </td>
                 <td className='py-3 px-6 text-center'>
                   <div className='flex items-center justify-center'>
-                    <button className='w-8 h-8 rounded-full bg-primary text-text-inverse flex items-center justify-center mr-2'>
+                    <button className='w-8 h-8 rounded-full bg-primary-subtle text-primary-emphasis flex items-center justify-center mr-2'>
                       Р
                     </button>
-                    <button className='w-8 h-8 rounded-full bg-danger text-text-inverse flex items-center justify-center'>
+                    <button className='w-8 h-8 rounded-full bg-danger-subtle text-danger-emphasis flex items-center justify-center'>
                       У
                     </button>
                   </div>
@@ -77,6 +78,46 @@ const AdminProductsPage = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Mobile Cards */}
+        <div className='md:hidden'>
+          {productsWithFakeStock.map((product) => (
+            <div
+              key={product.id}
+              className='p-4 border-b border-border-default'
+            >
+              <h3 className='font-bold text-lg mb-2 text-text-default'>
+                {product.name}
+              </h3>
+              <div className='text-sm space-y-1'>
+                <p>
+                  <span className='font-semibold'>Категория: </span>
+                  {getCategoryName(product.categoryId)}
+                </p>
+                <p>
+                  <span className='font-semibold'>Цена: </span>
+                  {product.price} ₽
+                </p>
+                <p>
+                  <span className='font-semibold'>В наличии: </span>
+                  {product.stock}
+                </p>
+                <p>
+                  <span className='font-semibold'>Рецептурный: </span>
+                  {product.isPrescription ? 'Да' : 'Нет'}
+                </p>
+              </div>
+              <div className='flex items-center mt-4'>
+                <button className='py-2 px-4 text-sm rounded-md bg-primary-subtle text-primary-emphasis mr-2'>
+                  Редактировать
+                </button>
+                <button className='py-2 px-4 text-sm rounded-md bg-danger-subtle text-danger-emphasis'>
+                  Удалить
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

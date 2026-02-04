@@ -14,8 +14,9 @@ const AdminCategoriesPage = () => {
           Добавить категорию
         </button>
       </div>
-      <div className='bg-background-default shadow-md rounded my-6'>
-        <table className='min-w-full table-auto'>
+      <div className='bg-background-default shadow-md rounded my-6 overflow-x-auto'>
+        {/* Desktop Table */}
+        <table className='min-w-full table-auto hidden md:table'>
           <thead>
             <tr className='bg-background-muted text-text-muted uppercase text-sm leading-normal'>
               <th className='py-3 px-6 text-left'>Название категории</th>
@@ -32,9 +33,12 @@ const AdminCategoriesPage = () => {
                   {category.name}
                 </td>
                 <td className='py-3 px-6 text-center'>
-                  <div className='flex items-center justify-center'>
-                    <button className='w-8 h-8 rounded-full bg-danger text-text-inverse flex items-center justify-center'>
-                      У
+                  <div className='flex items-center justify-center space-x-2'>
+                    <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+                      Редактировать
+                    </button>
+                    <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                      Удалить
                     </button>
                   </div>
                 </td>
@@ -42,6 +46,26 @@ const AdminCategoriesPage = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Mobile Cards */}
+        <div className='md:hidden'>
+          {allCategories.map((category) => (
+            <div
+              key={category.id}
+              className='p-4 border-b border-border-default flex justify-between items-center'
+            >
+              <p className='text-text-default font-medium'>{category.name}</p>
+              <div className='flex items-center space-x-2'>
+                <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+                  Р
+                </button>
+                <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                  У
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
