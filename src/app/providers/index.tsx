@@ -11,7 +11,7 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <BrowserRouter basename='/works/sites/pharmacy/'>
+    <BrowserRouter basename={import.meta.env.VITE_BASE || undefined}>
       <RegionProvider>
         <FavoritesProvider>
           <CartProvider>
