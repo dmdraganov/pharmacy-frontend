@@ -1,0 +1,1 @@
+var e=`/works/sites/pharmacy/assets/fluconazole-150-CVAAmDOd.webp`;export{e as default};

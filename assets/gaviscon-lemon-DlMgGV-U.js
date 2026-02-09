@@ -1,0 +1,1 @@
+var e=`/works/sites/pharmacy/assets/gaviscon-lemon-BMbL3kEN.webp`;export{e as default};

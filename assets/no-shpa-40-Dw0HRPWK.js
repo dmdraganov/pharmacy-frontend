@@ -1,0 +1,1 @@
+var e=`/works/sites/pharmacy/assets/no-shpa-40-CgdTZqjD.webp`;export{e as default};

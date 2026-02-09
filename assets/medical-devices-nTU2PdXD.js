@@ -1,0 +1,1 @@
+var e=`/works/sites/pharmacy/assets/medical-devices-Ck5zYa4k.jpeg`;export{e as default};

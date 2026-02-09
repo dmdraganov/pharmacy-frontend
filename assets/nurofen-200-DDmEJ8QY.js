@@ -1,0 +1,1 @@
+var e=`/works/sites/pharmacy/assets/nurofen-200-BLB6tj-t.jpg`;export{e as default};
