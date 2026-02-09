@@ -1,1 +1,0 @@
-var e=`/works/sites/pharmacy/assets/garnier-micellar-water-C3W4ehyQ.jpg`;export{e as default};

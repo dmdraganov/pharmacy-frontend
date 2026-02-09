@@ -1,0 +1,1 @@
+var e=`/pharmacy-frontend/assets/personal-care-B6GbQxZH.jpg`;export{e as default};

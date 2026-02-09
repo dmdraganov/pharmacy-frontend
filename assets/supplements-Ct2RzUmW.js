@@ -1,1 +1,0 @@
-var e=`/works/sites/pharmacy/assets/supplements-Bi8JoFX3.avif`;export{e as default};

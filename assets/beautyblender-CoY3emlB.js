@@ -1,0 +1,1 @@
+var e=`/pharmacy-frontend/assets/beautyblender-xu_OMa1i.avif`;export{e as default};

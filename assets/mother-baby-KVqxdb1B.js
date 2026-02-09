@@ -1,1 +1,0 @@
-var e=`/works/sites/pharmacy/assets/mother-baby-CRrTwPGd.jpg`;export{e as default};

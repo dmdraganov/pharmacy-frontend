@@ -1,1 +1,0 @@
-var e=`/works/sites/pharmacy/assets/loperamide-0lDpZzdb.webp`;export{e as default};

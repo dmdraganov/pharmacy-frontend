@@ -1,0 +1,1 @@
+var e=`/pharmacy-frontend/assets/citramon-p-l1etIwOC.png`;export{e as default};

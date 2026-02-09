@@ -1,0 +1,1 @@
+var e=`/pharmacy-frontend/assets/mother-baby-CRrTwPGd.jpg`;export{e as default};

@@ -1,0 +1,1 @@
+var e=`/pharmacy-frontend/assets/paracetamol-500-CEnbOJPa.webp`;export{e as default};
