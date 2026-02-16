@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { FavoritesContext } from '@/features/favorites';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
@@ -9,6 +9,10 @@ const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     STORAGE_KEYS.FAVORITES,
     []
   );
+
+  useEffect(() => {
+    console.log('Favorites updated:', favoriteIds);
+  }, [favoriteIds]);
 
   const toggleFavorite = useCallback(
     (productId: string) => {

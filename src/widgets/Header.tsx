@@ -4,11 +4,15 @@ import Button from '@/shared/ui/Button';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchInput } from '@/features/search';
 import { RegionSelectWithSearch } from '@/features/region';
+import { useCart } from '@/features/cart';
+import { useFavorites } from '@/features/favorites';
 
 const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { totalItems: cartTotalItems } = useCart();
+  const { favoriteIds } = useFavorites();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,15 +56,25 @@ const Header = memo(() => {
           <nav className='flex items-center space-x-4'>
             <Link
               to='/favorites'
-              className='text-text-muted hover:text-text-heading'
+              className='relative text-text-muted hover:text-text-heading'
             >
               Избранное
+              {favoriteIds.length > 0 && (
+                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                  {favoriteIds.length}
+                </span>
+              )}
             </Link>
             <Link
               to='/cart'
-              className='text-text-muted hover:text-text-heading'
+              className='relative text-text-muted hover:text-text-heading'
             >
               Корзина
+              {cartTotalItems > 0 && (
+                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                  {cartTotalItems}
+                </span>
+              )}
             </Link>
             <Link
               to='/account'
