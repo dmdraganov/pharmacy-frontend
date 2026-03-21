@@ -1,12 +1,12 @@
 import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart';
-import { CheckoutOrderSummary } from '@/widgets/CheckoutOrderSummary';
-import { CheckoutDelivery } from '@/widgets/CheckoutDelivery';
-import { CheckoutContactInfo } from '@/widgets/CheckoutContactInfo';
-import { CheckoutPayment } from '@/widgets/CheckoutPayment';
-import { CheckoutPrescription } from '@/widgets/CheckoutPrescription';
-import { CheckoutActions } from '@/widgets/CheckoutActions';
+import { CheckoutOrderSummary } from '@/widgets/checkout/CheckoutOrderSummary';
+import { CheckoutDelivery } from '@/widgets/checkout/CheckoutDelivery';
+import { CheckoutContactInfo } from '@/widgets/checkout/CheckoutContactInfo';
+import { CheckoutPayment } from '@/widgets/checkout/CheckoutPayment';
+import { CheckoutPrescription } from '@/widgets/checkout/CheckoutPrescription';
+import { CheckoutActions } from '@/widgets/checkout/CheckoutActions';
 import Button from '@/shared/ui/Button';
 
 const OrderSuccessMessage = () => (

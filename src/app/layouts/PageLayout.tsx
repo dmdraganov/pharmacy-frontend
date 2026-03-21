@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '@/widgets/Header';
-import Footer from '@/widgets/Footer';
+import Header from '@/widgets/layout/Header';
+import Footer from '@/widgets/layout/Footer';
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   const location = useLocation();

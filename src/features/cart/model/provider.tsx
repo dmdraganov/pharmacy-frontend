@@ -1,12 +1,12 @@
 import { useMemo, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { CartContext } from '@/features/cart';
+import { CartContext } from './context';
 import type { CartItemsMap, CartItem } from '@/entities/cart';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { Product } from '@/entities/product';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 
-const CartProvider = ({ children }: { children: ReactNode }) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useLocalStorage<CartItemsMap>(
     STORAGE_KEYS.CART,
     {}
@@ -226,4 +226,3 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
-export default CartProvider;

@@ -6,7 +6,7 @@ import { getProducts } from '@/shared/api';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import Spinner from '@/shared/ui/Spinner';
-import ProductSlider from '@/widgets/ProductSlider';
+import ProductSlider from '@/widgets/product/ProductSlider';
 
 const HomePage = memo(() => {
   const { data: products, isLoading, error } = useDataFetching(getProducts);

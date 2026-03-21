@@ -1,4 +1,4 @@
-import { orders } from '@/data/orders';
+import { orders } from './mocks/orders';
 import type { Order } from '@/entities/order';
 
 /**

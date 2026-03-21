@@ -1,4 +1,4 @@
-import { pharmacies } from '@/data/pharmacies';
+import { pharmacies } from './mocks/pharmacies';
 import type { Pharmacy } from '@/entities/pharmacy';
 
 /**

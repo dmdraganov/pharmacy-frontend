@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/features/user-profile';
+import { useUser } from '@/features/manage-user-profile';
 import type { AccountPageView } from '@/pages/AccountPage';
 
 interface AccountSidebarProps {

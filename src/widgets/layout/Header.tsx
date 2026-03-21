@@ -3,7 +3,7 @@ import Logo from '@/shared/ui/Logo';
 import Button from '@/shared/ui/Button';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchInput } from '@/features/search';
-import { RegionSelectWithSearch } from '@/features/region';
+import { RegionSelectWithSearch } from '@/features/select-region';
 import { useCart } from '@/features/cart';
 import { useFavorites } from '@/features/favorites';
 

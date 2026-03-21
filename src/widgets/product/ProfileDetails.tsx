@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from 'react';
-import { useUser } from '@/features/user-profile';
+import { useUser } from '@/features/manage-user-profile';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import type { User } from '@/entities/user';

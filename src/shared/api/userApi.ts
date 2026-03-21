@@ -1,4 +1,4 @@
-import { user } from '@/data/user';
+import { user } from './mocks/user';
 import type { User } from '@/entities/user';
 
 /**

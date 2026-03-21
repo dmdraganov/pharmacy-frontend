@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import Accordion from '@/shared/ui/Accordion';
 import Checkbox from '@/shared/ui/Checkbox';
 import RangeInput from '@/shared/ui/RangeInput';
-import { useFilters } from '@/features/filters/useFilters';
-import type { AvailableFilters } from '@/features/filters/lib';
+import { useFilters } from '@/features/filter-products/useFilters';
+import type { AvailableFilters } from '@/features/filter-products/lib';
 import type { Section, Category } from '@/entities/section/types';
 import { Link } from 'react-router-dom';
 

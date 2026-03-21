@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { UserContext } from '../context';
+import { UserContext } from './context';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import type { User } from '@/entities/user';
 import { getUser } from '@/shared/api';

@@ -3,7 +3,7 @@ import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Spinner from '@/shared/ui/Spinner';
 import PageLayout from '@/app/layouts/PageLayout';
 import AdminLayout from '@/app/layouts/AdminLayout';
-import ScrollToTop from '@/shared/lib/router/ScrollToTop';
+import ScrollToTop from '@/shared/utils/router/ScrollToTop';
 
 // Eagerly loaded pages
 import HomePage from '@/pages/HomePage';

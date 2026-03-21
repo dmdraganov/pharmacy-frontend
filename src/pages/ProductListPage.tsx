@@ -1,12 +1,12 @@
 import { memo, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProducts, getSections } from '@/shared/api';
-import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
-import { useFilters } from '@/features/filters/useFilters';
+import { applyFilters, getAvailableFilters } from '@/features/filter-products/lib';
+import { useFilters } from '@/features/filter-products/useFilters';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Spinner from '@/shared/ui/Spinner';
-import CatalogLayoutWidget from '@/widgets/CatalogLayoutWidget';
-import FiltersSidebar from '@/widgets/FiltersSidebar';
+import CatalogLayoutWidget from '@/widgets/layout/CatalogLayoutWidget';
+import FiltersSidebar from '@/widgets/layout/FiltersSidebar';
 
 const ProductListPage = memo(() => {
   const { section: sectionId, category: categoryId } = useParams<{

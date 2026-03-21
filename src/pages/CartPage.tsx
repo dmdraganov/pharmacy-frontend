@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useCart } from '@/features/cart';
 import Checkbox from '@/shared/ui/Checkbox';
 import CartItemCard from '@/entities/cart/ui/CartItemCard';
-import CartSummary from '@/widgets/CartSummary';
+import CartSummary from '@/widgets/cart/CartSummary';
 import EmptyState from '@/shared/ui/EmptyState';
 import Button from '@/shared/ui/Button';
 

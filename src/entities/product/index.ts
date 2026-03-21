@@ -1,3 +1,4 @@
 export * from './types';
-export { ProductCard } from './ui/ProductCard';
-export { ProductCharacteristics } from './ui/ProductCharacteristics';
+export * from './ui/ProductCard';
+export * from './ui/ProductCharacteristics';
+export * from './lib/getProductImage';

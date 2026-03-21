@@ -1,4 +1,4 @@
-import { products } from '@/data/products';
+import { products } from './mocks/products';
 import type { Product } from '@/entities/product';
 
 /**

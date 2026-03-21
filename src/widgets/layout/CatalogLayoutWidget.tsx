@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import ProductGrid from '@/widgets/ProductGrid';
+import ProductGrid from '@/widgets/product/ProductGrid';
 import type { Product } from '@/entities/product';
 
 interface CatalogLayoutWidgetProps {

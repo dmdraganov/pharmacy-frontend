@@ -1,7 +1,7 @@
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
-import { getProductImage } from '@/shared/lib/getProductImage';
+import { getProductImage } from '@/entities/product';
 import { useCart } from '@/features/cart';
 import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 import Badge from '@/shared/ui/Badge';
@@ -15,13 +15,9 @@ interface ProductDetailsProps {
 export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
     useCart();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const quantityInCart = getQuantityInCart(product.id);
-
-  useEffect(() => {
-    getProductImage(product.image).then(setImageUrl);
-  }, [product.image]);
+  const imageUrl = getProductImage(product.image);
 
   const handleAddProduct = useCallback(() => {
     addToCart(product);
@@ -41,44 +37,44 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   }, [quantityInCart, product.id, removeFromCart, updateQuantity]);
 
   return (
-    <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
       <div>
         <img
-          src={imageUrl ?? undefined}
+          src={imageUrl}
           alt={product.name}
-          className='w-full rounded-lg'
+          className="w-full rounded-lg"
         />
       </div>
       <div>
-        <div className='flex items-start gap-4'>
-          <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
-          <FavoriteButton productId={product.id} className='shrink-0 mt-2' />
+        <div className="flex items-start gap-4">
+          <h1 className="mb-2 text-3xl font-bold">{product.name}</h1>
+          <FavoriteButton productId={product.id} className="mt-2 shrink-0" />
         </div>
-        <p className='mb-4 text-lg text-text-muted'>{product.brand}</p>
+        <p className="mb-4 text-lg text-text-muted">{product.brand}</p>
         {product.isPrescription && (
-          <Badge variant='warning' className='mb-4'>
+          <Badge variant="warning" className="mb-4">
             Рецептурный
           </Badge>
         )}
-        <div className='mb-6'>
-          <span className='text-4xl font-bold'>{product.price} ₽</span>
+        <div className="mb-6">
+          <span className="text-4xl font-bold">{product.price} ₽</span>
           {product.oldPrice && (
-            <span className='ml-3 text-xl text-text-muted line-through'>
+            <span className="ml-3 text-xl text-text-muted line-through">
               {product.oldPrice} ₽
             </span>
           )}
         </div>
-        <div className='flex flex-col gap-4'>
+        <div className="flex flex-col gap-4">
           {quantityInCart === 0 ? (
             <Button onClick={handleAddProduct}>Добавить в корзину</Button>
           ) : (
-            <div className='flex items-center justify-between'>
+            <div className="flex items-center justify-between">
               <QuantityControl
                 quantity={quantityInCart}
                 onIncrement={handleIncrement}
                 onDecrement={handleDecrement}
               />
-              <Button as={Link} to='/cart' variant='primary'>
+              <Button as={Link} to="/cart" variant="primary">
                 К корзине
               </Button>
             </div>

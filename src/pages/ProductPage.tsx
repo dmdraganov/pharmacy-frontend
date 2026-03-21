@@ -3,8 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '@/shared/api';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Spinner from '@/shared/ui/Spinner';
-import { ProductDetails } from '@/widgets/ProductDetails';
-import { ProductInfo } from '@/widgets/ProductInfo';
+import { ProductDetails } from '@/widgets/product/ProductDetails';
+import { ProductInfo } from '@/widgets/product/ProductInfo';
 
 const ProductPage = memo(() => {
   const { id } = useParams<{ id: string }>();

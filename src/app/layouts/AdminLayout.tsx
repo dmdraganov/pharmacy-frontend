@@ -1,5 +1,5 @@
 import { type ReactNode, useState } from 'react';
-import AdminSidebar from '@/widgets/admin/AdminSidebar';
+import AdminSidebar from '@/widgets/layout/AdminSidebar';
 import MenuIcon from '@/shared/ui/MenuIcon';
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {

@@ -1,4 +1,4 @@
-import { sections } from '@/data/sections';
+import { sections } from './mocks/sections';
 import type { Section, Category } from '@/entities/section/types';
 
 /**

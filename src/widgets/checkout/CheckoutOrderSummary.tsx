@@ -1,40 +1,36 @@
-import { memo, useState, useEffect } from 'react';
+import { memo } from 'react';
 import { useCart } from '@/features/cart';
 import type { CartItem } from '@/entities/cart';
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
-import { getProductImage } from '@/shared/lib/getProductImage';
+import { getProductImage } from '@/entities/product';
 
 // Sub-component to handle async image loading for each item
 const CheckoutItem = memo(({ item }: { item: CartItem }) => {
   const { updateQuantity, removeFromCart } = useCart();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    getProductImage(item.image).then(setImageUrl);
-  }, [item.image]);
+  const imageUrl = getProductImage(item.image);
 
   return (
-    <div className='flex items-start gap-4 pt-4'>
+    <div className="flex items-start gap-4 pt-4">
       <img
-        src={imageUrl ?? undefined}
+        src={imageUrl}
         alt={item.name}
-        className='h-16 w-16 rounded object-cover'
+        className="h-16 w-16 rounded object-cover"
       />
-      <div className='flex-grow'>
-        <p className='font-semibold'>{item.name}</p>
-        <p className='text-sm text-text-muted'>{item.price} ₽</p>
+      <div className="flex-grow">
+        <p className="font-semibold">{item.name}</p>
+        <p className="text-sm text-text-muted">{item.price} ₽</p>
       </div>
-      <div className='flex flex-col items-end gap-2'>
+      <div className="flex flex-col items-end gap-2">
         <QuantityControl
           quantity={item.quantity}
           onIncrement={() => updateQuantity(item.id, item.quantity + 1)}
           onDecrement={() => updateQuantity(item.id, item.quantity - 1)}
         />
         <Button
-          variant='danger'
-          size='small'
+          variant="danger"
+          size="small"
           onClick={() => removeFromCart(item.id)}
         >
           Удалить

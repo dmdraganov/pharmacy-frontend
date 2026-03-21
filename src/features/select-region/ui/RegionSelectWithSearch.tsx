@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useRef } from 'react';
-import { useRegion } from '@/features/region';
+import { useRegion } from '@/features/select-region';
 import Input from '@/shared/ui/Input';
 import { REGIONS } from '../lib/constants';
 

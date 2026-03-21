@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useSearch } from '@/features/search';
 import FiltersSidebar from '@/widgets/FiltersSidebar';
-import { useFilters } from '@/features/filters/useFilters';
-import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
+import { useFilters } from '@/features/filter-products/useFilters';
+import { applyFilters, getAvailableFilters } from '@/features/filter-products/lib';
 import CatalogLayoutWidget from '@/widgets/CatalogLayoutWidget';
 
 const SearchPage = () => {

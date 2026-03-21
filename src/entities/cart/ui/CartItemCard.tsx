@@ -1,11 +1,11 @@
-import { memo, useState, useEffect } from 'react';
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import type { CartItem } from '@/entities/cart';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Badge from '@/shared/ui/Badge';
-import { getProductImage } from '@/shared/lib/getProductImage';
+import { getProductImage } from '@/entities/product';
 import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 
 interface CartItemCardProps {
@@ -20,61 +20,57 @@ const CartItemCard = memo((props: CartItemCardProps) => {
   const { item, isSelected, onSelectItem, onUpdateQuantity, onRemoveFromCart } =
     props;
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    getProductImage(item.image).then(setImageUrl);
-  }, [item.image]);
+  const imageUrl = getProductImage(item.image);
 
   return (
-    <div className='flex items-stretch rounded border border-border-default p-4'>
-      <div className='mr-4 flex items-center'>
+    <div className="flex items-stretch rounded border border-border-default p-4">
+      <div className="mr-4 flex items-center">
         <Checkbox
           id={`select-${item.id}`}
-          label=''
+          label=""
           checked={isSelected}
           onChange={() => onSelectItem(item.id)}
         />
       </div>
 
       <img
-        src={imageUrl ?? undefined}
+        src={imageUrl}
         alt={item.name}
-        className='mr-4 h-24 w-24 object-cover'
+        className="mr-4 h-24 w-24 object-cover"
       />
 
-      <div className='flex flex-grow flex-col'>
+      <div className="flex flex-grow flex-col">
         <div>
           <Link
             to={`/product/${item.id}`}
-            className='text-lg font-bold hover:underline'
+            className="text-lg font-bold hover:underline"
           >
             {' '}
             {item.name}
           </Link>
-          <p className='text-sm text-text-muted'>{item.brand}</p>
+          <p className="text-sm text-text-muted">{item.brand}</p>
           {item.isPrescription && (
-            <Badge variant='warning' className='mt-2'>
+            <Badge variant="warning" className="mt-2">
               Рецептурный
             </Badge>
           )}
         </div>
-        <div className='mt-auto flex items-center gap-4 pt-2'>
+        <div className="mt-auto flex items-center gap-4 pt-2">
           <FavoriteButton productId={item.id} />
           <Button
-            variant='danger'
-            size='small'
+            variant="danger"
+            size="small"
             onClick={() => onRemoveFromCart(item.id)}
           >
             Удалить
           </Button>
         </div>
       </div>
-      <div className='flex flex-col items-end justify-between'>
-        <div className='flex w-32 flex-col items-end'>
-          <p className='text-lg font-bold'>{item.price * item.quantity} ₽</p>
+      <div className="flex flex-col items-end justify-between">
+        <div className="flex w-32 flex-col items-end">
+          <p className="text-lg font-bold">{item.price * item.quantity} ₽</p>
           {item.oldPrice && (
-            <p className='text-sm text-text-muted line-through'>
+            <p className="text-sm text-text-muted line-through">
               {item.oldPrice * item.quantity} ₽
             </p>
           )}
