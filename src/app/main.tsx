@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import { AppProvider } from './providers';
+import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './AppRouter.tsx';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
-  <AppProvider>
+  <BrowserRouter basename={import.meta.env.VITE_BASE || undefined}>
     <AppRouter />
-  </AppProvider>
+  </BrowserRouter>
 );

@@ -4,13 +4,17 @@ import Spinner from '@/shared/ui/Spinner';
 import PageLayout from '@/app/layouts/PageLayout';
 import AdminLayout from '@/app/layouts/AdminLayout';
 import ScrollToTop from '@/shared/utils/router/ScrollToTop';
-
-// Eagerly loaded pages
 import HomePage from '@/pages/HomePage';
 import ProductPage from '@/pages/ProductPage';
 import CartPage from '@/pages/CartPage';
+import { AccountLayout } from '@/widgets/layout/AccountLayout';
 
-// Lazily loaded pages
+const AccountOrdersPage = lazy(
+  () => import('@/pages/account/AccountOrdersPage')
+);
+const AccountProfilePage = lazy(
+  () => import('@/pages/account/AccountProfilePage')
+);
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
 const DeliveryPage = lazy(() => import('@/pages/DeliveryPage'));
 const ProductListPage = lazy(() => import('@/pages/ProductListPage'));
@@ -18,7 +22,6 @@ const SearchPage = lazy(() => import('@/pages/SearchPage'));
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'));
 const AboutPage = lazy(() => import('@/pages/AboutPage'));
 const ContactsPage = lazy(() => import('@/pages/ContactsPage'));
-const AccountPage = lazy(() => import('@/pages/AccountPage'));
 const CheckoutPage = lazy(() => import('@/pages/CheckoutPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'));
 
@@ -66,9 +69,14 @@ const AppRouter = () => {
             <Route path='contacts' element={<ContactsPage />} />
             <Route path='product/:id' element={<ProductPage />} />
             <Route path='search' element={<SearchPage />} />
-            <Route path='account' element={<AccountPage />} />
             <Route path='checkout' element={<CheckoutPage />} />
             <Route path='privacy-policy' element={<PrivacyPolicyPage />} />
+
+            <Route path='account' element={<AccountLayout />}>
+              <Route index element={<Navigate to='orders' replace />} />
+              <Route path='orders' element={<AccountOrdersPage />} />
+              <Route path='profile' element={<AccountProfilePage />} />
+            </Route>
           </Route>
           <Route
             path='/admin'

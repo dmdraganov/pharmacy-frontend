@@ -36,8 +36,7 @@ src/
 ├─ widgets/      # Композитные UI-блоки (Header, Sidebar)
 ├─ features/     # Фичи: бизнес-функционал (catalog, cart, favorites, search)
 ├─ entities/     # Доменные сущности (product, section)
-├─ shared/       # UI-kit, hooks, utils, helpers
-└─ data/         # Статические массивы данных
+└─ shared/       # UI-kit, hooks, utils, helpers и тд
 ```
 
 ## Layer Responsibilities
@@ -50,7 +49,6 @@ src/
 | **features** | Пользовательские сценарии, бизнес-логика, действия (например: добавление в корзину, поиск товаров)       |
 | **entities** | Модели данных, типы, сущности приложения, внутренняя бизнес-логика                                       |
 | **shared**   | UI-компоненты, утилиты, хуки, функции без бизнес-логики; не зависят от features и entities               |
-| **data**     | Статические данные (JSON, массивы объектов), используются через entities и features                      |
 
 ## Data Flow
 
@@ -59,7 +57,7 @@ data/ → entities → features → widgets → pages → app
 ```
 
 - Данные **неизменяемы**; state-modifying операции проходят через **features**.
-- Взаимодействие между слоями только через публичные интерфейсы (actions, hooks, модели).
+- Взаимодействие между слоями только через публичные интерфейсы.
 
 ## State Management
 
