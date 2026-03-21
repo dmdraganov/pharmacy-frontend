@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import RadioInput from '@/shared/ui/RadioInput';
 
 type PaymentMethod = 'card' | 'sbp' | 'cash';
 
@@ -18,20 +19,15 @@ export const CheckoutPayment = memo(() => {
       </h2>
       <div className='flex flex-col gap-3'>
         {paymentOptions.map((option) => (
-          <label
+          <RadioInput
             key={option.id}
-            className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
+            name='paymentMethod'
+            value={option.id}
+            checked={paymentMethod === option.id}
+            onChange={(val) => setPaymentMethod(val as PaymentMethod)}
           >
-            <input
-              type='radio'
-              name='paymentMethod'
-              value={option.id}
-              checked={paymentMethod === option.id}
-              onChange={() => setPaymentMethod(option.id)}
-              className='mt-1'
-            />
             <span className='font-semibold'>{option.label}</span>
-          </label>
+          </RadioInput>
         ))}
       </div>
     </div>

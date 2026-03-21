@@ -8,12 +8,9 @@
 @theme {
   --font-inter: 'Inter';
 
-  /* Color Palette */
   --color-primary: #3b82f6;
   --color-primary-hover: #1d4ed8;
-  --color-primary-emphasis: #2563eb;
   --color-primary-subtle: #dbeafe;
-  --color-primary-ultrasubtle: #eff6ff;
 
   --color-danger-hover: #b91c1c;
   --color-danger: #dc2626;
@@ -23,7 +20,7 @@
   --color-success: #059669;
   --color-success-subtle: #d1fae5;
 
-  --color-warning-subtle: #fff2e3;
+  --color-warning-subtle: #ffe8cf;
   --color-warning-border: #fdba74;
   --color-warning-text: #9a3412;
 
@@ -33,7 +30,6 @@
 
   --color-background-default: white;
   --color-background-muted: #e2e8f0;
-  --color-background-hover: #f1f5f9;
   --color-background-muted-hover: #cbd5e1;
 
   --color-border-default: #b6c2d1;
@@ -42,8 +38,11 @@
 }
 
 @layer base {
-  html {
-    font-family: theme('fontFamily.inter');
+  html,
+  body {
+    font-family: var(--font-inter);
     scrollbar-gutter: stable;
+    color: var(--color-text-default);
+    background: var(--color-background-default);
   }
 }

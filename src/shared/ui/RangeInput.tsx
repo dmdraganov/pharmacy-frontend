@@ -204,12 +204,12 @@ const RangeInput = ({
           ></div>
           <div
             ref={minThumbRef}
-            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary-emphasis active:cursor-grabbing'
+            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary active:cursor-grabbing'
             style={{ left: `${minPercent}%` }}
           ></div>
           <div
             ref={maxThumbRef}
-            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary-emphasis active:cursor-grabbing'
+            className='absolute top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 h-4 w-4 cursor-grab rounded-full bg-primary active:cursor-grabbing'
             style={{ left: `${maxPercent}%` }}
           ></div>
         </div>

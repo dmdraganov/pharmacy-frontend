@@ -4,28 +4,8 @@ import type { Pharmacy } from '@/entities/pharmacy';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Input from '@/shared/ui/Input';
 import Spinner from '@/shared/ui/Spinner';
-
-const TabButton = ({
-  onClick,
-  isActive,
-  children,
-}: {
-  onClick: () => void;
-  isActive: boolean;
-  children: React.ReactNode;
-}) => (
-  <button
-    type='button'
-    onClick={onClick}
-    className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-center font-medium transition-colors ${
-      isActive
-        ? 'bg-primary text-text-inverse shadow'
-        : 'bg-background-muted text-text-default hover:bg-background-muted-hover'
-    }`}
-  >
-    {children}
-  </button>
-);
+import RadioInput from '@/shared/ui/RadioInput';
+import TabButton from '@/shared/ui/TabButton';
 
 const CourierForm = () => (
   <div className='flex flex-col gap-4'>
@@ -41,9 +21,13 @@ const CourierForm = () => (
 const PickupSelector = ({
   pharmacies,
   error,
+  selectedId,
+  onSelect,
 }: {
   pharmacies: Pharmacy[] | null;
   error: Error | null;
+  selectedId: string | null;
+  onSelect: (id: string) => void;
 }) => {
   if (error) {
     return (
@@ -53,22 +37,19 @@ const PickupSelector = ({
   return (
     <div className='flex flex-col gap-3'>
       {(pharmacies || []).map((pharmacy) => (
-        <label
+        <RadioInput
           key={pharmacy.id}
-          className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
+          name='pickupPoint'
+          value={pharmacy.id}
+          checked={selectedId === pharmacy.id}
+          onChange={onSelect}
         >
-          <input
-            type='radio'
-            name='pickupPoint'
-            value={pharmacy.id}
-            className='mt-1'
-          />
           <div>
             <p className='font-semibold'>{pharmacy.name}</p>
             <p className='text-sm text-text-muted'>{pharmacy.address}</p>
             <p className='text-sm text-text-muted'>{pharmacy.workingHours}</p>
           </div>
-        </label>
+        </RadioInput>
       ))}
     </div>
   );
@@ -78,6 +59,7 @@ export const CheckoutDelivery = memo(() => {
   const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
     'courier'
   );
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string | null>(null);
 
   const {
     data: pharmacies,
@@ -115,7 +97,12 @@ export const CheckoutDelivery = memo(() => {
             <Spinner />
           </div>
         ) : (
-          <PickupSelector pharmacies={pharmacies} error={error} />
+          <PickupSelector
+            pharmacies={pharmacies}
+            error={error}
+            selectedId={selectedPharmacy}
+            onSelect={setSelectedPharmacy}
+          />
         ))}
     </div>
   );

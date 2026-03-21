@@ -14,7 +14,7 @@ const Checkbox = ({ className, label, id, ...props }: CheckboxProps) => {
       <input
         type='checkbox'
         id={id}
-        className='size-4 cursor-pointer rounded border-border-default text-primary-emphasis focus:ring-primary'
+        className='size-4 cursor-pointer rounded border-border-default text-primary focus:ring-primary'
         {...props}
       />
       {label}

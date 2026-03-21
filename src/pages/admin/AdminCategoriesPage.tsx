@@ -43,14 +43,14 @@ const AdminCategoriesPage = () => {
             {(categories || []).map((category) => (
               <tr
                 key={category.id}
-                className='border-b border-border-default hover:bg-background-hover'
+                className='border-b border-border-default hover:bg-background-muted-hover'
               >
                 <td className='whitespace-nowrap px-6 py-3 text-left text-text-default'>
                   {category.name}
                 </td>
                 <td className='px-6 py-3 text-center'>
                   <div className='flex items-center justify-center space-x-2'>
-                    <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis'>
+                    <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary'>
                       Редактировать
                     </button>
                     <button className='rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis'>
@@ -72,7 +72,7 @@ const AdminCategoriesPage = () => {
             >
               <p className='font-medium text-text-default'>{category.name}</p>
               <div className='flex items-center space-x-2'>
-                <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis'>
+                <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary'>
                   Р
                 </button>
                 <button className='rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis'>

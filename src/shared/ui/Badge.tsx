@@ -21,7 +21,7 @@ const Badge = ({
     'inline-block h-fit rounded-full px-2 py-1 text-xs font-semibold uppercase';
 
   const variantStyles = {
-    primary: 'bg-primary-subtle text-primary-emphasis',
+    primary: 'bg-primary-subtle text-primary',
     secondary: 'bg-background-muted text-text-default',
     danger: 'bg-danger-subtle text-danger',
     success: 'bg-success-subtle text-success',

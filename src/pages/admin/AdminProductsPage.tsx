@@ -79,7 +79,7 @@ const AdminProductsPage = () => {
             {productsWithFakeStock.map((product) => (
               <tr
                 key={product.id}
-                className='border-b border-border-default hover:bg-background-hover'
+                className='border-b border-border-default hover:bg-background-muted-hover'
               >
                 <td className='whitespace-nowrap px-6 py-3 text-left text-text-default'>
                   {product.name}
@@ -98,7 +98,7 @@ const AdminProductsPage = () => {
                 </td>
                 <td className='px-6 py-3 text-center'>
                   <div className='flex items-center justify-center'>
-                    <button className='mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary-subtle text-primary-emphasis'>
+                    <button className='mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary-subtle text-primary'>
                       Р
                     </button>
                     <button className='flex h-8 w-8 items-center justify-center rounded-full bg-danger-subtle text-danger-emphasis'>
@@ -140,7 +140,7 @@ const AdminProductsPage = () => {
                 </p>
               </div>
               <div className='mt-4 flex items-center'>
-                <button className='mr-2 rounded-md bg-primary-subtle px-4 py-2 text-sm text-primary-emphasis'>
+                <button className='mr-2 rounded-md bg-primary-subtle px-4 py-2 text-sm text-primary'>
                   Редактировать
                 </button>
                 <button className='rounded-md bg-danger-subtle px-4 py-2 text-sm text-danger-emphasis'>

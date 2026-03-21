@@ -60,7 +60,7 @@ const Header = memo(() => {
             >
               Избранное
               {favoriteIds.length > 0 && (
-                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-danger text-xs text-white'>
                   {favoriteIds.length}
                 </span>
               )}
@@ -71,7 +71,7 @@ const Header = memo(() => {
             >
               Корзина
               {cartTotalItems > 0 && (
-                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-danger text-xs text-white'>
                   {cartTotalItems}
                 </span>
               )}

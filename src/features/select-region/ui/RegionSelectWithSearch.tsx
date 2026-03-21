@@ -78,7 +78,7 @@ export const RegionSelectWithSearch = memo(() => {
                     <button
                       type='button'
                       onClick={() => handleRegionSelect(r)}
-                      className='block w-full px-3 py-2 text-left hover:bg-background-hover cursor-pointer'
+                      className='block w-full px-3 py-2 text-left hover:bg-background-muted-hover cursor-pointer'
                     >
                       {r}
                     </button>

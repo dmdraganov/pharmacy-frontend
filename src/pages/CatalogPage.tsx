@@ -10,12 +10,12 @@ const CatalogPage = memo(() => {
 
   const hoveredSection = useMemo(
     () => (sections || []).find((sec) => sec.id === hoveredSectionId),
-    [hoveredSectionId, sections],
+    [hoveredSectionId, sections]
   );
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[600px] items-center justify-center">
+      <div className='flex min-h-[600px] items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -23,18 +23,18 @@ const CatalogPage = memo(() => {
 
   if (error) {
     return (
-      <div className="flex min-h-[600px] items-center justify-center text-center text-danger">
-        <h2 className="text-2xl font-bold">Ошибка при загрузке каталога</h2>
+      <div className='flex min-h-[600px] items-center justify-center text-center text-danger'>
+        <h2 className='text-2xl font-bold'>Ошибка при загрузке каталога</h2>
         <p>{error.message}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-[600px] gap-6">
+    <div className='flex min-h-[600px] gap-6'>
       {/* Categories List */}
-      <div className="w-full md:w-1/4">
-        <ul className="py-12">
+      <div className='w-full md:w-1/4'>
+        <ul className='py-12'>
           {(sections || []).map((sec) => (
             <li key={sec.id} onMouseEnter={() => setHoveredSectionId(sec.id)}>
               <Link
@@ -53,18 +53,18 @@ const CatalogPage = memo(() => {
       </div>
 
       {/* Subcategories on hover */}
-      <div className="relative flex w-full items-start justify-center py-12 md:w-3/4">
+      <div className='relative flex w-full items-start justify-center py-12 md:w-3/4'>
         {hoveredSection ? (
-          <div className="w-full">
-            <h3 className="mb-6 text-2xl font-semibold">
+          <div className='w-full'>
+            <h3 className='mb-6 text-2xl font-semibold'>
               {hoveredSection.name}
             </h3>
-            <ul className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-3">
+            <ul className='grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-3'>
               {hoveredSection.categories.map((cat) => (
                 <li key={cat.id}>
                   <Link
                     to={`/catalog/${hoveredSection.id}/${cat.id}`}
-                    className="text-base hover:text-primary-emphasis hover:underline"
+                    className='text-base hover:text-primary hover:underline'
                   >
                     {cat.name}
                   </Link>
@@ -73,11 +73,11 @@ const CatalogPage = memo(() => {
             </ul>
           </div>
         ) : (
-          <div className="text-center">
-            <h1 className="text-2xl font-semibold text-text-default">
+          <div className='text-center'>
+            <h1 className='text-2xl font-semibold text-text-default'>
               Каталог товаров
             </h1>
-            <p className="mt-2 text-base text-text-muted">
+            <p className='mt-2 text-base text-text-muted'>
               Выберите раздел в меню слева, чтобы посмотреть доступные
               категории.
             </p>

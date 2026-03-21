@@ -71,7 +71,7 @@ const AdminOrdersPage = () => {
             {(orders || []).map((order) => (
               <tr
                 key={order.id}
-                className='border-b border-border-default hover:bg-background-hover'
+                className='border-b border-border-default hover:bg-background-muted-hover'
               >
                 <td className='whitespace-nowrap px-6 py-3 text-left text-text-default'>
                   {order.id}
@@ -108,7 +108,7 @@ const AdminOrdersPage = () => {
                       </button>
                     )}
                     {order.status === 'processing' && (
-                      <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis'>
+                      <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary'>
                         Отгрузить
                       </button>
                     )}
@@ -164,7 +164,7 @@ const AdminOrdersPage = () => {
                   </button>
                 )}
                 {order.status === 'processing' && (
-                  <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis'>
+                  <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary'>
                     Отгрузить
                   </button>
                 )}

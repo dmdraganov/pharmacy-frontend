@@ -54,7 +54,7 @@ const FiltersSidebar = ({
               <Link
                 key={cat.id}
                 to={`/catalog/${section.id}/${cat.id}`}
-                className='text-sm text-primary-emphasis hover:underline'
+                className='text-sm text-primary hover:underline'
               >
                 {cat.name}
               </Link>

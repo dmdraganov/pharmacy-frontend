@@ -23,7 +23,7 @@ const ContactsPage = memo(() => {
             </h2>
             <a
               href='tel:88005553535'
-              className='mt-2 text-lg text-primary-emphasis hover:underline'
+              className='mt-2 text-lg text-primary hover:underline'
             >
               8 (800) 555-35-35
             </a>
@@ -35,7 +35,7 @@ const ContactsPage = memo(() => {
             </h2>
             <a
               href='mailto:support@pharmacy.com'
-              className='mt-2 text-lg text-primary-emphasis hover:underline'
+              className='mt-2 text-lg text-primary hover:underline'
             >
               support@pharmacy.com
             </a>
