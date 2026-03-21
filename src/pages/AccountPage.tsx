@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { CurrentOrder } from '@/widgets/order/CurrentOrder';
 import { OrderHistory } from '@/widgets/order/OrderHistory';
-import { ProfileDetails } from '@/widgets/product/ProfileDetails';
+import { ProfileDetails } from '@/widgets/ProfileDetails';
 import { AccountSidebar } from '@/widgets/layout/AccountSidebar';
 
 export type AccountPageView = 'orders' | 'profile';

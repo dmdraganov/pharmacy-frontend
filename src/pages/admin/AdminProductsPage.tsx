@@ -15,7 +15,10 @@ const AdminProductsPage = () => {
     () =>
       products.map((product) => ({
         ...product,
-        stock: Math.floor(Math.random() * 1000), // Fake stock data
+        stock:
+          product.id
+            .split('')
+            .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 1000, // Fake stock data
       })),
     [products]
   );

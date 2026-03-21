@@ -1,24 +1,28 @@
 import { memo } from 'react';
-import { useCart } from '@/features/cart';
+import {
+  useCartItems,
+  useCartStore,
+  useCartTotals,
+  useSelectedItemIds,
+} from '@/features/cart';
 import Checkbox from '@/shared/ui/Checkbox';
 import CartItemCard from '@/entities/cart/ui/CartItemCard';
 import CartSummary from '@/widgets/cart/CartSummary';
 import EmptyState from '@/shared/ui/EmptyState';
 import Button from '@/shared/ui/Button';
+import type { CartItem } from '@/entities/cart';
 
 const CartPage = memo(() => {
-  const {
-    cartItems,
-    updateQuantity,
-    removeFromCart,
-    clearCart,
-    selectedItemIds,
-    toggleSelectItem,
-    toggleSelectAll,
-    ...summaryProps
-  } = useCart();
+  const cartItems = useCartItems();
+  const selectedItemIds = useSelectedItemIds();
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const toggleSelectItem = useCartStore((state) => state.toggleSelectItem);
+  const toggleSelectAll = useCartStore((state) => state.toggleSelectAll);
+  const summaryProps = useCartTotals();
 
-  const cartItemValues = Object.values(cartItems);
+  const cartItemValues = Object.values(cartItems) as CartItem[];
   const areAllSelected =
     selectedItemIds.length === cartItemValues.length &&
     cartItemValues.length > 0;

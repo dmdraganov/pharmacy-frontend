@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '@/shared/api';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';

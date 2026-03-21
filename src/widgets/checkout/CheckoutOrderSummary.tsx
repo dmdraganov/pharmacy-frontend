@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useCart } from '@/features/cart';
+import { useCartItems, useCartStore, useCartTotals } from '@/features/cart';
 import type { CartItem } from '@/entities/cart';
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
@@ -8,7 +8,8 @@ import { getProductImage } from '@/entities/product';
 
 // Sub-component to handle async image loading for each item
 const CheckoutItem = memo(({ item }: { item: CartItem }) => {
-  const { updateQuantity, removeFromCart } = useCart();
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
   const imageUrl = getProductImage(item.image);
 
   return (
@@ -41,9 +42,10 @@ const CheckoutItem = memo(({ item }: { item: CartItem }) => {
 });
 
 export const CheckoutOrderSummary = memo(() => {
-  const { cartItems, totalItems, selectedItemsTotal } = useCart();
+  const cartItems = useCartItems();
+  const { totalItems, selectedItemsTotal } = useCartTotals();
 
-  const items = Object.values(cartItems);
+  const items = Object.values(cartItems) as CartItem[];
 
   if (items.length === 0) {
     return (

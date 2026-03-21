@@ -1,17 +1,33 @@
 import { memo, useMemo } from 'react';
-import { useFavorites } from '@/features/favorites';
+import { useFavoriteIds } from '@/features/favorites';
 import { getProducts } from '@/shared/api';
 import { ProductCard } from '@/entities/product/';
-import { useCart } from '@/features/cart';
+import { useCartStore, useCartItemQuantity } from '@/features/cart';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
+import type { Product } from '@/entities/product';
+
+const ProductCardWithCart = memo(({ product }: { product: Product }) => {
+  const addToCart = useCartStore((state) => state.addToCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const quantityInCart = useCartItemQuantity(product.id);
+
+  return (
+    <ProductCard
+      product={product}
+      quantityInCart={quantityInCart}
+      onAddToCart={() => addToCart(product)}
+      onUpdateQuantity={updateQuantity}
+      onRemoveFromCart={() => removeFromCart(product.id)}
+    />
+  );
+});
 
 const FavoritesPage = memo(() => {
   const { data: products, isLoading, error } = useDataFetching(getProducts);
-  const { favoriteIds } = useFavorites();
-  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
-    useCart();
+  const favoriteIds = useFavoriteIds();
 
   const favoriteProducts = useMemo(
     () => (products || []).filter((p) => favoriteIds.includes(p.id)),
@@ -53,14 +69,7 @@ const FavoritesPage = memo(() => {
       <h1 className='mb-6 text-2xl font-bold text-text-default'>Избранное</h1>
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {favoriteProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            quantityInCart={getQuantityInCart(product.id)}
-            onAddToCart={addToCart}
-            onUpdateQuantity={updateQuantity}
-            onRemoveFromCart={removeFromCart}
-          />
+          <ProductCardWithCart key={product.id} product={product} />
         ))}
       </div>
     </>
@@ -68,3 +77,4 @@ const FavoritesPage = memo(() => {
 });
 
 export default FavoritesPage;
+

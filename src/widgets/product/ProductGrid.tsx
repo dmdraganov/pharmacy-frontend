@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { ProductCard } from '@/entities/product/';
 import type { Product } from '@/entities/product';
-import { useCart } from '@/features/cart';
+import { useCartStore, useCartItemQuantity } from '@/features/cart';
 import { usePagination } from '@/shared/hooks/usePagination';
 import Pagination from '@/shared/ui/Pagination';
 
@@ -13,13 +13,29 @@ interface ProductGridProps {
 }
 
 const ProductGrid = ({ title, products }: ProductGridProps) => {
-  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
-    useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
 
   const { currentData, currentPage, totalPages, goToPage } = usePagination({
     data: products,
     itemsPerPage: ITEMS_PER_PAGE,
   });
+
+  // A helper component to manage cart quantity for each product
+  const ProductCardWithCart = ({ product }: { product: Product }) => {
+    const quantityInCart = useCartItemQuantity(product.id);
+    return (
+      <ProductCard
+        key={product.id}
+        product={product}
+        quantityInCart={quantityInCart}
+        onAddToCart={() => addToCart(product)}
+        onUpdateQuantity={updateQuantity}
+        onRemoveFromCart={() => removeFromCart(product.id)}
+      />
+    );
+  };
 
   return (
     <>
@@ -27,14 +43,7 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3'>
         {currentData.length > 0 ? (
           currentData.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              quantityInCart={getQuantityInCart(product.id)}
-              onAddToCart={addToCart}
-              onUpdateQuantity={updateQuantity}
-              onRemoveFromCart={removeFromCart}
-            />
+            <ProductCardWithCart key={product.id} product={product} />
           ))
         ) : (
           <p className='text-text-default'>Пока нет товаров.</p>

@@ -1,15 +1,18 @@
-import { memo, useState, useEffect } from 'react';
-import { useUser } from '@/features/manage-user-profile';
+import { memo, useState } from 'react';
+import { useUserStore } from '@/features/manage-user-profile';
 import Input from '@/shared/ui/Input';
 import type { User } from '@/entities/user';
 
-export const CheckoutContactInfo = memo(() => {
-  const { user } = useUser();
-  const [formData, setFormData] = useState<User>(user);
+const emptyUser: User = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+};
 
-  useEffect(() => {
-    setFormData(user);
-  }, [user]);
+export const CheckoutContactInfo = memo(() => {
+  const { user } = useUserStore();
+  const [formData, setFormData] = useState<User>(user || emptyUser);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,7 +23,10 @@ export const CheckoutContactInfo = memo(() => {
   };
 
   return (
-    <div className='rounded-lg border border-border-default bg-background-default p-6'>
+    <div
+      key={JSON.stringify(user)}
+      className='rounded-lg border border-border-default bg-background-default p-6'
+    >
       <h2 className='mb-4 text-xl font-bold text-text-default'>
         Контактные данные
       </h2>

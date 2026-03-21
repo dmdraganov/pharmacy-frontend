@@ -1,17 +1,32 @@
 import { memo, useMemo } from 'react';
 import type { Product } from '@/entities/product';
 import { ProductCard } from '@/entities/product/';
-import { useCart } from '@/features/cart';
+import { useCartStore, useCartItemQuantity } from '@/features/cart';
 import { getProducts } from '@/shared/api';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import Spinner from '@/shared/ui/Spinner';
 import ProductSlider from '@/widgets/product/ProductSlider';
 
+const ProductCardWithCart = memo(({ product }: { product: Product }) => {
+  const addToCart = useCartStore((state) => state.addToCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const quantityInCart = useCartItemQuantity(product.id);
+
+  return (
+    <ProductCard
+      product={product}
+      quantityInCart={quantityInCart}
+      onAddToCart={() => addToCart(product)}
+      onUpdateQuantity={updateQuantity}
+      onRemoveFromCart={() => removeFromCart(product.id)}
+    />
+  );
+});
+
 const HomePage = memo(() => {
   const { data: products, isLoading, error } = useDataFetching(getProducts);
-  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
-    useCart();
   const isMobile = useMediaQuery('(max-width: 1023px)');
 
   const popularProducts = useMemo(
@@ -25,13 +40,9 @@ const HomePage = memo(() => {
 
   const renderProductList = (productList: Product[], keyPrefix: string) => {
     const productCardList = productList.map((product) => (
-      <ProductCard
+      <ProductCardWithCart
         key={`${keyPrefix}-${product.id}`}
         product={product}
-        quantityInCart={getQuantityInCart(product.id)}
-        onAddToCart={addToCart}
-        onUpdateQuantity={updateQuantity}
-        onRemoveFromCart={removeFromCart}
       />
     ));
 

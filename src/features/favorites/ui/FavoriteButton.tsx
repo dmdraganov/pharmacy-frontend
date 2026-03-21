@@ -1,4 +1,4 @@
-import { useFavorites } from '@/features/favorites';
+import { useIsFavorite, useFavoriteActions } from '@/features/favorites';
 import HeartIcon from '@/shared/ui/HeartIcon';
 
 interface FavoriteButtonProps {
@@ -10,9 +10,8 @@ export const FavoriteButton = ({
   productId,
   className,
 }: FavoriteButtonProps) => {
-  const { isFavorite, toggleFavorite } = useFavorites();
-
-  const isFavorited = isFavorite(productId);
+  const toggleFavorite = useFavoriteActions();
+  const isFavorited = useIsFavorite(productId);
 
   const handleToggle = () => {
     toggleFavorite(productId);
@@ -24,6 +23,7 @@ export const FavoriteButton = ({
     <button
       onClick={handleToggle}
       className={`${baseClasses} ${className || ''}`}
+      aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
     >
       <HeartIcon
         className={`h-6 w-6 transition-colors ${

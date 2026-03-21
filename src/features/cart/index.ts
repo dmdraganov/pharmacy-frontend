@@ -1,2 +1,8 @@
-export { useCart } from './model/useCart';
-export { CartProvider } from './model/provider';
+export { useCartStore } from './model/store';
+export {
+  useCartItems,
+  useCartTotals,
+  useCartItemQuantity,
+  useSelectedItemIds,
+} from './model/hooks';
+

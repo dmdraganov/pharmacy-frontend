@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '@/features/cart';
+import { useCartStore } from '@/features/cart';
 import { CheckoutOrderSummary } from '@/widgets/checkout/CheckoutOrderSummary';
 import { CheckoutDelivery } from '@/widgets/checkout/CheckoutDelivery';
 import { CheckoutContactInfo } from '@/widgets/checkout/CheckoutContactInfo';
@@ -24,7 +24,7 @@ const OrderSuccessMessage = () => (
 );
 
 const CheckoutPage = memo(() => {
-  const { clearCart } = useCart();
+  const clearCart = useCartStore((state) => state.clearCart);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 

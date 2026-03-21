@@ -1,2 +1,2 @@
-export { useUser } from './model/useUser';
-export { UserProvider } from './model/provider';
+export { useUserStore } from './model/store';
+

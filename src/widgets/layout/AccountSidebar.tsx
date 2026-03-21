@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/features/manage-user-profile';
+import { useUserStore } from '@/features/manage-user-profile';
 import type { AccountPageView } from '@/pages/AccountPage';
 
 interface AccountSidebarProps {
@@ -46,17 +46,28 @@ const NavLink = ({
 
 export const AccountSidebar = memo(
   ({ activeView, setActiveView }: AccountSidebarProps) => {
-    const { user } = useUser();
+    const { user, isLoading } = useUserStore();
+
+    if (isLoading) {
+      return (
+        <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4'>
+          <div className='border-b border-border-default pb-4'>
+            <div className='h-6 w-3/4 rounded bg-gray-300 animate-pulse' />
+            <div className='mt-2 h-4 w-1/2 rounded bg-gray-300 animate-pulse' />
+          </div>
+        </aside>
+      );
+    }
 
     return (
       <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4'>
         {/* User Info */}
         <div className='border-b border-border-default pb-4'>
           <p className='text-lg font-bold'>
-            {user.firstName} {user.lastName}
+            {user?.firstName} {user?.lastName}
           </p>
           <p className='text-sm text-text-muted overflow-hidden text-ellipsis whitespace-nowrap'>
-            {user.email}
+            {user?.email}
           </p>
         </div>
 
@@ -83,5 +94,5 @@ export const AccountSidebar = memo(
         </div>
       </aside>
     );
-  }
+  },
 );

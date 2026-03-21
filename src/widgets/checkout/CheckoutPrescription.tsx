@@ -1,11 +1,14 @@
 import { memo, useMemo } from 'react';
-import { useCart } from '@/features/cart';
+import { useCartItems } from '@/features/cart';
+import type { CartItem } from '@/entities/cart';
 
 export const CheckoutPrescription = memo(() => {
-  const { cartItems } = useCart();
+  const cartItems = useCartItems();
 
   const needsPrescription = useMemo(() => {
-    return Object.values(cartItems).some((item) => item.isPrescription);
+    return Object.values(cartItems).some(
+      (item: CartItem) => item.isPrescription
+    );
   }, [cartItems]);
 
   if (!needsPrescription) {

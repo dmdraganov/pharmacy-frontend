@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/entities/product';
-import { useCart } from '@/features/cart';
+import { useCartStore, useCartItemQuantity } from '@/features/cart';
 import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
@@ -13,10 +13,10 @@ interface ProductDetailsProps {
 }
 
 export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
-  const { addToCart, updateQuantity, removeFromCart, getQuantityInCart } =
-    useCart();
-
-  const quantityInCart = getQuantityInCart(product.id);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const quantityInCart = useCartItemQuantity(product.id);
   const imageUrl = getProductImage(product.image);
 
   const handleAddProduct = useCallback(() => {

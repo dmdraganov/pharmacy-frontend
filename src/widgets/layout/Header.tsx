@@ -4,15 +4,15 @@ import Button from '@/shared/ui/Button';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchInput } from '@/features/search';
 import { RegionSelectWithSearch } from '@/features/select-region';
-import { useCart } from '@/features/cart';
-import { useFavorites } from '@/features/favorites';
+import { useCartTotals } from '@/features/cart';
+import { useFavoriteIds } from '@/features/favorites';
 
 const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
-  const { totalItems: cartTotalItems } = useCart();
-  const { favoriteIds } = useFavorites();
+  const { totalItems: cartTotalItems } = useCartTotals();
+  const favoriteIds = useFavoriteIds();
 
   useEffect(() => {
     const handleScroll = () => {

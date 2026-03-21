@@ -4,13 +4,13 @@ import { getOrders } from '@/shared/api';
 import { OrderHistoryItem, type Order } from '@/entities/order';
 import Button from '@/shared/ui/Button';
 import Spinner from '@/shared/ui/Spinner';
-import { useCart } from '@/features/cart';
+import { useCartStore } from '@/features/cart';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import { RepeatOrderButton } from '@/features/repeat-order';
 
 export const OrderHistory = memo(() => {
   const { data: orders, isLoading, error } = useDataFetching(getOrders);
-  const { addItemsToCart } = useCart();
+  const addItemsToCart = useCartStore((state) => state.addItemsToCart);
   const navigate = useNavigate();
 
   const handleRepeatOrder = (order: Order) => {

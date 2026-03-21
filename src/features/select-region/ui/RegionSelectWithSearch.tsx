@@ -1,10 +1,10 @@
 import { memo, useState, useEffect, useRef } from 'react';
-import { useRegion } from '@/features/select-region';
+import { useRegionStore } from '@/features/select-region';
 import Input from '@/shared/ui/Input';
 import { REGIONS } from '../lib/constants';
 
 export const RegionSelectWithSearch = memo(() => {
-  const { region, setRegion } = useRegion();
+  const { region, setRegion } = useRegionStore();
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);

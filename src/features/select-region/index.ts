@@ -1,3 +1,2 @@
-export { useRegion } from './model/useRegion';
-export { RegionProvider } from './model/provider';
+export { useRegionStore } from './model/store';
 export * from './ui';

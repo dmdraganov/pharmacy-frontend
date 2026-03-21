@@ -1,18 +1,21 @@
-import { memo, useState, useEffect } from 'react';
-import { useUser } from '@/features/manage-user-profile';
+import { memo, useState } from 'react';
+import { useUserStore } from '@/features/manage-user-profile';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import type { User } from '@/entities/user';
 
+const emptyUser: User = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+};
+
 export const ProfileDetails = memo(() => {
-  const { user, updateUser } = useUser();
-  const [formData, setFormData] = useState<User>(user);
+  const { user, isLoading, updateUser } = useUserStore();
+  const [formData, setFormData] = useState<User>(user || emptyUser);
   const [errors, setErrors] = useState<Partial<User>>({});
   const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    setFormData(user);
-  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,7 +23,7 @@ export const ProfileDetails = memo(() => {
       ...prev,
       [name]: value,
     }));
-    // Clear the error for the field being edited
+
     if (errors[name as keyof User]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -60,8 +63,25 @@ export const ProfileDetails = memo(() => {
     setTimeout(() => setIsSaved(false), 2000);
   };
 
+  if (isLoading) {
+    return (
+      <div className='rounded-lg border border-border-default bg-background-default p-6'>
+        <h2 className='mb-4 text-2xl font-bold text-text-default'>
+          Личные данные
+        </h2>
+        <div className='flex flex-col gap-4'>
+          <div className='h-10 w-full rounded bg-gray-300 animate-pulse' />
+          <div className='h-10 w-full rounded bg-gray-300 animate-pulse' />
+          <div className='h-10 w-full rounded bg-gray-300 animate-pulse' />
+          <div className='h-10 w-full rounded bg-gray-300 animate-pulse' />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form
+      key={JSON.stringify(user)}
       onSubmit={handleSubmit}
       className='rounded-lg border border-border-default bg-background-default p-6'
     >
