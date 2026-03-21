@@ -1,43 +1,60 @@
-import { sections } from '@/data/sections';
-import type { Category } from '@/entities/section/types';
+import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import { getCategories } from '@/shared/api';
+import Spinner from '@/shared/ui/Spinner';
 
 const AdminCategoriesPage = () => {
-  const allCategories: Category[] = sections.flatMap(
-    (section) => section.categories
-  );
+  const { data: categories, isLoading, error } =
+    useDataFetching(getCategories);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-96 items-center justify-center text-center text-danger">
+        <h2 className="text-2xl font-bold">Ошибка при загрузке категорий</h2>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <div className='flex justify-between items-center mb-4'>
-        <h1 className='text-2xl font-bold text-text-heading'>Категории</h1>
-        <button className='bg-primary hover:bg-primary-hover text-text-inverse font-bold py-2 px-4 rounded'>
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-text-heading">Категории</h1>
+        <button className="rounded bg-primary px-4 py-2 font-bold text-text-inverse hover:bg-primary-hover">
           Добавить категорию
         </button>
       </div>
-      <div className='bg-background-default shadow-md rounded my-6 overflow-x-auto'>
+      <div className="my-6 overflow-x-auto rounded bg-background-default shadow-md">
         {/* Desktop Table */}
-        <table className='min-w-full table-auto hidden md:table'>
+        <table className="hidden min-w-full table-auto md:table">
           <thead>
-            <tr className='bg-background-muted text-text-muted uppercase text-sm leading-normal'>
-              <th className='py-3 px-6 text-left'>Название категории</th>
-              <th className='py-3 px-6 text-center'>Действия</th>
+            <tr className="text-text-muted bg-background-muted text-sm uppercase leading-normal">
+              <th className="px-6 py-3 text-left">Название категории</th>
+              <th className="px-6 py-3 text-center">Действия</th>
             </tr>
           </thead>
-          <tbody className='text-text-muted text-sm font-light'>
-            {allCategories.map((category) => (
+          <tbody className="text-sm font-light text-text-muted">
+            {(categories || []).map((category) => (
               <tr
                 key={category.id}
-                className='border-b border-border-default hover:bg-background-hover'
+                className="border-b border-border-default hover:bg-background-hover"
               >
-                <td className='py-3 px-6 text-left whitespace-nowrap text-text-default'>
+                <td className="whitespace-nowrap px-6 py-3 text-left text-text-default">
                   {category.name}
                 </td>
-                <td className='py-3 px-6 text-center'>
-                  <div className='flex items-center justify-center space-x-2'>
-                    <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+                <td className="px-6 py-3 text-center">
+                  <div className="flex items-center justify-center space-x-2">
+                    <button className="rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis">
                       Редактировать
                     </button>
-                    <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                    <button className="rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis">
                       Удалить
                     </button>
                   </div>
@@ -48,18 +65,18 @@ const AdminCategoriesPage = () => {
         </table>
 
         {/* Mobile Cards */}
-        <div className='md:hidden'>
-          {allCategories.map((category) => (
+        <div className="md:hidden">
+          {(categories || []).map((category) => (
             <div
               key={category.id}
-              className='p-4 border-b border-border-default flex justify-between items-center'
+              className="flex items-center justify-between border-b border-border-default p-4"
             >
-              <p className='text-text-default font-medium'>{category.name}</p>
-              <div className='flex items-center space-x-2'>
-                <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+              <p className="font-medium text-text-default">{category.name}</p>
+              <div className="flex items-center space-x-2">
+                <button className="rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis">
                   Р
                 </button>
-                <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                <button className="rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis">
                   У
                 </button>
               </div>

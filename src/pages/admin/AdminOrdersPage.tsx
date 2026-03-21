@@ -1,7 +1,11 @@
-import { orders } from '@/data/orders';
+import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import { getOrders } from '@/shared/api';
 import type { OrderStatus } from '@/entities/order';
+import Spinner from '@/shared/ui/Spinner';
 
 const AdminOrdersPage = () => {
+  const { data: orders, isLoading, error } = useDataFetching(getOrders);
+
   const getStatusLabel = (status: OrderStatus) => {
     switch (status) {
       case 'new':
@@ -30,45 +34,62 @@ const AdminOrdersPage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-96 items-center justify-center text-center text-danger">
+        <h2 className="text-2xl font-bold">Ошибка при загрузке заказов</h2>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1 className='text-2xl font-bold mb-4 text-text-heading'>Заказы</h1>
-      <div className='bg-background-default shadow-md rounded my-6 overflow-x-auto'>
+      <h1 className="mb-4 text-2xl font-bold text-text-heading">Заказы</h1>
+      <div className="my-6 overflow-x-auto rounded bg-background-default shadow-md">
         {/* Desktop Table */}
-        <table className='min-w-full table-auto hidden md:table'>
+        <table className="hidden min-w-full table-auto md:table">
           <thead>
-            <tr className='bg-background-muted text-text-muted uppercase text-sm leading-normal'>
-              <th className='py-3 px-6 text-left'>ID Заказа</th>
-              <th className='py-3 px-6 text-left'>Дата</th>
-              <th className='py-3 px-6 text-center'>Статус</th>
-              <th className='py-3 px-6 text-left'>Состав</th>
-              <th className='py-3 px-6 text-center'>Сумма</th>
-              <th className='py-3 px-6 text-center'>Действия</th>
+            <tr className="text-text-muted bg-background-muted text-sm uppercase leading-normal">
+              <th className="px-6 py-3 text-left">ID Заказа</th>
+              <th className="px-6 py-3 text-left">Дата</th>
+              <th className="px-6 py-3 text-center">Статус</th>
+              <th className="px-6 py-3 text-left">Состав</th>
+              <th className="px-6 py-3 text-center">Сумма</th>
+              <th className="px-6 py-3 text-center">Действия</th>
             </tr>
           </thead>
-          <tbody className='text-text-muted text-sm font-light'>
-            {orders.map((order) => (
+          <tbody className="text-sm font-light text-text-muted">
+            {(orders || []).map((order) => (
               <tr
                 key={order.id}
-                className='border-b border-border-default hover:bg-background-hover'
+                className="border-b border-border-default hover:bg-background-hover"
               >
-                <td className='py-3 px-6 text-left whitespace-nowrap text-text-default'>
+                <td className="whitespace-nowrap px-6 py-3 text-left text-text-default">
                   {order.id}
                 </td>
-                <td className='py-3 px-6 text-left text-text-default'>
+                <td className="px-6 py-3 text-left text-text-default">
                   {new Date(order.date).toLocaleDateString()}
                 </td>
-                <td className='py-3 px-6 text-center'>
+                <td className="px-6 py-3 text-center">
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${getStatusClasses(
-                      order.status
+                    className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
+                      order.status,
                     )}`}
                   >
                     {getStatusLabel(order.status)}
                   </span>
                 </td>
-                <td className='py-3 px-6 text-left text-text-default'>
-                  <ul className='list-disc list-inside'>
+                <td className="px-6 py-3 text-left text-text-default">
+                  <ul className="list-inside list-disc">
                     {order.items.map((item) => (
                       <li key={item.product.id}>
                         {item.product.name} ({item.quantity} x {item.price} ₽)
@@ -76,24 +97,24 @@ const AdminOrdersPage = () => {
                     ))}
                   </ul>
                 </td>
-                <td className='py-3 px-6 text-center font-semibold text-text-default'>
+                <td className="px-6 py-3 text-center font-semibold text-text-default">
                   {order.total.toFixed(2)} ₽
                 </td>
-                <td className='py-3 px-6 text-center'>
-                  <div className='flex items-center justify-center space-x-2'>
+                <td className="px-6 py-3 text-center">
+                  <div className="flex items-center justify-center space-x-2">
                     {order.status === 'new' && (
-                      <button className='py-1 px-2 text-xs rounded-md bg-success-subtle text-success-emphasis'>
+                      <button className="rounded-md bg-success-subtle px-2 py-1 text-xs text-success-emphasis">
                         Подтвердить
                       </button>
                     )}
                     {order.status === 'processing' && (
-                      <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+                      <button className="rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis">
                         Отгрузить
                       </button>
                     )}
                     {order.status !== 'completed' &&
                       order.status !== 'cancelled' && (
-                        <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                        <button className="rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis">
                           Отменить
                         </button>
                       )}
@@ -105,27 +126,27 @@ const AdminOrdersPage = () => {
         </table>
 
         {/* Mobile Cards */}
-        <div className='md:hidden'>
-          {orders.map((order) => (
-            <div key={order.id} className='p-4 border-b border-border-default'>
-              <div className='flex justify-between items-start mb-2'>
+        <div className="md:hidden">
+          {(orders || []).map((order) => (
+            <div key={order.id} className="border-b border-border-default p-4">
+              <div className="mb-2 flex items-start justify-between">
                 <div>
-                  <h3 className='font-bold text-text-default'>{order.id}</h3>
-                  <p className='text-sm'>
+                  <h3 className="font-bold text-text-default">{order.id}</h3>
+                  <p className="text-sm">
                     {new Date(order.date).toLocaleDateString()}
                   </p>
                 </div>
                 <span
-                  className={`px-2 py-1 rounded-full text-xs ${getStatusClasses(
-                    order.status
+                  className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
+                    order.status,
                   )}`}
                 >
                   {getStatusLabel(order.status)}
                 </span>
               </div>
               <div>
-                <h4 className='font-semibold text-text-default'>Состав:</h4>
-                <ul className='list-disc list-inside pl-2 text-sm'>
+                <h4 className="font-semibold text-text-default">Состав:</h4>
+                <ul className="list-inside list-disc pl-2 text-sm">
                   {order.items.map((item) => (
                     <li key={item.product.id}>
                       {item.product.name} ({item.quantity} x {item.price} ₽)
@@ -133,23 +154,23 @@ const AdminOrdersPage = () => {
                   ))}
                 </ul>
               </div>
-              <p className='font-bold text-right mt-2 text-text-default'>
+              <p className="mt-2 text-right font-bold text-text-default">
                 Итого: {order.total.toFixed(2)} ₽
               </p>
-              <div className='flex items-center justify-end space-x-2 mt-4'>
+              <div className="mt-4 flex items-center justify-end space-x-2">
                 {order.status === 'new' && (
-                  <button className='py-1 px-2 text-xs rounded-md bg-success-subtle text-success-emphasis'>
+                  <button className="rounded-md bg-success-subtle px-2 py-1 text-xs text-success-emphasis">
                     Подтвердить
                   </button>
                 )}
                 {order.status === 'processing' && (
-                  <button className='py-1 px-2 text-xs rounded-md bg-primary-subtle text-primary-emphasis'>
+                  <button className="rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary-emphasis">
                     Отгрузить
                   </button>
                 )}
                 {order.status !== 'completed' &&
                   order.status !== 'cancelled' && (
-                    <button className='py-1 px-2 text-xs rounded-md bg-danger-subtle text-danger-emphasis'>
+                    <button className="rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis">
                       Отменить
                     </button>
                   )}

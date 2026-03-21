@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react';
-import { orders } from '@/data/orders';
+import { getOrders } from '@/shared/api';
 import Badge, { type BadgeVariant } from '@/shared/ui/Badge';
 import { type OrderStatus, OrderItemRow } from '@/entities/order';
+import { useDataFetching } from '@/shared/hooks/useDataFetching';
 
 const statusMap: Record<OrderStatus, { text: string; variant: BadgeVariant }> =
   {
@@ -17,15 +18,17 @@ const statusMap: Record<OrderStatus, { text: string; variant: BadgeVariant }> =
   };
 
 export const CurrentOrder = memo(() => {
+  const { data: orders, isLoading } = useDataFetching(getOrders);
+
   const currentOrder = useMemo(
     () =>
-      orders.find(
-        (order) => order.status === 'processing' || order.status === 'shipping'
+      (orders || []).find(
+        (order) => order.status === 'processing' || order.status === 'shipping',
       ),
-    []
+    [orders],
   );
 
-  if (!currentOrder) {
+  if (isLoading || !currentOrder) {
     return null;
   }
 
@@ -33,29 +36,29 @@ export const CurrentOrder = memo(() => {
   const statusInfo = statusMap[status];
 
   return (
-    <div className='rounded-lg border-2 border-primary bg-background-default p-6'>
-      <div className='flex flex-wrap items-center justify-between gap-4'>
+    <div className="rounded-lg border-2 border-primary bg-background-default p-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className='text-2xl font-bold'>Текущий заказ</h2>
-          <p className='text-text-muted'>
+          <h2 className="text-2xl font-bold">Текущий заказ</h2>
+          <p className="text-text-muted">
             №{id} от {new Date(date).toLocaleDateString('ru-RU')}
           </p>
         </div>
-        <Badge variant={statusInfo.variant} className='px-4 py-2 text-base'>
+        <Badge variant={statusInfo.variant} className="px-4 py-2 text-base">
           {statusInfo.text}
         </Badge>
       </div>
-      <div className='my-4 border-t border-border-default'></div>
+      <div className="my-4 border-t border-border-default"></div>
       <div>
-        <p className='mb-2 font-semibold'>Состав заказа:</p>
-        <div className='flex flex-col divide-y divide-border-default'>
+        <p className="mb-2 font-semibold">Состав заказа:</p>
+        <div className="flex flex-col divide-y divide-border-default">
           {items.map((item) => (
             <OrderItemRow key={item.product.id} item={item} />
           ))}
         </div>
       </div>
-      <div className='mt-4 border-t border-border-default pt-4 text-right'>
-        <p className='text-xl font-bold'>Итого: {total} ₽</p>
+      <div className="mt-4 border-t border-border-default pt-4 text-right">
+        <p className="text-xl font-bold">Итого: {total} ₽</p>
       </div>
     </div>
   );

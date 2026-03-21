@@ -1,57 +1,67 @@
-import { memo, useMemo } from 'react';
-import { products } from '@/data/products';
+import { memo, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { sections } from '@/data/sections';
-import FiltersSidebar from '@/widgets/FiltersSidebar';
-import { useFilters } from '@/features/filters/useFilters';
+import { getProducts, getSections } from '@/shared/api';
 import { applyFilters, getAvailableFilters } from '@/features/filters/lib';
+import { useFilters } from '@/features/filters/useFilters';
+import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import Spinner from '@/shared/ui/Spinner';
 import CatalogLayoutWidget from '@/widgets/CatalogLayoutWidget';
+import FiltersSidebar from '@/widgets/FiltersSidebar';
 
 const ProductListPage = memo(() => {
-  const { section, category } = useParams<{
+  const { section: sectionId, category: categoryId } = useParams<{
     section?: string;
     category?: string;
   }>();
 
+  const fetchData = useCallback(
+    () => Promise.all([getProducts(), getSections()]),
+    [],
+  );
+
+  const { data, isLoading, error } = useDataFetching(fetchData);
+  const [products, sections] = data || [[], []];
+
   const { activeFilters } = useFilters();
 
   const currentSection = useMemo(
-    () => (section ? sections.find((sec) => sec.id === section) : undefined),
-    [section]
+    () => (sectionId ? sections.find((sec) => sec.id === sectionId) : undefined),
+    [sectionId, sections],
   );
 
   const currentCategory = useMemo(
     () =>
-      category
-        ? currentSection?.categories.find((cat) => cat.id === category)
+      categoryId
+        ? currentSection?.categories.find((cat) => cat.id === categoryId)
         : undefined,
-    [category, currentSection]
+    [categoryId, currentSection],
   );
 
   // 1. Determine the most specific product set BEFORE generating filters.
   const baseProducts = useMemo(() => {
-    if (category) {
-      return products.filter((p) => p.categoryId === category);
+    if (isLoading) return []; // Return empty array while loading
+    if (categoryId) {
+      return products.filter((p) => p.categoryId === categoryId);
     }
-    if (section) {
-      return products.filter((p) => p.sectionId === section);
+    if (sectionId) {
+      return products.filter((p) => p.sectionId === sectionId);
     }
     return []; // Should not happen on this page
-  }, [section, category]);
+  }, [sectionId, categoryId, products, isLoading]);
 
   // 2. Generate available filters from the specific product set.
   const availableFilters = useMemo(
     () => getAvailableFilters(baseProducts),
-    [baseProducts]
+    [baseProducts],
   );
 
   // 3. Apply active filters to the same specific set for display.
   const displayProducts = useMemo(
     () => applyFilters(baseProducts, activeFilters),
-    [baseProducts, activeFilters]
+    [baseProducts, activeFilters],
   );
 
-  const title = currentCategory?.name || currentSection?.name || 'Все товары';
+  const title = currentCategory?.name || currentSection?.name || 'Загрузка...';
 
   // Category filter is shown only when a section is selected but not a category.
   const categoryFilterOptions =
@@ -65,8 +75,25 @@ const ProductListPage = memo(() => {
         categories={categoryFilterOptions}
       />
     ),
-    [availableFilters, currentSection, categoryFilterOptions]
+    [availableFilters, currentSection, categoryFilterOptions],
   );
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center text-center text-danger">
+        <h2 className="text-2xl font-bold">Ошибка при загрузке каталога</h2>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <CatalogLayoutWidget
