@@ -21,7 +21,7 @@ export const CheckoutContactInfo = memo(() => {
 
   return (
     <div className='rounded-lg border border-border-default bg-background-default p-6'>
-      <h2 className='mb-4 text-xl font-bold text-text-heading'>
+      <h2 className='mb-4 text-xl font-bold text-text-default'>
         Контактные данные
       </h2>
       <div className='flex flex-col gap-4'>

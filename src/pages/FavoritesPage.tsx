@@ -15,12 +15,12 @@ const FavoritesPage = memo(() => {
 
   const favoriteProducts = useMemo(
     () => (products || []).filter((p) => favoriteIds.includes(p.id)),
-    [products, favoriteIds],
+    [products, favoriteIds]
   );
 
   if (isLoading) {
     return (
-      <div className="flex grow items-center justify-center">
+      <div className='flex grow items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -28,8 +28,8 @@ const FavoritesPage = memo(() => {
 
   if (error) {
     return (
-      <div className="flex grow items-center justify-center text-center text-danger">
-        <h2 className="text-2xl font-bold">Ошибка при загрузке избранного</h2>
+      <div className='flex grow items-center justify-center text-center text-danger'>
+        <h2 className='text-2xl font-bold'>Ошибка при загрузке избранного</h2>
         <p>{error.message}</p>
       </div>
     );
@@ -37,12 +37,12 @@ const FavoritesPage = memo(() => {
 
   if (favoriteProducts.length === 0) {
     return (
-      <div className="flex grow items-center justify-center">
+      <div className='flex grow items-center justify-center'>
         <EmptyState
-          title="В избранном пусто"
-          description="Добавляйте товары в избранное, чтобы не потерять их."
-          buttonText="Перейти к покупкам"
-          linkTo="/"
+          title='В избранном пусто'
+          description='Добавляйте товары в избранное, чтобы не потерять их.'
+          buttonText='Перейти к покупкам'
+          linkTo='/'
         />
       </div>
     );
@@ -50,8 +50,8 @@ const FavoritesPage = memo(() => {
 
   return (
     <>
-      <h1 className="mb-6 text-2xl font-bold text-text-heading">Избранное</h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <h1 className='mb-6 text-2xl font-bold text-text-default'>Избранное</h1>
+      <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {favoriteProducts.map((product) => (
           <ProductCard
             key={product.id}

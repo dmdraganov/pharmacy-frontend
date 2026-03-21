@@ -25,7 +25,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps) => {
             `block px-4 py-2 rounded-md text-base font-medium ${
               isActive
                 ? 'bg-primary-subtle text-primary-emphasis'
-                : 'text-text-muted hover:bg-background-hover hover:text-text-heading'
+                : 'text-text-muted hover:bg-background-hover hover:text-text-default'
             }`
           }
         >
@@ -38,7 +38,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps) => {
             `block px-4 py-2 rounded-md text-base font-medium ${
               isActive
                 ? 'bg-primary-subtle text-primary-emphasis'
-                : 'text-text-muted hover:bg-background-hover hover:text-text-heading'
+                : 'text-text-muted hover:bg-background-hover hover:text-text-default'
             }`
           }
         >
@@ -51,7 +51,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps) => {
             `block px-4 py-2 rounded-md text-base font-medium ${
               isActive
                 ? 'bg-primary-subtle text-primary-emphasis'
-                : 'text-text-muted hover:bg-background-hover hover:text-text-heading'
+                : 'text-text-muted hover:bg-background-hover hover:text-text-default'
             }`
           }
         >
@@ -64,7 +64,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps) => {
             `block px-4 py-2 rounded-md text-base font-medium ${
               isActive
                 ? 'bg-primary-subtle text-primary-emphasis'
-                : 'text-text-muted hover:bg-background-hover hover:text-text-heading'
+                : 'text-text-muted hover:bg-background-hover hover:text-text-default'
             }`
           }
         >
@@ -75,7 +75,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps) => {
         <NavLink
           to='/'
           onClick={onClose}
-          className='block px-4 py-2 rounded-md text-center text-base font-medium text-text-muted hover:bg-background-hover hover:text-text-heading'
+          className='block px-4 py-2 rounded-md text-center text-base font-medium text-text-muted hover:bg-background-hover hover:text-text-default'
         >
           Вернуться на сайт
         </NavLink>

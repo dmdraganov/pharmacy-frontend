@@ -45,7 +45,7 @@ const FiltersSidebar = ({
 
   return (
     <aside className={className}>
-      <h2 className='mb-4 text-xl font-bold text-text-heading'>Фильтры</h2>
+      <h2 className='mb-4 text-xl font-bold text-text-default'>Фильтры</h2>
 
       {section && categories && categories.length > 0 && (
         <Accordion title='Категории'>

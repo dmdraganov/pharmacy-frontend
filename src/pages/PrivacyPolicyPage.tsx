@@ -3,7 +3,7 @@ import { memo } from 'react';
 const PrivacyPolicyPage = memo(() => {
   return (
     <div>
-      <h1 className='mb-4 text-3xl font-bold text-text-heading'>
+      <h1 className='mb-4 text-3xl font-bold text-text-default'>
         Политика конфиденциальности
       </h1>
       <div className='prose max-w-none'>

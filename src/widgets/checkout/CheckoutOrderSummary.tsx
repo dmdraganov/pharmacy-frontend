@@ -12,25 +12,25 @@ const CheckoutItem = memo(({ item }: { item: CartItem }) => {
   const imageUrl = getProductImage(item.image);
 
   return (
-    <div className="flex items-start gap-4 pt-4">
+    <div className='flex items-start gap-4 pt-4'>
       <img
         src={imageUrl}
         alt={item.name}
-        className="h-16 w-16 rounded object-cover"
+        className='h-16 w-16 rounded object-cover'
       />
-      <div className="flex-grow">
-        <p className="font-semibold">{item.name}</p>
-        <p className="text-sm text-text-muted">{item.price} ₽</p>
+      <div className='flex-grow'>
+        <p className='font-semibold'>{item.name}</p>
+        <p className='text-sm text-text-muted'>{item.price} ₽</p>
       </div>
-      <div className="flex flex-col items-end gap-2">
+      <div className='flex flex-col items-end gap-2'>
         <QuantityControl
           quantity={item.quantity}
           onIncrement={() => updateQuantity(item.id, item.quantity + 1)}
           onDecrement={() => updateQuantity(item.id, item.quantity - 1)}
         />
         <Button
-          variant="danger"
-          size="small"
+          variant='danger'
+          size='small'
           onClick={() => removeFromCart(item.id)}
         >
           Удалить
@@ -48,7 +48,7 @@ export const CheckoutOrderSummary = memo(() => {
   if (items.length === 0) {
     return (
       <div className='rounded-lg border border-border-default bg-background-default p-6'>
-        <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
+        <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
         <p>Ваша корзина пуста.</p>
         <Button as={Link} to='/' className='mt-4 w-full'>
           Вернуться к покупкам
@@ -59,7 +59,7 @@ export const CheckoutOrderSummary = memo(() => {
 
   return (
     <div className='rounded-lg border border-border-default bg-background-default p-6'>
-      <h2 className='mb-4 text-xl font-bold text-text-heading'>Ваш заказ</h2>
+      <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
       <div className='flex flex-col gap-4 divide-y divide-border-default'>
         {items.map((item) => (
           <CheckoutItem key={item.id} item={item} />

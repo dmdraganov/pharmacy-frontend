@@ -16,17 +16,14 @@ const HomePage = memo(() => {
 
   const popularProducts = useMemo(
     () => (products || []).filter((p) => p.isPopular),
-    [products],
+    [products]
   );
   const promotionalProducts = useMemo(
     () => (products || []).filter((p) => p.oldPrice).slice(0, isMobile ? 4 : 8),
-    [products, isMobile],
+    [products, isMobile]
   );
 
-  const renderProductList = (
-    productList: Product[],
-    keyPrefix: string,
-  ) => {
+  const renderProductList = (productList: Product[], keyPrefix: string) => {
     const productCardList = productList.map((product) => (
       <ProductCard
         key={`${keyPrefix}-${product.id}`}
@@ -40,7 +37,7 @@ const HomePage = memo(() => {
 
     if (isMobile) {
       return (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
           {productCardList}
         </div>
       );
@@ -51,7 +48,7 @@ const HomePage = memo(() => {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center">
+      <div className='flex h-96 items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -59,8 +56,8 @@ const HomePage = memo(() => {
 
   if (error) {
     return (
-      <div className="flex h-96 items-center justify-center text-center text-danger">
-        <h2 className="text-2xl font-bold">Ошибка при загрузке данных</h2>
+      <div className='flex h-96 items-center justify-center text-center text-danger'>
+        <h2 className='text-2xl font-bold'>Ошибка при загрузке данных</h2>
         <p>{error.message}</p>
       </div>
     );
@@ -68,8 +65,8 @@ const HomePage = memo(() => {
 
   return (
     <>
-      <section className="mb-12">
-        <h2 className="mb-6 text-3xl font-bold text-text-heading">
+      <section className='mb-12'>
+        <h2 className='mb-6 text-3xl font-bold text-text-default'>
           Популярные товары
         </h2>
         {renderProductList(popularProducts, 'popular')}
@@ -77,7 +74,7 @@ const HomePage = memo(() => {
 
       {promotionalProducts.length > 0 && (
         <section>
-          <h2 className="mb-6 text-3xl font-bold text-text-heading">
+          <h2 className='mb-6 text-3xl font-bold text-text-default'>
             Акции и скидки
           </h2>
           {renderProductList(promotionalProducts, 'promo')}

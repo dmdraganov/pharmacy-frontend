@@ -24,15 +24,15 @@ export const OrderHistory = memo(() => {
         (order) =>
           order.status === 'completed' ||
           order.status === 'delivered' ||
-          order.status === 'cancelled',
+          order.status === 'cancelled'
       ),
-    [orders],
+    [orders]
   );
 
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="flex h-48 items-center justify-center">
+        <div className='flex h-48 items-center justify-center'>
           <Spinner />
         </div>
       );
@@ -40,7 +40,7 @@ export const OrderHistory = memo(() => {
 
     if (error) {
       return (
-        <p className="text-center text-danger">
+        <p className='text-center text-danger'>
           Не удалось загрузить историю заказов.
         </p>
       );
@@ -48,7 +48,7 @@ export const OrderHistory = memo(() => {
 
     if (pastOrders.length === 0) {
       return (
-        <p className="text-text-default">
+        <p className='text-text-default'>
           Здесь будет список ваших прошлых заказов.
         </p>
       );
@@ -56,7 +56,7 @@ export const OrderHistory = memo(() => {
 
     return (
       <>
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           {pastOrders.slice(0, 3).map((order) => (
             <OrderHistoryItem
               key={order.id}
@@ -66,7 +66,7 @@ export const OrderHistory = memo(() => {
                   order.status === 'cancelled') && (
                   <RepeatOrderButton
                     order={order}
-                    className="w-full sm:w-auto"
+                    className='w-full sm:w-auto'
                     onRepeatOrder={handleRepeatOrder}
                   />
                 )
@@ -75,7 +75,7 @@ export const OrderHistory = memo(() => {
           ))}
         </div>
         {pastOrders.length > 3 && (
-          <Button variant="secondary" className="mt-4" disabled>
+          <Button variant='secondary' className='mt-4' disabled>
             Показать все
           </Button>
         )}
@@ -85,7 +85,7 @@ export const OrderHistory = memo(() => {
 
   return (
     <div>
-      <h2 className="mb-4 text-2xl font-bold text-text-heading">
+      <h2 className='mb-4 text-2xl font-bold text-text-default'>
         История заказов
       </h2>
       {renderContent()}

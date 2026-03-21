@@ -43,7 +43,7 @@ const CheckoutPage = memo(() => {
 
   return (
     <>
-      <h1 className='mb-8 text-3xl font-bold text-text-heading'>
+      <h1 className='mb-8 text-3xl font-bold text-text-default'>
         Оформление заказа
       </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>

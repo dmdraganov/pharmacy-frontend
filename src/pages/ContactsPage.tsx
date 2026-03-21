@@ -3,13 +3,13 @@ import { memo } from 'react';
 const ContactsPage = memo(() => {
   return (
     <div>
-      <h1 className='mb-8 text-3xl font-bold text-text-heading'>Контакты</h1>
+      <h1 className='mb-8 text-3xl font-bold text-text-default'>Контакты</h1>
 
       <div className='grid grid-cols-1 gap-12 md:grid-cols-2'>
         {/* Contact Information */}
         <div className='space-y-6'>
           <div>
-            <h2 className='text-2xl font-semibold text-text-heading'>
+            <h2 className='text-2xl font-semibold text-text-default'>
               Наш адрес
             </h2>
             <p className='mt-2 text-lg text-text-default'>
@@ -18,7 +18,7 @@ const ContactsPage = memo(() => {
           </div>
 
           <div>
-            <h2 className='text-2xl font-semibold text-text-heading'>
+            <h2 className='text-2xl font-semibold text-text-default'>
               Телефон
             </h2>
             <a
@@ -30,7 +30,7 @@ const ContactsPage = memo(() => {
           </div>
 
           <div>
-            <h2 className='text-2xl font-semibold text-text-heading'>
+            <h2 className='text-2xl font-semibold text-text-default'>
               Электронная почта
             </h2>
             <a
@@ -42,7 +42,7 @@ const ContactsPage = memo(() => {
           </div>
 
           <div>
-            <h2 className='text-2xl font-semibold text-text-heading'>
+            <h2 className='text-2xl font-semibold text-text-default'>
               Часы работы
             </h2>
             <p className='mt-2 text-lg text-text-default'>
@@ -56,7 +56,7 @@ const ContactsPage = memo(() => {
 
         {/* Map Placeholder */}
         <div>
-          <h2 className='mb-4 text-2xl font-semibold text-text-heading'>
+          <h2 className='mb-4 text-2xl font-semibold text-text-default'>
             Мы на карте
           </h2>
           <div className='aspect-h-3 aspect-w-4 rounded-lg bg-background-muted'>

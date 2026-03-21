@@ -56,7 +56,7 @@ const Header = memo(() => {
           <nav className='flex items-center space-x-4'>
             <Link
               to='/favorites'
-              className='relative text-text-muted hover:text-text-heading'
+              className='relative text-text-muted hover:text-text-default'
             >
               Избранное
               {favoriteIds.length > 0 && (
@@ -67,7 +67,7 @@ const Header = memo(() => {
             </Link>
             <Link
               to='/cart'
-              className='relative text-text-muted hover:text-text-heading'
+              className='relative text-text-muted hover:text-text-default'
             >
               Корзина
               {cartTotalItems > 0 && (
@@ -78,7 +78,7 @@ const Header = memo(() => {
             </Link>
             <Link
               to='/account'
-              className='text-text-muted hover:text-text-heading'
+              className='text-text-muted hover:text-text-default'
             >
               Личный кабинет
             </Link>

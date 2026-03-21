@@ -4,7 +4,7 @@ import type { ProductCharacteristic } from '@/entities/product';
 export const ProductCharacteristics = memo(
   ({ characteristics }: { characteristics: ProductCharacteristic[] }) => (
     <div className='mb-6'>
-      <h2 className='mb-2 text-2xl font-bold text-text-heading'>
+      <h2 className='mb-2 text-2xl font-bold text-text-default'>
         Характеристики
       </h2>
       <ul className='divide-y divide-border-default'>

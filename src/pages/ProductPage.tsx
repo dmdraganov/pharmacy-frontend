@@ -20,7 +20,7 @@ const ProductPage = memo(() => {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center">
+      <div className='flex h-96 items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -28,8 +28,8 @@ const ProductPage = memo(() => {
 
   if (error) {
     return (
-      <div className="flex h-96 items-center justify-center text-center text-danger">
-        <h2 className="text-2xl font-bold">Ошибка при загрузке товара</h2>
+      <div className='flex h-96 items-center justify-center text-center text-danger'>
+        <h2 className='text-2xl font-bold'>Ошибка при загрузке товара</h2>
         <p>{error.message}</p>
       </div>
     );
@@ -37,11 +37,11 @@ const ProductPage = memo(() => {
 
   if (!product) {
     return (
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-text-heading">
+      <div className='text-center'>
+        <h1 className='text-2xl font-bold text-text-default'>
           Товар не найден
         </h1>
-        <Link to="/catalog" className="text-primary hover:underline">
+        <Link to='/catalog' className='text-primary hover:underline'>
           Вернуться в каталог
         </Link>
       </div>

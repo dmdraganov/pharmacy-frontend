@@ -15,7 +15,7 @@ const TabButton = ({
   children: React.ReactNode;
 }) => (
   <button
-    type="button"
+    type='button'
     onClick={onClick}
     className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-center font-medium transition-colors ${
       isActive
@@ -28,12 +28,12 @@ const TabButton = ({
 );
 
 const CourierForm = () => (
-  <div className="flex flex-col gap-4">
-    <Input name="street" placeholder="Улица" />
-    <div className="grid grid-cols-3 gap-4">
-      <Input name="house" placeholder="Дом" />
-      <Input name="apartment" placeholder="Квартира" />
-      <Input name="postalCode" placeholder="Индекс" />
+  <div className='flex flex-col gap-4'>
+    <Input name='street' placeholder='Улица' />
+    <div className='grid grid-cols-3 gap-4'>
+      <Input name='house' placeholder='Дом' />
+      <Input name='apartment' placeholder='Квартира' />
+      <Input name='postalCode' placeholder='Индекс' />
     </div>
   </div>
 );
@@ -47,26 +47,26 @@ const PickupSelector = ({
 }) => {
   if (error) {
     return (
-      <p className="text-center text-danger">Не удалось загрузить пункты.</p>
+      <p className='text-center text-danger'>Не удалось загрузить пункты.</p>
     );
   }
   return (
-    <div className="flex flex-col gap-3">
+    <div className='flex flex-col gap-3'>
       {(pharmacies || []).map((pharmacy) => (
         <label
           key={pharmacy.id}
-          className="flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle"
+          className='flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:bg-primary-ultrasubtle'
         >
           <input
-            type="radio"
-            name="pickupPoint"
+            type='radio'
+            name='pickupPoint'
             value={pharmacy.id}
-            className="mt-1"
+            className='mt-1'
           />
           <div>
-            <p className="font-semibold">{pharmacy.name}</p>
-            <p className="text-sm text-text-muted">{pharmacy.address}</p>
-            <p className="text-sm text-text-muted">{pharmacy.workingHours}</p>
+            <p className='font-semibold'>{pharmacy.name}</p>
+            <p className='text-sm text-text-muted'>{pharmacy.address}</p>
+            <p className='text-sm text-text-muted'>{pharmacy.workingHours}</p>
           </div>
         </label>
       ))}
@@ -76,7 +76,7 @@ const PickupSelector = ({
 
 export const CheckoutDelivery = memo(() => {
   const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
-    'courier',
+    'courier'
   );
 
   const {
@@ -88,12 +88,12 @@ export const CheckoutDelivery = memo(() => {
   });
 
   return (
-    <div className="rounded-lg border border-border-default bg-background-default p-6">
-      <h2 className="mb-4 text-xl font-bold text-text-heading">
+    <div className='rounded-lg border border-border-default bg-background-default p-6'>
+      <h2 className='mb-4 text-xl font-bold text-text-default'>
         Способ получения
       </h2>
 
-      <div className="mb-6 flex gap-2 rounded-lg bg-background-muted p-1">
+      <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
         <TabButton
           onClick={() => setDeliveryMethod('courier')}
           isActive={deliveryMethod === 'courier'}
@@ -111,7 +111,7 @@ export const CheckoutDelivery = memo(() => {
       {deliveryMethod === 'courier' && <CourierForm />}
       {deliveryMethod === 'pickup' &&
         (isLoading ? (
-          <div className="flex h-48 items-center justify-center">
+          <div className='flex h-48 items-center justify-center'>
             <Spinner />
           </div>
         ) : (

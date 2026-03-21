@@ -3,18 +3,18 @@ import { memo } from 'react';
 const DeliveryPage = memo(() => {
   return (
     <div>
-      <h1 className='mb-8 text-3xl font-bold text-text-heading'>
+      <h1 className='mb-8 text-3xl font-bold text-text-default'>
         Доставка и оплата
       </h1>
 
       <div className='space-y-12'>
         <section>
-          <h2 className='mb-4 text-2xl font-semibold text-text-heading'>
+          <h2 className='mb-4 text-2xl font-semibold text-text-default'>
             Способы доставки
           </h2>
           <div className='space-y-4'>
             <div>
-              <h3 className='text-xl font-medium text-text-heading'>
+              <h3 className='text-xl font-medium text-text-default'>
                 Курьерская доставка по городу
               </h3>
               <p className='mt-2 text-text-default'>
@@ -23,7 +23,7 @@ const DeliveryPage = memo(() => {
               </p>
             </div>
             <div>
-              <h3 className='text-xl font-medium text-text-heading'>
+              <h3 className='text-xl font-medium text-text-default'>
                 Доставка почтой
               </h3>
               <p className='mt-2 text-text-default'>
@@ -32,7 +32,7 @@ const DeliveryPage = memo(() => {
               </p>
             </div>
             <div>
-              <h3 className='text-xl font-medium text-text-heading'>
+              <h3 className='text-xl font-medium text-text-default'>
                 Самовывоз из аптеки
               </h3>
               <p className='mt-2 text-text-default'>
@@ -44,7 +44,7 @@ const DeliveryPage = memo(() => {
         </section>
 
         <section>
-          <h2 className='mb-4 text-2xl font-semibold text-text-heading'>
+          <h2 className='mb-4 text-2xl font-semibold text-text-default'>
             Стоимость доставки
           </h2>
           <ul className='list-inside list-disc space-y-2 text-text-default'>
@@ -67,7 +67,7 @@ const DeliveryPage = memo(() => {
         </section>
 
         <section>
-          <h2 className='mb-4 text-2xl font-semibold text-text-heading'>
+          <h2 className='mb-4 text-2xl font-semibold text-text-default'>
             Оплата
           </h2>
           <p className='text-text-default'>
@@ -81,7 +81,7 @@ const DeliveryPage = memo(() => {
         </section>
 
         <section>
-          <h2 className='mb-4 text-2xl font-semibold text-text-heading'>
+          <h2 className='mb-4 text-2xl font-semibold text-text-default'>
             Возврат товара
           </h2>
           <p className='text-text-default'>

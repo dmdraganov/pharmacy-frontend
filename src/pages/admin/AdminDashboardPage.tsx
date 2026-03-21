@@ -43,7 +43,7 @@ const AdminDashboardPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-96 items-center justify-center">
+      <div className='flex h-96 items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -51,8 +51,8 @@ const AdminDashboardPage = () => {
 
   if (error) {
     return (
-      <div className="flex h-96 items-center justify-center text-center text-danger">
-        <h2 className="text-2xl font-bold">Ошибка при загрузке дашборда</h2>
+      <div className='flex h-96 items-center justify-center text-center text-danger'>
+        <h2 className='text-2xl font-bold'>Ошибка при загрузке дашборда</h2>
         <p>{error.message}</p>
       </div>
     );
@@ -60,51 +60,51 @@ const AdminDashboardPage = () => {
 
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-semibold">Дашборд</h1>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border bg-background-default p-6">
-          <h2 className="text-lg font-medium text-text-muted">Всего заказов</h2>
-          <p className="mt-2 text-3xl font-bold text-text-heading">
+      <h1 className='mb-6 text-3xl font-semibold'>Дашборд</h1>
+      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4'>
+        <div className='rounded-lg border bg-background-default p-6'>
+          <h2 className='text-lg font-medium text-text-muted'>Всего заказов</h2>
+          <p className='mt-2 text-3xl font-bold text-text-default'>
             {totalOrders}
           </p>
         </div>
-        <div className="rounded-lg border bg-background-default p-6">
-          <h2 className="text-lg font-medium text-text-muted">Общая выручка</h2>
-          <p className="mt-2 text-3xl font-bold text-text-heading">
+        <div className='rounded-lg border bg-background-default p-6'>
+          <h2 className='text-lg font-medium text-text-muted'>Общая выручка</h2>
+          <p className='mt-2 text-3xl font-bold text-text-default'>
             {totalSales.toFixed(2)} ₽
           </p>
         </div>
-        <div className="rounded-lg border bg-background-default p-6">
-          <h2 className="text-lg font-medium text-text-muted">
+        <div className='rounded-lg border bg-background-default p-6'>
+          <h2 className='text-lg font-medium text-text-muted'>
             Новые пользователи
           </h2>
-          <p className="mt-2 text-3xl font-bold text-text-heading">
+          <p className='mt-2 text-3xl font-bold text-text-default'>
             {fakeData.newUsers}
           </p>
         </div>
-        <div className="rounded-lg border bg-background-default p-6">
-          <h2 className="text-lg font-medium text-text-muted">
+        <div className='rounded-lg border bg-background-default p-6'>
+          <h2 className='text-lg font-medium text-text-muted'>
             Процент отказов
           </h2>
-          <p className="mt-2 text-3xl font-bold text-text-heading">
+          <p className='mt-2 text-3xl font-bold text-text-default'>
             {fakeData.bounceRate}
           </p>
         </div>
       </div>
 
-      <div className="mt-8">
-        <div className="rounded-lg border bg-background-default p-6">
-          <h2 className="mb-4 text-lg font-medium text-text-muted">
+      <div className='mt-8'>
+        <div className='rounded-lg border bg-background-default p-6'>
+          <h2 className='mb-4 text-lg font-medium text-text-muted'>
             Топ продаваемых товаров
           </h2>
           <ul>
             {topProducts.map((product, index) => (
               <li
                 key={index}
-                className="flex items-center justify-between border-b py-2"
+                className='flex items-center justify-between border-b py-2'
               >
-                <span className="text-text-muted">{product.name}</span>
-                <span className="font-bold text-text-default">
+                <span className='text-text-muted'>{product.name}</span>
+                <span className='font-bold text-text-default'>
                   {product.count} шт.
                 </span>
               </li>

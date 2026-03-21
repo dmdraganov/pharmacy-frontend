@@ -13,7 +13,7 @@ const EmptyState = memo(
   ({ title, description, buttonText, linkTo }: EmptyStateProps) => {
     return (
       <div className='text-center'>
-        <h1 className='mb-4 text-2xl font-bold text-text-heading'>{title}</h1>
+        <h1 className='mb-4 text-2xl font-bold text-text-default'>{title}</h1>
         <p className='mb-6 text-text-muted'>{description}</p>
         <Link to={linkTo}>
           <Button>{buttonText}</Button>

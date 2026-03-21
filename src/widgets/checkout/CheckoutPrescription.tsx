@@ -14,7 +14,7 @@ export const CheckoutPrescription = memo(() => {
 
   return (
     <div className='rounded-lg border border-warning-border bg-warning-subtle p-6'>
-      <h2 className='mb-4 text-xl font-bold text-text-heading'>
+      <h2 className='mb-4 text-xl font-bold text-text-default'>
         Загрузка рецепта
       </h2>
       <p className='mb-4 text-sm text-warning-text'>
