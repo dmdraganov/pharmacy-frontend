@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:gh": "VITE_BASE_URL=/pharmacy-frontend/ npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",

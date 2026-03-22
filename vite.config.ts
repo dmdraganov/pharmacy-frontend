@@ -13,6 +13,6 @@ export default ({ mode }: { mode: string }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
-    base: env.VITE_BASE || '/',
+    base: env.VITE_BASE_URL || '/',
   });
 };

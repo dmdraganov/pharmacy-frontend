@@ -4,5 +4,5 @@
  * @returns - Публичный URL (e.g., '/images/products/theraflu.webp')
  */
 export const getProductImage = (filename: string): string => {
-  return `/assets/images/products/${filename}`;
+  return `${import.meta.env.VITE_BASE_URL || '/'}assets/images/products/${filename}`;
 };

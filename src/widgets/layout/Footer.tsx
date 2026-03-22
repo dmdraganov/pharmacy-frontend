@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Footer = memo(() => {
   return (
     <footer className='border-t border-border-default bg-background-muted'>
-      <div className='container max-w-[1280px] mx-auto px-3 md:px-4 lg:px-6 py-8'>
+      <div className='container max-w-7xl mx-auto px-3 md:px-4 lg:px-6 py-8'>
         <div className='flex flex-col gap-8 md:flex-row md:gap-19'>
           <div>
             <h3 className='mb-4 text-lg font-medium text-text-default'>
