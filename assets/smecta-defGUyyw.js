@@ -1,1 +1,0 @@
-var e=`/pharmacy-frontend/assets/smecta-ZKqxsiHb.webp`;export{e as default};

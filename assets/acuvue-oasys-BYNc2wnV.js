@@ -1,1 +1,0 @@
-var e=`/pharmacy-frontend/assets/acuvue-oasys-5pKjeR2X.webp`;export{e as default};

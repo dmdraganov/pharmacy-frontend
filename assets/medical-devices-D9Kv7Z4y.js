@@ -1,1 +1,0 @@
-var e=`/pharmacy-frontend/assets/medical-devices-Ck5zYa4k.jpeg`;export{e as default};
