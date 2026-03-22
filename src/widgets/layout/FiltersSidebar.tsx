@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import Accordion from '@/shared/ui/Accordion';
 import Checkbox from '@/shared/ui/Checkbox';
 import RangeInput from '@/shared/ui/RangeInput';
@@ -6,6 +6,9 @@ import { useFilters } from '@/features/filter-products/useFilters';
 import type { AvailableFilters } from '@/features/filter-products/lib';
 import type { Section, Category } from '@/entities/section/types';
 import { Link } from 'react-router-dom';
+import Button from '@/shared/ui/Button'; // Import Button component
+
+const ITEM_THRESHOLD = 6; // Define the threshold for "show more"
 
 type FiltersSidebarProps = {
   availableFilters: AvailableFilters;
@@ -21,6 +24,8 @@ const FiltersSidebar = ({
   className,
 }: FiltersSidebarProps) => {
   const { activeFilters, setFilter, toggleFilter, removeFilter } = useFilters();
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [showAllBrands, setShowAllBrands] = useState(false);
 
   const handleMinPriceChange = useCallback(
     (value: number) => {
@@ -43,14 +48,28 @@ const FiltersSidebar = ({
     minPriceValue
   );
 
+  // --- Categories Logic ---
+  const displayCategories =
+    categories && categories.length > ITEM_THRESHOLD && !showAllCategories
+      ? categories.slice(0, ITEM_THRESHOLD)
+      : categories;
+  const hasMoreCategories = categories && categories.length > ITEM_THRESHOLD;
+
+  // --- Brands Logic ---
+  const displayBrands =
+    availableFilters.brands.length > ITEM_THRESHOLD && !showAllBrands
+      ? availableFilters.brands.slice(0, ITEM_THRESHOLD)
+      : availableFilters.brands;
+  const hasMoreBrands = availableFilters.brands.length > ITEM_THRESHOLD;
+
   return (
     <aside className={className}>
       <h2 className='mb-4 text-xl font-bold text-text-default'>Фильтры</h2>
 
       {section && categories && categories.length > 0 && (
         <Accordion title='Категории'>
-          <div className='flex flex-col gap-2'>
-            {categories.map((cat) => (
+          <div className='flex flex-col gap-2 items-start'>
+            {(displayCategories || []).map((cat) => (
               <Link
                 key={cat.id}
                 to={`/catalog/${section.id}/${cat.id}`}
@@ -59,6 +78,16 @@ const FiltersSidebar = ({
                 {cat.name}
               </Link>
             ))}
+            {hasMoreCategories && (
+              <Button
+                variant='link'
+                size='none'
+                onClick={() => setShowAllCategories((prev) => !prev)}
+                className='mt-2'
+              >
+                {showAllCategories ? 'Скрыть' : 'Показать ещё'}
+              </Button>
+            )}
           </div>
         </Accordion>
       )}
@@ -76,8 +105,8 @@ const FiltersSidebar = ({
 
       {availableFilters.brands.length > 0 && (
         <Accordion title='Бренд'>
-          <div className='flex flex-col gap-2'>
-            {availableFilters.brands.map((brand) => (
+          <div className='flex flex-col gap-2 items-start'>
+            {displayBrands.map((brand) => (
               <Checkbox
                 key={brand}
                 id={`brand-${brand}`}
@@ -86,6 +115,16 @@ const FiltersSidebar = ({
                 onChange={() => toggleFilter('brand', brand)}
               />
             ))}
+            {hasMoreBrands && (
+              <Button
+                variant='link'
+                size='none'
+                onClick={() => setShowAllBrands((prev) => !prev)}
+                className='mt-2'
+              >
+                {showAllBrands ? 'Скрыть' : 'Показать ещё'}
+              </Button>
+            )}
           </div>
         </Accordion>
       )}

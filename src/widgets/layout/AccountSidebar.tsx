@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth';
 import { useShallow } from 'zustand/shallow';
-import Button from '@/shared/ui/Button';
 
 const NavLink = ({
   to,

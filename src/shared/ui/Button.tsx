@@ -6,8 +6,8 @@ import type {
 
 import type { LinkProps } from 'react-router-dom';
 
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
-type ButtonSize = 'small' | 'medium';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'link';
+type ButtonSize = 'small' | 'medium' | 'none';
 
 // Base props for the button, excluding polymorphic 'as'
 interface BaseButtonProps {
@@ -56,11 +56,13 @@ const Button = ({
       'bg-background-muted text-text-default hover:bg-background-muted-hover',
     danger: 'bg-danger text-text-inverse hover:bg-danger-hover',
     ghost: 'bg-transparent text-text-default hover:bg-background-muted',
+    link: 'bg-transparent text-primary hover:underline',
   };
 
   const sizeStyles = {
     small: 'px-3 py-1 text-sm',
     medium: 'px-4 py-2',
+    none: 'p-0', // No padding
   };
 
   const combinedClasses = [
