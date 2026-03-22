@@ -4,11 +4,13 @@ import type { Product } from '@/entities/product';
 import type { CartItemsMap } from '@/entities/cart';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 
-export interface CartState {
+interface CartState {
   items: CartItemsMap;
   selectedItemIds: string[];
   addToCart: (product: Product, quantity?: number) => void;
-  addItemsToCart: (items: Array<{ product: Product; quantity: number }>) => void;
+  addItemsToCart: (
+    items: Array<{ product: Product; quantity: number }>
+  ) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;

@@ -4,6 +4,7 @@ import PageLayout from '@/app/layouts/PageLayout';
 import AdminLayout from '@/app/layouts/AdminLayout';
 import { AccountLayout } from '@/widgets/layout/AccountLayout';
 import * as pages from '@/pages';
+import { ProtectedRoute } from '@/features/auth';
 
 export const routes: RouteObject[] = [
   {
@@ -67,52 +68,70 @@ export const routes: RouteObject[] = [
         element: <pages.PrivacyPolicyPage />,
       },
       {
-        path: 'account',
-        element: <AccountLayout />,
+        path: 'login',
+        element: <pages.LoginPage />,
+      },
+      {
+        path: 'register',
+        element: <pages.RegisterPage />,
+      },
+      {
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <Navigate to='orders' replace />,
-          },
-          {
-            path: 'orders',
-            element: <pages.AccountOrdersPage />,
-          },
-          {
-            path: 'profile',
-            element: <pages.AccountProfilePage />,
+            path: 'account',
+            element: <AccountLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to='orders' replace />,
+              },
+              {
+                path: 'orders',
+                element: <pages.AccountOrdersPage />,
+              },
+              {
+                path: 'profile',
+                element: <pages.AccountProfilePage />,
+              },
+            ],
           },
         ],
       },
     ],
   },
   {
-    path: '/admin',
-    element: (
-      <AdminLayout>
-        <Outlet />
-      </AdminLayout>
-    ),
+    element: <ProtectedRoute allowedRoles={['ADMIN']} />,
     children: [
       {
-        index: true,
-        element: <Navigate to='dashboard' replace />,
-      },
-      {
-        path: 'dashboard',
-        element: <pages.AdminDashboardPage />,
-      },
-      {
-        path: 'products',
-        element: <pages.AdminProductsPage />,
-      },
-      {
-        path: 'orders',
-        element: <pages.AdminOrdersPage />,
-      },
-      {
-        path: 'categories',
-        element: <pages.AdminCategoriesPage />,
+        path: '/admin',
+        element: (
+          <AdminLayout>
+            <Outlet />
+          </AdminLayout>
+        ),
+        children: [
+          {
+            index: true,
+            element: <Navigate to='dashboard' replace />,
+          },
+          {
+            path: 'dashboard',
+            element: <pages.AdminDashboardPage />,
+          },
+          {
+            path: 'products',
+            element: <pages.AdminProductsPage />,
+          },
+          {
+            path: 'orders',
+            element: <pages.AdminOrdersPage />,
+          },
+          {
+            path: 'categories',
+            element: <pages.AdminCategoriesPage />,
+          },
+        ],
       },
     ],
   },

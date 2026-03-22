@@ -1,10 +1,12 @@
 import { memo, useState } from 'react';
-import { useUserStore } from '@/features/manage-user-profile';
+import { useAuthStore } from '@/features/auth';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import type { User } from '@/entities/user';
 
 const emptyUser: User = {
+  id: '',
+  role: 'USER',
   firstName: '',
   lastName: '',
   email: '',
@@ -12,8 +14,10 @@ const emptyUser: User = {
 };
 
 export const ProfileDetails = memo(() => {
-  const { user, isLoading, updateUser } = useUserStore();
-  const [formData, setFormData] = useState<User>(user || emptyUser);
+  const { user, isLoading, updateProfile } = useAuthStore();
+  const [formData, setFormData] = useState<User>(
+    user || (emptyUser as User)
+  );
   const [errors, setErrors] = useState<Partial<User>>({});
   const [isSaved, setIsSaved] = useState(false);
 
@@ -58,7 +62,7 @@ export const ProfileDetails = memo(() => {
     if (!validateForm()) {
       return;
     }
-    updateUser(formData);
+    updateProfile(formData);
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };

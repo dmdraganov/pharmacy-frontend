@@ -1,8 +1,9 @@
 import { memo } from 'react';
 import { Link, NavLink as RouterNavLink } from 'react-router-dom';
-import { useUserStore } from '@/features/manage-user-profile';
+import { useAuthStore } from '@/features/auth';
+import { useShallow } from 'zustand/shallow';
+import Button from '@/shared/ui/Button';
 
-// Re-usable NavLink component for consistent styling
 const NavLink = ({
   to,
   end = false,
@@ -28,7 +29,16 @@ const NavLink = ({
 );
 
 export const AccountSidebar = memo(() => {
-  const { user, isLoading } = useUserStore();
+  const { firstName, lastName, email, role, isLoading, logout } = useAuthStore(
+    useShallow(({ user, isLoading, logout }) => ({
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      role: user?.role,
+      isLoading,
+      logout,
+    }))
+  );
 
   if (isLoading) {
     return (
@@ -45,10 +55,10 @@ export const AccountSidebar = memo(() => {
     <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4'>
       <div className='border-b border-border-default pb-4'>
         <p className='text-lg font-bold'>
-          {user?.firstName} {user?.lastName}
+          {firstName} {lastName}
         </p>
         <p className='text-sm text-text-muted overflow-hidden text-ellipsis whitespace-nowrap'>
-          {user?.email}
+          {email}
         </p>
       </div>
 
@@ -69,6 +79,21 @@ export const AccountSidebar = memo(() => {
           Избранное
         </Link>
         <NavLink to='/account/profile'>Профиль</NavLink>
+        <button
+          onClick={logout}
+          className='w-full rounded-md px-4 py-2 text-left font-medium text-danger transition-colors hover:bg-danger-subtle hover:text-danger-hover cursor-pointer'
+        >
+          Выйти из аккаунта
+        </button>
+
+        {role === 'ADMIN' && (
+          <Link
+            to='/admin'
+            className='w-full rounded-md px-4 py-2 text-left font-medium text-text-default transition-colors hover:bg-background-muted-hover cursor-pointer'
+          >
+            Панель администратора
+          </Link>
+        )}
       </nav>
     </aside>
   );

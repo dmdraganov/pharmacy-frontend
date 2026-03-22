@@ -21,7 +21,7 @@ export const getProducts = async (): Promise<Product[]> => {
  * @param id - ID товара
  */
 export const getProductById = async (
-  id: string,
+  id: string
 ): Promise<Product | undefined> => {
   await sleep();
   return Promise.resolve(products.find((p) => p.id === id));

@@ -7,12 +7,15 @@ import { RegionSelectWithSearch } from '@/features/select-region';
 import { useCartTotals } from '@/features/cart';
 import { useFavoriteIds } from '@/features/favorites';
 
+import { useAuthStore } from '@/features/auth';
+
 const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const { totalItems: cartTotalItems } = useCartTotals();
   const favoriteIds = useFavoriteIds();
+  const { user, logout } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,8 +37,7 @@ const Header = memo(() => {
 
   return (
     <header className='sticky top-0 z-50 border-b border-border-default bg-background-default'>
-      <div className='container max-w-[1280px] mx-auto px-3 md:px-4 lg:px-6'>
-        {/* Top Row: Region Selector */}
+      <div className='container max-w-7xl mx-auto px-3 md:px-4 lg:px-6'>
         <div
           className={`flex justify-start transition-all duration-300 ease-in-out ${
             isScrolled ? 'max-h-0 pt-0 opacity-0' : 'max-h-16 pt-4 opacity-100'
@@ -43,8 +45,6 @@ const Header = memo(() => {
         >
           <RegionSelectWithSearch />
         </div>
-
-        {/* Bottom Row: Logo, Search, Navigation */}
         <div className='flex items-center justify-between py-4'>
           <Logo />
 
@@ -76,12 +76,26 @@ const Header = memo(() => {
                 </span>
               )}
             </Link>
-            <Link
-              to='/account'
-              className='text-text-muted hover:text-text-default'
-            >
-              Личный кабинет
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to='/account'
+                  className='text-text-muted hover:text-text-default'
+                >
+                  {user.firstName}
+                </Link>
+                <Button variant='secondary' size='small' onClick={logout}>
+                  Выйти
+                </Button>
+              </>
+            ) : (
+              <Link
+                to='/login'
+                className='text-text-muted hover:text-text-default'
+              >
+                Войти
+              </Link>
+            )}
           </nav>
         </div>
       </div>

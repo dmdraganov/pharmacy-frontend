@@ -1,9 +1,11 @@
 import { memo, useState } from 'react';
-import { useUserStore } from '@/features/manage-user-profile';
+import { useAuthStore } from '@/features/auth';
 import Input from '@/shared/ui/Input';
 import type { User } from '@/entities/user';
 
 const emptyUser: User = {
+  id: '',
+  role: 'USER',
   firstName: '',
   lastName: '',
   email: '',
@@ -11,7 +13,7 @@ const emptyUser: User = {
 };
 
 export const CheckoutContactInfo = memo(() => {
-  const { user } = useUserStore();
+  const { user } = useAuthStore();
   const [formData, setFormData] = useState<User>(user || emptyUser);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

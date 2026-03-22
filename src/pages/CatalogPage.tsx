@@ -15,7 +15,7 @@ const CatalogPage = memo(() => {
 
   if (isLoading) {
     return (
-      <div className='flex min-h-[600px] items-center justify-center'>
+      <div className='flex min-h-150 items-center justify-center'>
         <Spinner />
       </div>
     );
@@ -23,7 +23,7 @@ const CatalogPage = memo(() => {
 
   if (error) {
     return (
-      <div className='flex min-h-[600px] items-center justify-center text-center text-danger'>
+      <div className='flex min-h-150 items-center justify-center text-center text-danger'>
         <h2 className='text-2xl font-bold'>Ошибка при загрузке каталога</h2>
         <p>{error.message}</p>
       </div>
@@ -31,7 +31,7 @@ const CatalogPage = memo(() => {
   }
 
   return (
-    <div className='flex min-h-[600px] gap-6'>
+    <div className='flex min-h-150 gap-6'>
       {/* Categories List */}
       <div className='w-full md:w-1/4'>
         <ul className='py-12'>

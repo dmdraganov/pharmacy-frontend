@@ -14,7 +14,7 @@ const CatalogLayoutWidget = ({
   sidebar,
 }: CatalogLayoutWidgetProps) => {
   return (
-    <div className='flex flex-grow gap-6'>
+    <div className='flex grow gap-6'>
       {/* Sidebar */}
       {sidebar && (
         <aside className='hidden md:block w-72 shrink-0 overflow-y-auto py-12'>
@@ -23,7 +23,7 @@ const CatalogLayoutWidget = ({
       )}
 
       {/* Products Grid */}
-      <main className='flex-grow overflow-y-auto py-12'>
+      <main className='grow overflow-y-auto py-12'>
         <ProductGrid title={title} products={products} />
       </main>
     </div>
