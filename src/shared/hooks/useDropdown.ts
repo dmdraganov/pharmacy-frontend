@@ -1,17 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import type { ReactNode } from 'react';
 
-interface DropdownProps {
+interface UseDropdownProps {
   triggerOn?: 'click' | 'hover';
-  children: (
-    isOpen: boolean,
-    open: () => void,
-    close: (immediate?: boolean) => void,
-    toggle: () => void
-  ) => ReactNode;
 }
 
-export const Dropdown = ({ triggerOn = 'click', children }: DropdownProps) => {
+export const useDropdown = ({ triggerOn = 'click' }: UseDropdownProps = {}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -49,15 +42,29 @@ export const Dropdown = ({ triggerOn = 'click', children }: DropdownProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [triggerOn]);
 
-  const eventHandlers =
-    triggerOn === 'hover'
-      ? { onMouseEnter: open, onMouseLeave: () => close() }
+  // Props to spread onto the trigger element for 'click' mode
+  const triggerProps =
+    triggerOn === 'click'
+      ? {
+          onClick: toggle,
+        }
       : {};
 
-  return (
-    <div ref={dropdownRef} className='relative inline-block' {...eventHandlers}>
-      {/* eslint-disable-next-line react-hooks/refs */}
-      {children(isOpen, open, close, toggle)}
-    </div>
-  );
+  // Props to spread onto the main container for 'hover' mode
+  const containerProps =
+    triggerOn === 'hover'
+      ? {
+          onMouseEnter: open,
+          onMouseLeave: () => close(),
+        }
+      : {};
+
+  return {
+    isOpen,
+    setIsOpen,
+    close,
+    triggerProps,
+    containerProps,
+    dropdownRef,
+  };
 };

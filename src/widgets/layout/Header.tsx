@@ -9,7 +9,7 @@ import { useFavoriteIds } from '@/features/favorites';
 
 import { useAuthStore } from '@/features/auth';
 
-import { Dropdown } from '@/shared/ui/Dropdown';
+import { useDropdown } from '@/shared/hooks/useDropdown';
 
 const Header = memo(() => {
   const location = useLocation();
@@ -18,6 +18,9 @@ const Header = memo(() => {
   const { totalItems: cartTotalItems } = useCartTotals();
   const favoriteIds = useFavoriteIds();
   const { user, logout } = useAuthStore();
+  const { isOpen, close, containerProps, dropdownRef } = useDropdown({
+    triggerOn: 'hover',
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +43,11 @@ const Header = memo(() => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleLogoutAndClose = () => {
+    handleLogout();
+    close(true);
   };
 
   return (
@@ -84,55 +92,53 @@ const Header = memo(() => {
               )}
             </Link>
             {user ? (
-              <Dropdown triggerOn='hover'>
-                {(_isOpen, _open, close, _toggle) => {
-                  const handleLogoutAndClose = () => {
-                    handleLogout();
-                    close(true);
-                  };
+              <div
+                ref={dropdownRef}
+                className='relative inline-block'
+                {...containerProps}
+              >
+                <Button
+                  as={Link}
+                  to='/account'
+                  variant='secondary'
+                  size='small'
+                >
+                  {user.firstName}
+                </Button>
 
-                  return (
-                    <>
-                      <Button
-                        as={Link}
-                        to='/account'
-                        variant='secondary'
-                        size='small'
+                {isOpen && (
+                  <div className='absolute right-0 mt-2 w-56 rounded-md border border-border-default bg-background-default shadow-lg z-50'>
+                    <div className='p-2' onClick={() => close(true)}>
+                      <Link
+                        to='/account/profile'
+                        className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
                       >
-                        {user.firstName}
-                      </Button>
-
-                      {_isOpen && (
-                        <div className='absolute right-0 mt-2 w-56 rounded-md border border-border-default bg-background-default shadow-lg z-50'>
-                          <div
-                            className='p-1'
-                            onClick={() => close(true)}
-                          >
-                            <Link
-                              to='/account/profile'
-                              className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                            >
-                              Профиль
-                            </Link>
-                            <Link
-                              to='/account/orders'
-                              className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                            >
-                              Заказы
-                            </Link>
-                            <button
-                              onClick={handleLogoutAndClose}
-                              className='text-text-default block w-full text-left px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                            >
-                              Выйти
-                            </button>
-                          </div>
-                        </div>
+                        Профиль
+                      </Link>
+                      <Link
+                        to='/account/orders'
+                        className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                      >
+                        Заказы
+                      </Link>
+                      <button
+                        onClick={handleLogoutAndClose}
+                        className='text-text-default block w-full text-left px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                      >
+                        Выйти
+                      </button>
+                      {user.role === 'ADMIN' && (
+                        <Link
+                          to='/admin'
+                          className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                        >
+                          Панель администратора
+                        </Link>
                       )}
-                    </>
-                  );
-                }}
-              </Dropdown>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link
                 to='/login'
