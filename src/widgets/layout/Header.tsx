@@ -9,6 +9,8 @@ import { useFavoriteIds } from '@/features/favorites';
 
 import { useAuthStore } from '@/features/auth';
 
+import { Dropdown } from '@/shared/ui/Dropdown';
+
 const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,6 +35,11 @@ const Header = memo(() => {
     } else {
       navigate('/catalog');
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -77,17 +84,55 @@ const Header = memo(() => {
               )}
             </Link>
             {user ? (
-              <>
-                <Link
-                  to='/account'
-                  className='text-text-muted hover:text-text-default'
-                >
-                  {user.firstName}
-                </Link>
-                <Button variant='secondary' size='small' onClick={logout}>
-                  Выйти
-                </Button>
-              </>
+              <Dropdown triggerOn='hover'>
+                {(_isOpen, _open, close, _toggle) => {
+                  const handleLogoutAndClose = () => {
+                    handleLogout();
+                    close(true);
+                  };
+
+                  return (
+                    <>
+                      <Button
+                        as={Link}
+                        to='/account'
+                        variant='secondary'
+                        size='small'
+                      >
+                        {user.firstName}
+                      </Button>
+
+                      {_isOpen && (
+                        <div className='absolute right-0 mt-2 w-56 rounded-md border border-border-default bg-background-default shadow-lg z-50'>
+                          <div
+                            className='p-1'
+                            onClick={() => close(true)}
+                          >
+                            <Link
+                              to='/account/profile'
+                              className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                            >
+                              Профиль
+                            </Link>
+                            <Link
+                              to='/account/orders'
+                              className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                            >
+                              Заказы
+                            </Link>
+                            <button
+                              onClick={handleLogoutAndClose}
+                              className='text-text-default block w-full text-left px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                            >
+                              Выйти
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                }}
+              </Dropdown>
             ) : (
               <Link
                 to='/login'
