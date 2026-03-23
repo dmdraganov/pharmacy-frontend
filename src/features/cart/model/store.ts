@@ -16,30 +16,38 @@ interface CartState {
   clearCart: () => void;
   toggleSelectItem: (productId: string) => void;
   toggleSelectAll: (select?: boolean) => void;
-  _syncSelection: () => void;
+  _addOrUpdateItems: (
+    itemsToAdd: Array<{ product: Product; quantity: number }>
+  ) => void;
 }
+
+const syncSelection = (
+  items: CartItemsMap,
+  selectedItemIds: string[]
+): string[] => {
+  const itemIds = Object.keys(items);
+  const newSelectedIds = selectedItemIds.filter((id) => itemIds.includes(id));
+  return newSelectedIds.length !== selectedItemIds.length
+    ? newSelectedIds
+    : selectedItemIds;
+};
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: {},
       selectedItemIds: [],
-      _syncSelection: () => {
-        const { items, selectedItemIds } = get();
-        const itemIds = Object.keys(items);
-        const newSelectedIds = selectedItemIds.filter((id) =>
-          itemIds.includes(id)
-        );
-        if (newSelectedIds.length !== selectedItemIds.length) {
-          set({ selectedItemIds: newSelectedIds });
-        }
-      },
 
-      addItemsToCart: (items) => {
+      _addOrUpdateItems: (
+        itemsToAdd: Array<{ product: Product; quantity: number }>
+      ) => {
         const newCartItems = { ...get().items };
-        items.forEach((item) => {
+        const newItemIds: string[] = [];
+
+        itemsToAdd.forEach((item) => {
           const { product, quantity } = item;
           const existingItem = newCartItems[product.id];
+          newItemIds.push(product.id);
           if (existingItem) {
             newCartItems[product.id] = {
               ...existingItem,
@@ -50,7 +58,6 @@ export const useCartStore = create<CartState>()(
           }
         });
 
-        const newItemIds = items.map((item) => item.product.id);
         set((state) => ({
           items: newCartItems,
           selectedItemIds: [
@@ -59,33 +66,18 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
+      addItemsToCart: (items) => {
+        get()._addOrUpdateItems(items);
+      },
+
       addToCart: (product, quantity = 1) => {
-        const { items } = get();
-        const existingItem = items[product.id];
-        const newItems = { ...items };
-
-        if (existingItem) {
-          newItems[product.id] = {
-            ...existingItem,
-            quantity: existingItem.quantity + quantity,
-          };
-        } else {
-          newItems[product.id] = { ...product, quantity };
-        }
-
-        set((state) => ({
-          items: newItems,
-          selectedItemIds: state.selectedItemIds.includes(product.id)
-            ? state.selectedItemIds
-            : [...state.selectedItemIds, product.id],
-        }));
+        get()._addOrUpdateItems([{ product, quantity }]);
       },
 
       removeFromCart: (productId) => {
         const newItems = { ...get().items };
         delete newItems[productId];
         set({ items: newItems });
-        get()._syncSelection();
       },
 
       updateQuantity: (productId, quantity) => {
@@ -116,11 +108,7 @@ export const useCartStore = create<CartState>()(
         const areAllSelected = selectedItemIds.length === allItemIds.length;
         const shouldSelect = forceSelect ?? !areAllSelected;
 
-        if (shouldSelect) {
-          set({ selectedItemIds: allItemIds });
-        } else {
-          set({ selectedItemIds: [] });
-        }
+        set({ selectedItemIds: shouldSelect ? allItemIds : [] });
       },
     }),
     {
@@ -131,8 +119,29 @@ export const useCartStore = create<CartState>()(
         selectedItemIds: state.selectedItemIds,
       }),
       onRehydrateStorage: () => (state) => {
-        state?._syncSelection();
+        if (state) {
+          const newSelectedIds = syncSelection(
+            state.items,
+            state.selectedItemIds
+          );
+          state.selectedItemIds = newSelectedIds;
+        }
       },
     }
   )
 );
+
+let previousItems = useCartStore.getState().items;
+
+useCartStore.subscribe((state) => {
+  const currentItems = state.items;
+  if (currentItems !== previousItems) {
+    const { selectedItemIds } = state;
+    const newSelectedIds = syncSelection(currentItems, selectedItemIds);
+    if (newSelectedIds !== selectedItemIds) {
+      useCartStore.setState({ selectedItemIds: newSelectedIds });
+    }
+  }
+  previousItems = currentItems;
+});
+

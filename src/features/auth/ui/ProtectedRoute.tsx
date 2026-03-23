@@ -8,10 +8,10 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAuthStore();
+  const { user, isAuthLoading } = useAuthStore();
   const location = useLocation();
 
-  if (isLoading) {
+  if (isAuthLoading) {
     return (
       <div className='flex h-screen items-center justify-center'>
         <Spinner />

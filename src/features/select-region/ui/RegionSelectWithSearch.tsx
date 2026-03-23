@@ -3,6 +3,7 @@ import { useRegionStore } from '@/features/select-region';
 import Input from '@/shared/ui/Input';
 import { useDropdown } from '@/shared/hooks/useDropdown';
 import { REGIONS } from '../lib/constants';
+import { ChevronIcon } from '@/shared/ui/ChevronIcon';
 
 export const RegionSelectWithSearch = memo(() => {
   const { region, setRegion } = useRegionStore();
@@ -29,22 +30,10 @@ export const RegionSelectWithSearch = memo(() => {
         className='flex items-center gap-1 rounded-md border-none text-sm text-text-default outline-none cursor-pointer'
       >
         <span>{region}</span>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          className={`h-4 w-4 transform transition-transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M19 9l-7 7-7-7'
-          />
-        </svg>
+        <ChevronIcon
+          direction={isOpen ? 'up' : 'down'}
+          className='h-4 w-4'
+        />
       </button>
 
       {isOpen && (

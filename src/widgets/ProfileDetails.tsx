@@ -14,7 +14,7 @@ const emptyUser: User = {
 };
 
 export const ProfileDetails = memo(() => {
-  const { user, isLoading, updateProfile } = useAuthStore();
+  const { user, isAuthLoading, updateProfile } = useAuthStore();
   const [formData, setFormData] = useState<User>(
     user || (emptyUser as User)
   );
@@ -67,7 +67,7 @@ export const ProfileDetails = memo(() => {
     setTimeout(() => setIsSaved(false), 2000);
   };
 
-  if (isLoading) {
+  if (isAuthLoading) {
     return (
       <div className='rounded-lg border border-border-default bg-background-default p-6'>
         <h2 className='mb-4 text-2xl font-bold text-text-default'>

@@ -6,10 +6,9 @@ import { SearchInput } from '@/features/search';
 import { RegionSelectWithSearch } from '@/features/select-region';
 import { useCartTotals } from '@/features/cart';
 import { useFavoriteIds } from '@/features/favorites';
-
 import { useAuthStore } from '@/features/auth';
-
 import { useDropdown } from '@/shared/hooks/useDropdown';
+import UserIcon from '@/shared/ui/UserIcon';
 
 const Header = memo(() => {
   const location = useLocation();
@@ -97,44 +96,49 @@ const Header = memo(() => {
                 className='relative inline-block'
                 {...containerProps}
               >
-                <Button
-                  as={Link}
-                  to='/account'
-                  variant='secondary'
-                  size='small'
-                >
-                  {user.firstName}
-                </Button>
+                <Link to='/account' className='text-text-muted'>
+                  <UserIcon />
+                </Link>
 
                 {isOpen && (
                   <div className='absolute right-0 mt-2 w-56 rounded-md border border-border-default bg-background-default shadow-lg z-50'>
-                    <div className='p-2' onClick={() => close(true)}>
-                      <Link
-                        to='/account/profile'
-                        className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                      >
-                        Профиль
-                      </Link>
-                      <Link
-                        to='/account/orders'
-                        className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                      >
-                        Заказы
-                      </Link>
-                      <button
-                        onClick={handleLogoutAndClose}
-                        className='text-text-default block w-full text-left px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
-                      >
-                        Выйти
-                      </button>
-                      {user.role === 'ADMIN' && (
+                    <div className='p-2'>
+                      <div className='px-3 py-2 border-b border-border-default mb-2'>
+                        <p className='text-base font-bold text-text-default truncate'>
+                          {user.firstName} {user.lastName}
+                        </p>
+                        <p className='text-sm text-text-muted truncate'>
+                          {user.email}
+                        </p>
+                      </div>
+                      <div onClick={() => close(true)}>
                         <Link
-                          to='/admin'
-                          className='text-text-default block px-3 py-2 text-sm hover:bg-background-muted-hover cursor-pointer'
+                          to='/account/profile'
+                          className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
                         >
-                          Панель администратора
+                          Профиль
                         </Link>
-                      )}
+                        <Link
+                          to='/account/orders'
+                          className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
+                        >
+                          Заказы
+                        </Link>
+                        <button
+                          onClick={handleLogoutAndClose}
+                          className='text-danger block w-full text-left px-3 py-2 text-base hover:bg-danger-subtle hover:text-danger-hover cursor-pointer'
+                        >
+                          Выйти
+                        </button>
+                        {user.role === 'ADMIN' && (
+                          <Link
+                            to='/admin'
+                            className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
+                          >
+                            Панель администратора
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}

@@ -6,45 +6,68 @@ import { STORAGE_KEYS } from '@/shared/config/constants';
 
 interface AuthState {
   user: User | null;
-  isLoading: boolean;
+  isAuthLoading: boolean;
+  isLoginLoading: boolean;
+  isRegisterLoading: boolean;
+  isUpdateLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (userData: Omit<User, 'id' | 'role'>) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
-  updateProfile: (data: Partial<User>) => void;
+  updateProfile: (data: Partial<User>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      isLoading: true,
+      isAuthLoading: true,
+      isLoginLoading: false,
+      isRegisterLoading: false,
+      isUpdateLoading: false,
       login: async (email, password) => {
-        const userData = await api.login(email, password);
-        set({ user: userData, isLoading: false });
+        set({ isLoginLoading: true });
+        try {
+          const userData = await api.login(email, password);
+          set({ user: userData });
+        } finally {
+          set({ isLoginLoading: false });
+        }
       },
       register: async (userData) => {
-        await api.register(userData);
+        set({ isRegisterLoading: true });
+        try {
+          await api.register(userData);
+        } finally {
+          set({ isRegisterLoading: false });
+        }
       },
       logout: () => {
         set({ user: null });
       },
-      updateProfile: (data) => {
-        set((state) => ({
-          user: state.user ? { ...state.user, ...data } : null,
-        }));
+      updateProfile: async (data) => {
+        set({ isUpdateLoading: true });
+        try {
+          set((state) => ({
+            user: state.user ? { ...state.user, ...data } : null,
+          }));
+        } finally {
+          set({ isUpdateLoading: false });
+        }
       },
       checkAuth: async () => {
-        const { user } = get();
-        if (!user) {
-          set({ isLoading: false });
-          return;
-        }
+        set({ isAuthLoading: true });
         try {
+          const { user } = get();
+          if (!user) {
+            return;
+          }
           const freshUser = await api.getMe(user.id);
-          set({ user: freshUser, isLoading: false });
+          set({ user: freshUser });
         } catch (_error) {
-          set({ user: null, isLoading: false });
+          set({ user: null });
+        } finally {
+          set({ isAuthLoading: false });
         }
       },
     }),
@@ -56,5 +79,3 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-// Check auth status when the app loads
-useAuthStore.getState().checkAuth();

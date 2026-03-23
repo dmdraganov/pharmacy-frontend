@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SearchIcon } from '@/shared/ui/SearchIcon';
+import SearchIcon from '@/shared/ui/SearchIcon';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
 

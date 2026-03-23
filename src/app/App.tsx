@@ -1,9 +1,14 @@
 import Spinner from '@/shared/ui/Spinner';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import router from './router';
+import { useAuthStore } from '@/features/auth';
 
 export const App = () => {
+  useEffect(() => {
+    useAuthStore.getState().checkAuth();
+  }, []);
+
   return (
     <Suspense
       fallback={

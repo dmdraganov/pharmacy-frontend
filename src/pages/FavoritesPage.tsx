@@ -1,29 +1,10 @@
 import { memo, useMemo } from 'react';
 import { useFavoriteIds } from '@/features/favorites';
 import { getProducts } from '@/shared/api';
-import { ProductCard } from '@/entities/product/';
-import { useCartStore, useCartItemQuantity } from '@/features/cart';
+import { ProductCardWithCart } from '@/features/cart';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
-import type { Product } from '@/entities/product';
-
-const ProductCardWithCart = memo(({ product }: { product: Product }) => {
-  const addToCart = useCartStore((state) => state.addToCart);
-  const updateQuantity = useCartStore((state) => state.updateQuantity);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const quantityInCart = useCartItemQuantity(product.id);
-
-  return (
-    <ProductCard
-      product={product}
-      quantityInCart={quantityInCart}
-      onAddToCart={() => addToCart(product)}
-      onUpdateQuantity={updateQuantity}
-      onRemoveFromCart={() => removeFromCart(product.id)}
-    />
-  );
-});
 
 const FavoritesPage = memo(() => {
   const { data: products, isLoading, error } = useDataFetching(getProducts);

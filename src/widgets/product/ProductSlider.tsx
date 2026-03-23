@@ -1,4 +1,5 @@
 import { memo, useState, Children, type ReactElement } from 'react';
+import { ChevronIcon } from '@/shared/ui/ChevronIcon';
 
 type SliderProps = {
   children: React.ReactNode;
@@ -48,38 +49,12 @@ const ProductSlider = memo(({ children }: SliderProps) => {
 
       {canGoPrev && (
         <button onClick={handlePrev} className={`${buttonClasses} -left-5`}>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='h-6 w-6'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2}
-              d='M15 19l-7-7 7-7'
-            />
-          </svg>
+          <ChevronIcon direction='left' className='h-6 w-6' />
         </button>
       )}
       {canGoNext && (
         <button onClick={handleNext} className={`${buttonClasses} -right-5`}>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='h-6 w-6'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2}
-              d='M9 5l7 7-7 7'
-            />
-          </svg>
+          <ChevronIcon direction='right' className='h-6 w-6' />
         </button>
       )}
     </div>

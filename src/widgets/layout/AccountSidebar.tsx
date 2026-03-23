@@ -28,18 +28,18 @@ const NavLink = ({
 );
 
 export const AccountSidebar = memo(() => {
-  const { firstName, lastName, email, role, isLoading, logout } = useAuthStore(
-    useShallow(({ user, isLoading, logout }) => ({
+  const { firstName, lastName, email, role, isAuthLoading, logout } = useAuthStore(
+    useShallow(({ user, isAuthLoading, logout }) => ({
       firstName: user?.firstName,
       lastName: user?.lastName,
       email: user?.email,
       role: user?.role,
-      isLoading,
+      isAuthLoading,
       logout,
     }))
   );
 
-  if (isLoading) {
+  if (isAuthLoading) {
     return (
       <aside className='flex shrink-0 flex-col gap-8 rounded-lg border border-border-default bg-background-default p-4'>
         <div className='border-b border-border-default pb-4'>

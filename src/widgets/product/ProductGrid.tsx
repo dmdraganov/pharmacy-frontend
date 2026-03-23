@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
-import { ProductCard } from '@/entities/product/';
 import type { Product } from '@/entities/product';
-import { useCartStore, useCartItemQuantity } from '@/features/cart';
+import { ProductCardWithCart } from '@/features/cart';
 import { usePagination } from '@/shared/hooks/usePagination';
 import Pagination from '@/shared/ui/Pagination';
 
@@ -13,29 +12,10 @@ interface ProductGridProps {
 }
 
 const ProductGrid = ({ title, products }: ProductGridProps) => {
-  const addToCart = useCartStore((state) => state.addToCart);
-  const updateQuantity = useCartStore((state) => state.updateQuantity);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-
   const { currentData, currentPage, totalPages, goToPage } = usePagination({
     data: products,
     itemsPerPage: ITEMS_PER_PAGE,
   });
-
-  // A helper component to manage cart quantity for each product
-  const ProductCardWithCart = ({ product }: { product: Product }) => {
-    const quantityInCart = useCartItemQuantity(product.id);
-    return (
-      <ProductCard
-        key={product.id}
-        product={product}
-        quantityInCart={quantityInCart}
-        onAddToCart={() => addToCart(product)}
-        onUpdateQuantity={updateQuantity}
-        onRemoveFromCart={() => removeFromCart(product.id)}
-      />
-    );
-  };
 
   return (
     <>
