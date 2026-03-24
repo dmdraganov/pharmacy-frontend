@@ -5,8 +5,8 @@ import Button from '@/shared/ui/Button';
 interface EmptyStateProps {
   title: string;
   description: string;
-  buttonText: string;
-  linkTo: string;
+  buttonText?: string;
+  linkTo?: string;
 }
 
 const EmptyState = memo(
@@ -15,9 +15,11 @@ const EmptyState = memo(
       <div className='text-center'>
         <h1 className='mb-4 text-2xl font-bold text-text-default'>{title}</h1>
         <p className='mb-6 text-text-muted'>{description}</p>
-        <Link to={linkTo}>
-          <Button>{buttonText}</Button>
-        </Link>
+        {buttonText && linkTo && (
+          <Link to={linkTo}>
+            <Button>{buttonText}</Button>
+          </Link>
+        )}
       </div>
     );
   }

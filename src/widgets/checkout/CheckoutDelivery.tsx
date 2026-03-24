@@ -1,19 +1,52 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { getPharmacies } from '@/shared/api';
-import type { Pharmacy } from '@/entities/pharmacy';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Input from '@/shared/ui/Input';
 import Spinner from '@/shared/ui/Spinner';
-import RadioInput from '@/shared/ui/RadioInput';
 import TabButton from '@/shared/ui/TabButton';
+import RadioInput from '@/shared/ui/RadioInput';
+import type { Pharmacy } from '@/entities/pharmacy';
 
-const CourierForm = () => (
+interface Address {
+  city: string;
+  street: string;
+  house: string;
+  apartment: string;
+}
+
+const CourierForm = ({
+  address,
+  onAddressChange,
+}: {
+  address: Address;
+  onAddressChange: (field: keyof Address, value: string) => void;
+}) => (
   <div className='flex flex-col gap-4'>
-    <Input name='street' placeholder='Улица' />
-    <div className='grid grid-cols-3 gap-4'>
-      <Input name='house' placeholder='Дом' />
-      <Input name='apartment' placeholder='Квартира' />
-      <Input name='postalCode' placeholder='Индекс' />
+    <Input
+      name='city'
+      placeholder='Город'
+      value={address.city}
+      onChange={(e) => onAddressChange('city', e.target.value)}
+    />
+    <Input
+      name='street'
+      placeholder='Улица'
+      value={address.street}
+      onChange={(e) => onAddressChange('street', e.target.value)}
+    />
+    <div className='grid grid-cols-2 gap-4'>
+      <Input
+        name='house'
+        placeholder='Дом'
+        value={address.house}
+        onChange={(e) => onAddressChange('house', e.target.value)}
+      />
+      <Input
+        name='apartment'
+        placeholder='Квартира'
+        value={address.apartment}
+        onChange={(e) => onAddressChange('apartment', e.target.value)}
+      />
     </div>
   </div>
 );
@@ -55,55 +88,77 @@ const PickupSelector = ({
   );
 };
 
-export const CheckoutDelivery = memo(() => {
-  const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
-    'courier'
-  );
-  const [selectedPharmacy, setSelectedPharmacy] = useState<string | null>(null);
+interface CheckoutDeliveryProps {
+  deliveryMethod: 'courier' | 'pickup';
+  setDeliveryMethod: (method: 'courier' | 'pickup') => void;
+  address: Address;
+  setAddress: (address: Address) => void;
+  selectedPharmacy: string | null;
+  setSelectedPharmacy: (id: string | null) => void;
+}
 
-  const {
-    data: pharmacies,
-    isLoading,
-    error,
-  } = useDataFetching(getPharmacies, {
-    skip: deliveryMethod !== 'pickup',
-  });
+export const CheckoutDelivery = memo(
+  ({
+    deliveryMethod,
+    setDeliveryMethod,
+    address,
+    setAddress,
+    selectedPharmacy,
+    setSelectedPharmacy,
+  }: CheckoutDeliveryProps) => {
+    const {
+      data: pharmacies,
+      isLoading,
+      error,
+    } = useDataFetching(getPharmacies, {
+      skip: deliveryMethod !== 'pickup',
+    });
 
-  return (
-    <div className='rounded-lg border border-border-default bg-background-default p-6'>
-      <h2 className='mb-4 text-xl font-bold text-text-default'>
-        Способ получения
-      </h2>
+    const handleAddressChange = (field: keyof Address, value: string) => {
+      setAddress({ ...address, [field]: value });
+    };
 
-      <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
-        <TabButton
-          onClick={() => setDeliveryMethod('courier')}
-          isActive={deliveryMethod === 'courier'}
-        >
-          Курьерская доставка
-        </TabButton>
-        <TabButton
-          onClick={() => setDeliveryMethod('pickup')}
-          isActive={deliveryMethod === 'pickup'}
-        >
-          Самовывоз
-        </TabButton>
-      </div>
+    return (
+      <div className='rounded-lg border border-border-default bg-background-default p-6'>
+        <h2 className='mb-4 text-xl font-bold text-text-default'>
+          Способ получения
+        </h2>
 
-      {deliveryMethod === 'courier' && <CourierForm />}
-      {deliveryMethod === 'pickup' &&
-        (isLoading ? (
-          <div className='flex h-48 items-center justify-center'>
-            <Spinner />
-          </div>
-        ) : (
-          <PickupSelector
-            pharmacies={pharmacies}
-            error={error}
-            selectedId={selectedPharmacy}
-            onSelect={setSelectedPharmacy}
+        <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
+          <TabButton
+            onClick={() => setDeliveryMethod('courier')}
+            isActive={deliveryMethod === 'courier'}
+          >
+            Курьерская доставка
+          </TabButton>
+          <TabButton
+            onClick={() => setDeliveryMethod('pickup')}
+            isActive={deliveryMethod === 'pickup'}
+          >
+            Самовывоз
+          </TabButton>
+        </div>
+
+        {deliveryMethod === 'courier' && (
+          <CourierForm
+            address={address}
+            onAddressChange={handleAddressChange}
           />
-        ))}
-    </div>
-  );
-});
+        )}
+        {deliveryMethod === 'pickup' &&
+          (isLoading ? (
+            <div className='flex h-48 items-center justify-center'>
+              <Spinner />
+            </div>
+          ) : (
+            <PickupSelector
+              pharmacies={pharmacies}
+              error={error}
+              selectedId={selectedPharmacy}
+              onSelect={setSelectedPharmacy}
+            />
+          ))}
+      </div>
+    );
+  },
+);

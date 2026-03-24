@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useCartItems, useCartStore, useCartTotals } from '@/features/cart';
+import { useAllCartTotals, useCartItems, useCartStore } from '@/features/cart';
 import type { CartItem } from '@/entities/cart';
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
@@ -43,7 +43,7 @@ const CheckoutItem = memo(({ item }: { item: CartItem }) => {
 
 export const CheckoutOrderSummary = memo(() => {
   const cartItems = useCartItems();
-  const { totalItems, selectedItemsTotal } = useCartTotals();
+  const { totalItems, total } = useAllCartTotals();
 
   const items = Object.values(cartItems) as CartItem[];
 
@@ -70,11 +70,11 @@ export const CheckoutOrderSummary = memo(() => {
       <div className='mt-6 border-t border-border-default pt-4'>
         <div className='flex justify-between'>
           <span>Товары ({totalItems} шт.)</span>
-          <span>{selectedItemsTotal} ₽</span>
+          <span>{total} ₽</span>
         </div>
         <div className='mt-4 flex justify-between font-bold'>
           <span>Итого</span>
-          <span>{selectedItemsTotal} ₽</span>
+          <span>{total} ₽</span>
         </div>
       </div>
     </div>

@@ -21,6 +21,32 @@ export const useCartItemQuantity = (productId: string) => {
 };
 
 /**
+ * Hook for components that need calculated totals and counts for all items.
+ */
+export const useAllCartTotals = () => {
+  const items = useCartItems();
+
+  const totalItems = useMemo(() => {
+    return Object.values(items).reduce(
+      (acc: number, item: CartItem) => acc + item.quantity,
+      0,
+    );
+  }, [items]);
+
+  const total = useMemo(() => {
+    return Object.values(items).reduce(
+      (acc: number, item: CartItem) => acc + item.price * item.quantity,
+      0,
+    );
+  }, [items]);
+
+  return {
+    totalItems,
+    total,
+  };
+};
+
+/**
  * Hook for components that need calculated totals and counts.
  */
 export const useCartTotals = () => {

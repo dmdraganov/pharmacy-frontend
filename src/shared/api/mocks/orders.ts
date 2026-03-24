@@ -23,6 +23,10 @@ export const orders: Order[] = [
       },
     ],
     total: 450,
+    deliveryMethod: 'pickup',
+    deliveryInfo: 'Аптека №1',
+    deliveryAddress: null,
+    paymentMethod: 'online',
   },
   {
     id: 'ORDER-1025',
@@ -41,6 +45,15 @@ export const orders: Order[] = [
       },
     ],
     total: 635,
+    deliveryMethod: 'delivery',
+    deliveryInfo: 'г. Москва, ул. Ленина, д. 1, кв. 5',
+    deliveryAddress: {
+      city: 'Москва',
+      street: 'ул. Ленина',
+      house: '1',
+      apartment: '5',
+    },
+    paymentMethod: 'online',
   },
   {
     id: 'ORDER-1024',
@@ -54,6 +67,10 @@ export const orders: Order[] = [
       },
     ],
     total: 95,
+    deliveryMethod: 'pickup',
+    deliveryInfo: 'Аптека №2',
+    deliveryAddress: null,
+    paymentMethod: 'on-receipt',
   },
   {
     id: 'ORDER-1023',
@@ -72,6 +89,15 @@ export const orders: Order[] = [
       },
     ],
     total: 780,
+    deliveryMethod: 'delivery',
+    deliveryInfo: 'г. Санкт-Петербург, ул. Невский проспект, д. 10',
+    deliveryAddress: {
+      city: 'Санкт-Петербург',
+      street: 'ул. Невский проспект',
+      house: '10',
+      apartment: '',
+    },
+    paymentMethod: 'online',
   },
   {
     id: 'ORDER-1022',
@@ -85,5 +111,9 @@ export const orders: Order[] = [
       },
     ],
     total: 380,
+    deliveryMethod: 'pickup',
+    deliveryInfo: 'Аптека №1',
+    deliveryAddress: null,
+    paymentMethod: 'online',
   },
 ];
