@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
+import { BASE_URL } from '@/shared/config/constants';
 
 const LoginPage = memo(() => {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ const LoginPage = memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || BASE_URL;
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();

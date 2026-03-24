@@ -5,3 +5,5 @@ export const STORAGE_KEYS = {
   FAVORITES: 'pharmacy_favorites',
   REGION: 'pharmacy_region',
 };
+
+export const BASE_URL = import.meta.env.VITE_BASE_URL || '/';

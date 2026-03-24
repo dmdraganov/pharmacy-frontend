@@ -5,6 +5,7 @@ import AdminLayout from '@/app/layouts/AdminLayout';
 import { AccountLayout } from '@/widgets/layout/AccountLayout';
 import * as pages from '@/pages';
 import { ProtectedRoute } from '@/features/auth';
+import { BASE_URL } from '@/shared/config/constants';
 
 export const routes: RouteObject[] = [
   {
@@ -138,7 +139,7 @@ export const routes: RouteObject[] = [
 ];
 
 const router = createBrowserRouter(routes, {
-  basename: import.meta.env.VITE_BASE_URL || undefined,
+  basename: BASE_URL,
 });
 
 export default router;
