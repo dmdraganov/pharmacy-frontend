@@ -35,5 +35,5 @@ export const CheckoutPayment = memo(
         </div>
       </div>
     );
-  },
+  }
 );

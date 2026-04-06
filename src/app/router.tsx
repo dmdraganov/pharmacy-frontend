@@ -6,10 +6,11 @@ import { AccountLayout } from '@/widgets/layout/AccountLayout';
 import * as pages from '@/pages';
 import { ProtectedRoute } from '@/features/auth';
 import { BASE_URL } from '@/shared/config/constants';
+import { ROUTES } from '@/shared/config/router';
 
 export const routes: RouteObject[] = [
   {
-    path: '/',
+    path: ROUTES.home,
     element: (
       <PageLayout>
         <Outlet />
@@ -21,78 +22,78 @@ export const routes: RouteObject[] = [
         element: <pages.HomePage />,
       },
       {
-        path: 'catalog',
+        path: ROUTES.catalog,
         element: <pages.CatalogPage />,
       },
       {
-        path: 'catalog/:section',
+        path: ROUTES.catalogSection,
         element: <pages.ProductListPage />,
       },
       {
-        path: 'catalog/:section/:category',
+        path: ROUTES.catalogCategory,
         element: <pages.ProductListPage />,
       },
       {
-        path: 'cart',
+        path: ROUTES.cart,
         element: <pages.CartPage />,
       },
       {
-        path: 'favorites',
+        path: ROUTES.favorites,
         element: <pages.FavoritesPage />,
       },
       {
-        path: 'delivery',
+        path: ROUTES.delivery,
         element: <pages.DeliveryPage />,
       },
       {
-        path: 'about',
+        path: ROUTES.about,
         element: <pages.AboutPage />,
       },
       {
-        path: 'contacts',
+        path: ROUTES.contacts,
         element: <pages.ContactsPage />,
       },
       {
-        path: 'product/:id',
+        path: ROUTES.product,
         element: <pages.ProductPage />,
       },
       {
-        path: 'search',
+        path: ROUTES.search,
         element: <pages.SearchPage />,
       },
       {
-        path: 'checkout',
+        path: ROUTES.checkout,
         element: <pages.CheckoutPage />,
       },
       {
-        path: 'privacy-policy',
+        path: ROUTES.privacyPolicy,
         element: <pages.PrivacyPolicyPage />,
       },
       {
-        path: 'login',
+        path: ROUTES.login,
         element: <pages.LoginPage />,
       },
       {
-        path: 'register',
+        path: ROUTES.register,
         element: <pages.RegisterPage />,
       },
       {
         element: <ProtectedRoute />,
         children: [
           {
-            path: 'account',
+            path: ROUTES.account.base,
             element: <AccountLayout />,
             children: [
               {
                 index: true,
-                element: <Navigate to='orders' replace />,
+                element: <Navigate to={ROUTES.account.orders} replace />,
               },
               {
-                path: 'orders',
+                path: ROUTES.account.orders,
                 element: <pages.AccountOrdersPage />,
               },
               {
-                path: 'profile',
+                path: ROUTES.account.profile,
                 element: <pages.AccountProfilePage />,
               },
             ],
@@ -105,7 +106,7 @@ export const routes: RouteObject[] = [
     element: <ProtectedRoute allowedRoles={['ADMIN']} />,
     children: [
       {
-        path: '/admin',
+        path: ROUTES.admin.base,
         element: (
           <AdminLayout>
             <Outlet />
@@ -114,22 +115,22 @@ export const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to='dashboard' replace />,
+            element: <Navigate to={ROUTES.admin.dashboard} replace />,
           },
           {
-            path: 'dashboard',
+            path: ROUTES.admin.dashboard,
             element: <pages.AdminDashboardPage />,
           },
           {
-            path: 'products',
+            path: ROUTES.admin.products,
             element: <pages.AdminProductsPage />,
           },
           {
-            path: 'orders',
+            path: ROUTES.admin.orders,
             element: <pages.AdminOrdersPage />,
           },
           {
-            path: 'categories',
+            path: ROUTES.admin.categories,
             element: <pages.AdminCategoriesPage />,
           },
         ],

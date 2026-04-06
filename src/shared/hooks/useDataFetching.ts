@@ -18,7 +18,7 @@ interface UseDataFetchingReturn<T> {
  */
 export const useDataFetching = <T>(
   fetcher: () => Promise<T>,
-  options: UseDataFetchingOptions = {},
+  options: UseDataFetchingOptions = {}
 ): UseDataFetchingReturn<T> => {
   const { skip = false } = options;
   const [data, setData] = useState<T | null>(null);

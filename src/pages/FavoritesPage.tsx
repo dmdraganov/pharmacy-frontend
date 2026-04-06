@@ -58,4 +58,3 @@ const FavoritesPage = memo(() => {
 });
 
 export default FavoritesPage;
-

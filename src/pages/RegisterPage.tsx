@@ -1,3 +1,4 @@
+import { ROUTES } from '@/shared/config/router';
 import { memo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth';
@@ -29,7 +30,7 @@ const RegisterPage = memo(() => {
     }
     try {
       await register(formData);
-      navigate('/login');
+      navigate(ROUTES.login);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Произошла ошибка');
       console.error(err);

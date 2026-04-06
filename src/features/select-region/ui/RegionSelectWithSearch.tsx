@@ -30,10 +30,7 @@ export const RegionSelectWithSearch = memo(() => {
         className='flex items-center gap-1 rounded-md border-none text-sm text-text-default outline-none cursor-pointer'
       >
         <span>{region}</span>
-        <ChevronIcon
-          direction={isOpen ? 'up' : 'down'}
-          className='h-4 w-4'
-        />
+        <ChevronIcon direction={isOpen ? 'up' : 'down'} className='h-4 w-4' />
       </button>
 
       {isOpen && (
@@ -60,9 +57,7 @@ export const RegionSelectWithSearch = memo(() => {
                   </li>
                 ))
               ) : (
-                <li className='px-3 py-2 text-text-muted'>
-                  Регион не найден
-                </li>
+                <li className='px-3 py-2 text-text-muted'>Регион не найден</li>
               )}
             </ul>
           </div>

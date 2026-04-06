@@ -15,9 +15,7 @@ const emptyUser: User = {
 
 export const ProfileDetails = memo(() => {
   const { user, isAuthLoading, updateProfile } = useAuthStore();
-  const [formData, setFormData] = useState<User>(
-    user || (emptyUser as User)
-  );
+  const [formData, setFormData] = useState<User>(user || (emptyUser as User));
   const [errors, setErrors] = useState<Partial<User>>({});
   const [isSaved, setIsSaved] = useState(false);
 

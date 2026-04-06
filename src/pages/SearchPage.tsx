@@ -14,12 +14,12 @@ const SearchPage = () => {
 
   const availableFilters = useMemo(
     () => getAvailableFilters(searchResults),
-    [searchResults],
+    [searchResults]
   );
 
   const displayProducts = useMemo(
     () => applyFilters(searchResults, activeFilters),
-    [searchResults, activeFilters],
+    [searchResults, activeFilters]
   );
 
   const title = searchTerm ? `Результаты поиска: "${searchTerm}"` : 'Поиск';
@@ -29,7 +29,7 @@ const SearchPage = () => {
       searchResults.length > 0 ? (
         <FiltersSidebar availableFilters={availableFilters} />
       ) : null,
-    [searchResults.length, availableFilters],
+    [searchResults.length, availableFilters]
   );
 
   return (

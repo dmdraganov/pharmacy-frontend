@@ -1,10 +1,6 @@
 import { memo, useState } from 'react';
 import Badge, { type BadgeVariant } from '@/shared/ui/Badge';
-import {
-  type Order,
-  type OrderStatus,
-  OrderItemRow,
-} from '@/entities/order';
+import { type Order, type OrderStatus, OrderItemRow } from '@/entities/order';
 import { getProductImage } from '@/entities/product';
 import Button from '@/shared/ui/Button';
 
@@ -40,7 +36,7 @@ const OrderCard = memo(({ order }: { order: Order }) => {
   const remainingItemsCount = items.length - previewItems.length;
 
   const requiresPrescription = items.some(
-    (item) => item.product.isPrescription,
+    (item) => item.product.isPrescription
   );
   const paymentMethodText =
     paymentMethod === 'online'
@@ -86,9 +82,7 @@ const OrderCard = memo(({ order }: { order: Order }) => {
                 ))}
               </div>
               <div className='text-sm text-text-default'>
-                {previewItems
-                  .map((item) => item.product.name)
-                  .join(', ')}
+                {previewItems.map((item) => item.product.name).join(', ')}
                 {remainingItemsCount > 0 && (
                   <span className='ml-1 text-text-muted'>
                     + ещё {remainingItemsCount}
@@ -115,9 +109,7 @@ const OrderCard = memo(({ order }: { order: Order }) => {
             <p className='text-sm text-text-default'>{deliveryInfo}</p>
           </div>
           <div className='text-left sm:text-right'>
-            <h3 className='mb-1 text-sm font-semibold text-text-muted'>
-              Итог
-            </h3>
+            <h3 className='mb-1 text-sm font-semibold text-text-muted'>Итог</h3>
             <p className='text-lg font-bold text-text-default'>{total} ₽</p>
             <p className='text-xs text-text-muted'>{paymentMethodText}</p>
           </div>

@@ -28,16 +28,17 @@ const NavLink = ({
 );
 
 export const AccountSidebar = memo(() => {
-  const { firstName, lastName, email, role, isAuthLoading, logout } = useAuthStore(
-    useShallow(({ user, isAuthLoading, logout }) => ({
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      email: user?.email,
-      role: user?.role,
-      isAuthLoading,
-      logout,
-    }))
-  );
+  const { firstName, lastName, email, role, isAuthLoading, logout } =
+    useAuthStore(
+      useShallow(({ user, isAuthLoading, logout }) => ({
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
+        role: user?.role,
+        isAuthLoading,
+        logout,
+      }))
+    );
 
   if (isAuthLoading) {
     return (

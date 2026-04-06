@@ -29,14 +29,14 @@ export const useAllCartTotals = () => {
   const totalItems = useMemo(() => {
     return Object.values(items).reduce(
       (acc: number, item: CartItem) => acc + item.quantity,
-      0,
+      0
     );
   }, [items]);
 
   const total = useMemo(() => {
     return Object.values(items).reduce(
       (acc: number, item: CartItem) => acc + item.price * item.quantity,
-      0,
+      0
     );
   }, [items]);
 
@@ -56,14 +56,14 @@ export const useCartTotals = () => {
   const totalItems = useMemo(() => {
     return Object.values(items).reduce(
       (acc: number, item: CartItem) => acc + item.quantity,
-      0,
+      0
     );
   }, [items]);
 
   const selectedItemsCount = useMemo(() => {
     return selectedItemIds.reduce(
       (acc: number, id: string) => acc + (items[id]?.quantity || 0),
-      0,
+      0
     );
   }, [selectedItemIds, items]);
 
@@ -71,7 +71,7 @@ export const useCartTotals = () => {
     return selectedItemIds.reduce(
       (acc: number, id: string) =>
         acc + (items[id]?.price || 0) * (items[id]?.quantity || 0),
-      0,
+      0
     );
   }, [selectedItemIds, items]);
 
@@ -86,7 +86,7 @@ export const useCartTotals = () => {
 
   const selectedItemsDiscount = useMemo(
     () => selectedItemsOriginalTotal - selectedItemsTotal,
-    [selectedItemsOriginalTotal, selectedItemsTotal],
+    [selectedItemsOriginalTotal, selectedItemsTotal]
   );
 
   return {

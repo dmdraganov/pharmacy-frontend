@@ -11,7 +11,7 @@ import Button from '@/shared/ui/Button';
 import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import { getPharmacies } from '@/shared/api';
 import { useOrderStore, type Order, type OrderItem } from '@/entities/order';
-import { ROUTER_PATHS } from '@/shared/config/constants';
+import { ROUTES } from '@/shared/config/router';
 
 const OrderSuccessMessage = () => {
   return (
@@ -24,10 +24,10 @@ const OrderSuccessMessage = () => {
         кабинете.
       </p>
       <div className='flex gap-4'>
-        <Button as={Link} to={ROUTER_PATHS.home} variant='secondary'>
+        <Button as={Link} to={ROUTES.home} variant='secondary'>
           Вернуться на главную
         </Button>
-        <Button as={Link} to={ROUTER_PATHS.account.orders} variant='primary'>
+        <Button as={Link} to={ROUTES.account.orders} variant='primary'>
           Посмотреть заказы
         </Button>
       </div>
@@ -43,7 +43,9 @@ const CheckoutPage = memo(() => {
   const { total } = useAllCartTotals();
 
   // State for delivery and payment
-  const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>('courier');
+  const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
+    'courier'
+  );
   const [address, setAddress] = useState({
     city: '',
     street: '',
@@ -51,10 +53,10 @@ const CheckoutPage = memo(() => {
     apartment: '',
   });
   const [selectedPharmacyId, setSelectedPharmacyId] = useState<string | null>(
-    null,
+    null
   );
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'on-receipt'>(
-    'online',
+    'online'
   );
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -115,7 +117,7 @@ const CheckoutPage = memo(() => {
       setIsOrderPlaced(true);
 
       // Redirect to orders page after a short delay
-      setTimeout(() => navigate(ROUTER_PATHS.account.orders), 2000);
+      setTimeout(() => navigate(ROUTES.account.orders), 2000);
     }, 1500);
   }, [
     cartItems,

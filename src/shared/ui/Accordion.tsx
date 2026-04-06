@@ -20,10 +20,7 @@ const Accordion = ({ title, children, className }: AccordionProps) => {
         className='flex w-full items-center justify-between py-4 text-left font-semibold text-text-default cursor-pointer'
       >
         <span>{title}</span>
-        <ChevronIcon
-          direction={isOpen ? 'up' : 'down'}
-          className='h-4 w-4'
-        />
+        <ChevronIcon direction={isOpen ? 'up' : 'down'} className='h-4 w-4' />
       </button>
       {isOpen && <div className='pb-4'>{children}</div>}
     </div>

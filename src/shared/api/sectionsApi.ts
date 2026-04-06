@@ -30,7 +30,7 @@ export const getCategories = async (): Promise<Category[]> => {
  * @param id - ID секции
  */
 export const getSectionById = async (
-  id: string,
+  id: string
 ): Promise<Section | undefined> => {
   await sleep();
   return Promise.resolve(sections.find((s) => s.id === id));

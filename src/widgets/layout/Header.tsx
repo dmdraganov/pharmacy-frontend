@@ -1,3 +1,4 @@
+import { ROUTES } from '@/shared/config/router';
 import { memo, useState, useEffect } from 'react';
 import Logo from '@/shared/ui/Logo';
 import Button from '@/shared/ui/Button';
@@ -32,16 +33,16 @@ const Header = memo(() => {
   }, []);
 
   const handleCatalogToggle = () => {
-    if (location.pathname === '/catalog') {
+    if (location.pathname === ROUTES.catalog) {
       navigate(-1);
     } else {
-      navigate('/catalog');
+      navigate(ROUTES.catalog);
     }
   };
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate(ROUTES.home);
   };
 
   const handleLogoutAndClose = () => {
@@ -69,7 +70,7 @@ const Header = memo(() => {
 
           <nav className='flex items-center space-x-4'>
             <Link
-              to='/favorites'
+              to={ROUTES.favorites}
               className='relative text-text-muted hover:text-text-default'
             >
               Избранное
@@ -80,7 +81,7 @@ const Header = memo(() => {
               )}
             </Link>
             <Link
-              to='/cart'
+              to={ROUTES.cart}
               className='relative text-text-muted hover:text-text-default'
             >
               Корзина
@@ -96,7 +97,7 @@ const Header = memo(() => {
                 className='relative inline-block'
                 {...containerProps}
               >
-                <Link to='/account' className='text-text-muted'>
+                <Link to={ROUTES.account.base} className='text-text-muted'>
                   <UserIcon />
                 </Link>
 
@@ -113,13 +114,13 @@ const Header = memo(() => {
                       </div>
                       <div onClick={() => close(true)}>
                         <Link
-                          to='/account/profile'
+                          to={ROUTES.account.profile}
                           className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
                         >
                           Профиль
                         </Link>
                         <Link
-                          to='/account/orders'
+                          to={ROUTES.account.orders}
                           className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
                         >
                           Заказы
@@ -132,7 +133,7 @@ const Header = memo(() => {
                         </button>
                         {user.role === 'ADMIN' && (
                           <Link
-                            to='/admin'
+                            to={ROUTES.admin.base}
                             className='text-text-default block px-3 py-2 text-base hover:bg-background-muted-hover cursor-pointer'
                           >
                             Панель администратора
@@ -145,7 +146,7 @@ const Header = memo(() => {
               </div>
             ) : (
               <Link
-                to='/login'
+                to={ROUTES.login}
                 className='text-text-muted hover:text-text-default'
               >
                 Войти

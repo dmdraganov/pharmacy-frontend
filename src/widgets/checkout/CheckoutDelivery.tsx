@@ -160,5 +160,5 @@ export const CheckoutDelivery = memo(
           ))}
       </div>
     );
-  },
+  }
 );

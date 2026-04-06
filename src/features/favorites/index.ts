@@ -3,4 +3,3 @@ export {
   useFavoriteActions,
   useIsFavorite,
 } from './model/hooks';
-

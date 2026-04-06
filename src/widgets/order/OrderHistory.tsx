@@ -1,3 +1,4 @@
+import { ROUTES } from '@/shared/config/router';
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OrderHistoryItem, type Order } from '@/entities/order';
@@ -22,7 +23,7 @@ export const OrderHistory = memo(
         quantity: item.quantity,
       }));
       addItemsToCart(itemsToCart);
-      navigate('/cart');
+      navigate(ROUTES.cart);
     };
 
     const renderContent = () => {
@@ -81,5 +82,5 @@ export const OrderHistory = memo(
         {renderContent()}
       </div>
     );
-  },
+  }
 );

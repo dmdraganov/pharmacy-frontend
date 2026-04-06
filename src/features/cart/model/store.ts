@@ -144,4 +144,3 @@ useCartStore.subscribe((state) => {
   }
   previousItems = currentItems;
 });
-
