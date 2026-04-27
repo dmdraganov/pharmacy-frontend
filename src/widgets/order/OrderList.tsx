@@ -1,8 +1,14 @@
 import { memo, useState } from 'react';
 import Badge, { type BadgeVariant } from '@/shared/ui/Badge';
-import { type Order, type OrderStatus, OrderItemRow } from '@/entities/order';
+import {
+  type Order,
+  type OrderStatus,
+  OrderItemRow,
+  useOrderStore,
+} from '@/entities/order';
 import { getProductImage } from '@/entities/product';
 import Button from '@/shared/ui/Button';
+import Spinner from '@/shared/ui/Spinner';
 
 const statusMap: Record<OrderStatus, { text: string; variant: BadgeVariant }> =
   {
@@ -14,11 +20,11 @@ const statusMap: Record<OrderStatus, { text: string; variant: BadgeVariant }> =
     cancelled: { text: 'Отменён', variant: 'danger' },
   };
 
-interface OrderListProps {
-  orders: Order[];
+interface OrderCardProps {
+  order: Order;
 }
 
-const OrderCard = memo(({ order }: { order: Order }) => {
+const OrderCard = memo(({ order }: OrderCardProps) => {
   const {
     id,
     date,
@@ -31,6 +37,20 @@ const OrderCard = memo(({ order }: { order: Order }) => {
   } = order;
   const statusInfo = statusMap[status];
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const { cancelOrder } = useOrderStore();
+
+  const handleCancel = async () => {
+    setIsCancelling(true);
+    try {
+      await cancelOrder(id);
+    } catch (error) {
+      console.error('Failed to cancel order:', error);
+      // Optionally show an error to the user
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   const previewItems = items.slice(0, 2);
   const remainingItemsCount = items.length - previewItems.length;
@@ -139,10 +159,24 @@ const OrderCard = memo(({ order }: { order: Order }) => {
         >
           {isExpanded ? 'Скрыть' : 'Подробнее'}
         </Button>
+        {status === 'new' && (
+          <Button
+            variant='ghost'
+            onClick={handleCancel}
+            disabled={isCancelling}
+            className='flex-1 rounded-none border-l border-border-default bg-background-default text-text-danger hover:bg-background-danger-hover'
+          >
+            {isCancelling ? <Spinner size='sm' /> : 'Отменить заказ'}
+          </Button>
+        )}
       </div>
     </div>
   );
 });
+
+interface OrderListProps {
+  orders: Order[];
+}
 
 export const OrderList = memo(({ orders }: OrderListProps) => {
   if (!orders || orders.length === 0) {

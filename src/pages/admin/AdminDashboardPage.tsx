@@ -1,15 +1,19 @@
-import { useMemo } from 'react';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
-import { getOrders } from '@/shared/api';
+import { useEffect, useMemo } from 'react';
+import { useOrderStore } from '@/entities/order';
 import Spinner from '@/shared/ui/Spinner';
 
 const AdminDashboardPage = () => {
-  const { data: orders, isLoading, error } = useDataFetching(getOrders);
+  const { orders, _seedInitialOrders } = useOrderStore();
 
-  const totalOrders = (orders || []).length;
+  // Ensure data is seeded
+  useEffect(() => {
+    _seedInitialOrders();
+  }, [_seedInitialOrders]);
+
+  const totalOrders = orders.length;
 
   const totalSales = useMemo(() => {
-    return (orders || [])
+    return orders
       .filter((order) => order.status === 'completed')
       .reduce((sum, order) => sum + order.total, 0);
   }, [orders]);
@@ -17,7 +21,7 @@ const AdminDashboardPage = () => {
   const topProducts = useMemo(() => {
     const productCounts: Record<string, { name: string; count: number }> = {};
 
-    (orders || []).forEach((order) => {
+    orders.forEach((order) => {
       order.items.forEach((item) => {
         if (productCounts[item.product.id]) {
           productCounts[item.product.id].count += item.quantity;
@@ -41,19 +45,11 @@ const AdminDashboardPage = () => {
     bounceRate: '25%',
   };
 
-  if (isLoading) {
+  if (orders.length === 0) {
     return (
       <div className='flex h-96 items-center justify-center'>
         <Spinner />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className='flex h-96 items-center justify-center text-center text-danger'>
-        <h2 className='text-2xl font-bold'>Ошибка при загрузке дашборда</h2>
-        <p>{error.message}</p>
+        <p className='ml-4'>Загрузка данных о заказах...</p>
       </div>
     );
   }

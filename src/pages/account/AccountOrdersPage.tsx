@@ -1,30 +1,29 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
+import { useAuthStore } from '@/features/auth';
 import { useOrderStore, type OrderStatus, type Order } from '@/entities/order';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
-import { getOrders } from '@/shared/api';
 import { OrderList } from '@/widgets/order/OrderList';
 import { OrderHistory } from '@/widgets/order/OrderHistory';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
+import TabButton from '@/shared/ui/TabButton';
 
 const ACTIVE_STATUSES: OrderStatus[] = ['new', 'processing', 'shipping'];
+type Tab = 'current' | 'history';
 
 const AccountOrdersPage = memo(() => {
-  const { orders: runtimeOrders } = useOrderStore();
-  const { data: mockOrders, isLoading } = useDataFetching(getOrders);
+  const { user, isAuthLoading } = useAuthStore();
+  const { orders } = useOrderStore();
+  const [activeTab, setActiveTab] = useState<Tab>('current');
 
-  const allOrders = useMemo(() => {
-    const runtimeOrderIds = new Set(runtimeOrders.map((o) => o.id));
-    const filteredMockOrders = (mockOrders || []).filter(
-      (mockOrder) => !runtimeOrderIds.has(mockOrder.id)
-    );
-    return [...runtimeOrders, ...filteredMockOrders];
-  }, [runtimeOrders, mockOrders]);
+  const userOrders = useMemo(() => {
+    if (!user) return [];
+    return orders.filter((o) => o.userId === user.id).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [orders, user]);
 
   const [currentOrders, orderHistory] = useMemo(() => {
     const current: Order[] = [];
     const history: Order[] = [];
-    for (const order of allOrders) {
+    for (const order of userOrders) {
       if (ACTIVE_STATUSES.includes(order.status)) {
         current.push(order);
       } else {
@@ -32,9 +31,20 @@ const AccountOrdersPage = memo(() => {
       }
     }
     return [current, history];
-  }, [allOrders]);
+  }, [userOrders]);
 
-  if (isLoading) {
+  if (!user && !isAuthLoading) {
+    return (
+      <EmptyState
+        title='Войдите, чтобы увидеть заказы'
+        description='Для доступа к истории заказов необходимо войти в свой аккаунт.'
+        buttonText='Войти'
+        linkTo='/login'
+      />
+    );
+  }
+
+  if (isAuthLoading) {
     return (
       <div className='flex h-48 items-center justify-center'>
         <Spinner />
@@ -42,7 +52,7 @@ const AccountOrdersPage = memo(() => {
     );
   }
 
-  if (allOrders.length === 0) {
+  if (userOrders.length === 0) {
     return (
       <EmptyState
         title='У вас еще нет заказов'
@@ -54,21 +64,49 @@ const AccountOrdersPage = memo(() => {
   }
 
   return (
-    <div className='flex flex-col gap-8'>
-      {currentOrders.length > 0 ? (
-        <div>
-          <h2 className='mb-4 text-2xl font-bold text-text-default'>
-            Текущие заказы
-          </h2>
-          <OrderList orders={currentOrders} />
-        </div>
-      ) : (
-        <EmptyState
-          title='Нет активных заказов'
-          description='Ваши текущие заказы будут отображаться здесь.'
-        />
-      )}
-      <OrderHistory orders={orderHistory} />
+    <div className='flex flex-col gap-6'>
+      <div className='flex border-b border-border-default'>
+        <TabButton
+          isActive={activeTab === 'current'}
+          onClick={() => setActiveTab('current')}
+        >
+          Текущие ({currentOrders.length})
+        </TabButton>
+        <TabButton
+          isActive={activeTab === 'history'}
+          onClick={() => setActiveTab('history')}
+        >
+          История ({orderHistory.length})
+        </TabButton>
+      </div>
+
+      <div>
+        {activeTab === 'current' && (
+          <>
+            {currentOrders.length > 0 ? (
+              <OrderList orders={currentOrders} />
+            ) : (
+              <EmptyState
+                title='Нет активных заказов'
+                description='Ваши текущие заказы будут отображаться здесь.'
+              />
+            )}
+          </>
+        )}
+
+        {activeTab === 'history' && (
+          <>
+            {orderHistory.length > 0 ? (
+              <OrderHistory orders={orderHistory} />
+            ) : (
+              <EmptyState
+                title='История заказов пуста'
+                description='Здесь будут отображаться ваши завершенные и отмененные заказы.'
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 });

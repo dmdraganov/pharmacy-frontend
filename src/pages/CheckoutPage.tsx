@@ -1,6 +1,7 @@
 import { memo, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAllCartTotals, useCartItems, useCartStore } from '@/features/cart';
+import { useAuthStore } from '@/features/auth';
 import { CheckoutOrderSummary } from '@/widgets/checkout/CheckoutOrderSummary';
 import { CheckoutDelivery } from '@/widgets/checkout/CheckoutDelivery';
 import { CheckoutContactInfo } from '@/widgets/checkout/CheckoutContactInfo';
@@ -37,6 +38,7 @@ const OrderSuccessMessage = () => {
 
 const CheckoutPage = memo(() => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { clearCart } = useCartStore();
   const { addOrder } = useOrderStore();
   const cartItems = useCartItems();
@@ -66,7 +68,7 @@ const CheckoutPage = memo(() => {
 
   const handleConfirmOrder = useCallback(() => {
     const items = Object.values(cartItems);
-    if (items.length === 0) return;
+    if (items.length === 0 || !user) return; // Guard against no user
 
     setIsProcessing(true);
 
@@ -101,6 +103,7 @@ const CheckoutPage = memo(() => {
 
       const newOrder: Order = {
         id: new Date().toISOString(),
+        userId: user.id, // Associate order with user
         date: new Date().toISOString(),
         status: 'new',
         items: orderItems,
@@ -130,17 +133,32 @@ const CheckoutPage = memo(() => {
     selectedPharmacyId,
     paymentMethod,
     pharmacies,
+    user, // Add user to dependency array
   ]);
 
   if (isOrderPlaced) {
     return <OrderSuccessMessage />;
   }
 
+  // Disable confirmation if not logged in
+  const isConfirmDisabled = isProcessing || !user;
+
   return (
     <>
       <h1 className='mb-8 text-3xl font-bold text-text-default'>
         Оформление заказа
       </h1>
+      {!user && (
+        <div className='mb-6 rounded-lg border border-warning bg-warning/10 p-4 text-warning'>
+          <p>
+            Пожалуйста,{' '}
+            <Link to={ROUTES.login} className='font-bold underline'>
+              войдите в свой аккаунт
+            </Link>
+            , чтобы продолжить оформление заказа.
+          </p>
+        </div>
+      )}
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         {/* Main Content */}
         <main className='flex flex-col gap-6 lg:col-span-2'>
@@ -166,7 +184,7 @@ const CheckoutPage = memo(() => {
             <CheckoutOrderSummary />
             <CheckoutActions
               onConfirm={handleConfirmOrder}
-              isProcessing={isProcessing}
+              isProcessing={isConfirmDisabled}
             />
           </div>
         </aside>

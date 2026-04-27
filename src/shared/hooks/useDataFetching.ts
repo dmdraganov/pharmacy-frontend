@@ -8,13 +8,14 @@ interface UseDataFetchingReturn<T> {
   data: T | null;
   isLoading: boolean;
   error: Error | null;
+  refetch: () => Promise<void>;
 }
 
 /**
  * Универсальный хук для асинхронного получения данных.
  * @param fetcher - Асинхронная функция, которая возвращает данные.
  * @param options - Опции, например { skip: true } для пропуска выполнения.
- * @returns {{data: T | null, isLoading: boolean, error: Error | null}}
+ * @returns {{data: T | null, isLoading: boolean, error: Error | null, refetch: () => Promise<void>}}
  */
 export const useDataFetching = <T>(
   fetcher: () => Promise<T>,
@@ -25,7 +26,7 @@ export const useDataFetching = <T>(
   const [isLoading, setIsLoading] = useState<boolean>(!skip);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const refetch = useCallback(async () => {
     if (skip) {
       setIsLoading(false);
       return;
@@ -43,8 +44,9 @@ export const useDataFetching = <T>(
   }, [fetcher, skip]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    refetch();
+  }, [refetch, fetcher]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 };
+
