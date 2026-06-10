@@ -12,12 +12,15 @@ use App\Modules\Users\Infrastructure\Persistence\Eloquent\UserModel;
 use App\Modules\Users\Presentation\Requests\LoginRequest;
 use App\Modules\Users\Presentation\Requests\RegisterRequest;
 use App\Modules\Users\Presentation\Resources\UserResource;
+use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class AuthController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         private readonly RegisterUserUseCase $registerUserUseCase,
         private readonly LoginUseCase $loginUseCase
@@ -39,13 +42,10 @@ class AuthController extends Controller
         $userModel = UserModel::find($user->id);
         $token = $userModel->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'data' => [
-                'user' => new UserResource($user),
-                'token' => $token,
-            ],
-            'message' => 'User registered successfully',
-        ], 201);
+        return $this->created([
+            'user' => new UserResource($user),
+            'token' => $token,
+        ], 'User registered successfully');
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -60,19 +60,16 @@ class AuthController extends Controller
         $userModel = UserModel::find($user->id);
         $token = $userModel->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'data' => [
-                'token' => $token,
-            ],
-            'message' => 'User logged in successfully',
-        ]);
+        return $this->ok([
+            'token' => $token,
+        ], null, 'User logged in successfully');
     }
 
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out'], 204);
+        return $this->noContent();
     }
 
     public function me(Request $request): JsonResponse
@@ -92,6 +89,6 @@ class AuthController extends Controller
             roles: $userModel->roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
         );
 
-        return response()->json(new UserResource($user));
+        return $this->ok(new UserResource($user));
     }
 }

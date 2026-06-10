@@ -9,11 +9,9 @@ use App\Modules\Pharmacies\PharmaciesServiceProvider;
 use App\Modules\Search\SearchServiceProvider;
 use App\Modules\Users\UsersServiceProvider;
 use App\Providers\AppServiceProvider;
-use App\Providers\ElasticsearchServiceProvider;
 
 return [
     AppServiceProvider::class,
-    ElasticsearchServiceProvider::class,
     UsersServiceProvider::class,
     CatalogServiceProvider::class,
     PharmaciesServiceProvider::class,

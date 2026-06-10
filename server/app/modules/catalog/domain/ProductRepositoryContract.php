@@ -11,4 +11,6 @@ interface ProductRepositoryContract
     public function delete(Product $product): void;
 
     public function list(array $criteria = []): array;
+
+    public function listByPharmacy(int $pharmacyId, array $criteria = []): array;
 }

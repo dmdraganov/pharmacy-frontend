@@ -13,54 +13,63 @@ use App\Modules\Catalog\Presentation\Resources\CategoryResource;
 use App\Modules\Catalog\Presentation\Resources\ManufacturerResource;
 use App\Modules\Catalog\Presentation\Resources\ProductResource;
 use App\Modules\Catalog\Presentation\Resources\SectionResource;
+use App\Support\ApiResponse;
+use App\Support\PaginatesArrays;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class CatalogController extends Controller
 {
+    use ApiResponse;
+    use PaginatesArrays;
+
     public function __construct() {}
 
-    public function listSections(ListSectionsUseCase $useCase): JsonResponse
+    public function listSections(Request $request, ListSectionsUseCase $useCase): JsonResponse
     {
         $sections = $useCase();
+        $result = $this->paginateArray($sections, $request);
 
-        return response()->json(SectionResource::collection($sections));
+        return $this->ok(SectionResource::collection($result['data']), $result['meta']);
     }
 
-    public function listCategories(ListCategoriesUseCase $useCase): JsonResponse
+    public function listCategories(Request $request, ListCategoriesUseCase $useCase): JsonResponse
     {
         $categories = $useCase();
+        $result = $this->paginateArray($categories, $request);
 
-        return response()->json(CategoryResource::collection($categories));
+        return $this->ok(CategoryResource::collection($result['data']), $result['meta']);
     }
 
-    public function listBrands(ListBrandsUseCase $useCase): JsonResponse
+    public function listBrands(Request $request, ListBrandsUseCase $useCase): JsonResponse
     {
         $brands = $useCase();
+        $result = $this->paginateArray($brands, $request);
 
-        return response()->json(BrandResource::collection($brands));
+        return $this->ok(BrandResource::collection($result['data']), $result['meta']);
     }
 
-    public function listManufacturers(ListManufacturersUseCase $useCase): JsonResponse
+    public function listManufacturers(Request $request, ListManufacturersUseCase $useCase): JsonResponse
     {
         $manufacturers = $useCase();
+        $result = $this->paginateArray($manufacturers, $request);
 
-        return response()->json(ManufacturerResource::collection($manufacturers));
+        return $this->ok(ManufacturerResource::collection($result['data']), $result['meta']);
     }
 
     public function listProducts(Request $request, ListProductsUseCase $useCase): JsonResponse
     {
-        $products = $useCase($request->all());
+        $result = $useCase($request->all());
 
-        return response()->json(ProductResource::collection($products));
+        return $this->ok(ProductResource::collection($result['data']), $result['meta']);
     }
 
-    public function popularProducts(ListProductsUseCase $useCase): JsonResponse
+    public function popularProducts(Request $request, ListProductsUseCase $useCase): JsonResponse
     {
-        $products = $useCase(['is_popular' => true]);
+        $result = $useCase([...$request->all(), 'is_popular' => true]);
 
-        return response()->json(ProductResource::collection($products));
+        return $this->ok(ProductResource::collection($result['data']), $result['meta']);
     }
 
     public function showProduct(GetProductUseCase $useCase, string $id): JsonResponse
@@ -70,6 +79,6 @@ class CatalogController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        return response()->json(new ProductResource($product));
+        return $this->ok(new ProductResource($product));
     }
 }

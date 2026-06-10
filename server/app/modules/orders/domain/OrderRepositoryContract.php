@@ -13,4 +13,6 @@ interface OrderRepositoryContract
     public function listAll(): array;
 
     public function getStatusIdByCode(string $code): ?int;
+
+    public function getStatusCodeById(int $id): ?string;
 }

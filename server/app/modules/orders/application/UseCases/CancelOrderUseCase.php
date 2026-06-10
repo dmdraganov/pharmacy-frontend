@@ -21,6 +21,17 @@ class CancelOrderUseCase implements UseCase
             throw ValidationException::withMessages(['order' => 'Order not found']);
         }
 
+        $currentStatus = $this->orderRepository->getStatusCodeById($order->statusId);
+        if (! $currentStatus) {
+            throw ValidationException::withMessages(['status' => 'Current order status is invalid']);
+        }
+
+        if (! in_array($currentStatus, ['new', 'processing'], true)) {
+            throw ValidationException::withMessages([
+                'status' => "Cannot cancel order with status {$currentStatus}",
+            ]);
+        }
+
         $cancelledStatusId = $this->orderRepository->getStatusIdByCode('cancelled') ?? 6;
         $order->statusId = $cancelledStatusId;
         $order->updatedAt = new \DateTimeImmutable;

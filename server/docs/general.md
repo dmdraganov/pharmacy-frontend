@@ -35,8 +35,8 @@ Educational college-level project designed with production-inspired architecture
 - Demonstrate Modular Monolith architecture
 - Implement a complete REST API
 - Integrate PostgreSQL
-- Integrate Elasticsearch
-- Integrate S3-compatible file storage
+- Implement simple product search with PostgreSQL
+- Store product images on the application server
 - Implement RBAC (Role-Based Access Control)
 
 ---
@@ -48,9 +48,7 @@ Educational college-level project designed with production-inspired architecture
 - PHP 8.4+
 - Laravel 12
 - PostgreSQL 17+
-- Elasticsearch 8+
 - Docker
-- S3-compatible Storage
 - Laravel Sanctum
 
 ### Architecture
@@ -111,15 +109,14 @@ Permissions:
 
 ## Search
 
-Elasticsearch is the only search engine.
-PostgreSQL is not used for full-text search.
+Product search is implemented with simple PostgreSQL filtering over product fields.
 
 ---
 
 ## File Storage
 
-Product images are stored in an external S3-compatible storage service.
-The backend stores only file URLs and metadata.
+Product images are stored on the application server using Laravel's `public` filesystem disk.
+The backend stores public file URLs and image metadata.
 
 ---
 

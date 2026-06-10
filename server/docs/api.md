@@ -34,13 +34,40 @@ Authorization: Bearer {token}
 
 # Success Response Format
 
+Successful JSON responses use this envelope:
+
 ```json
 {
     "data": {},
-    "meta": {},
     "message": "Success"
 }
 ```
+
+Paginated list endpoints include `meta`:
+
+```json
+{
+    "data": [],
+    "meta": {
+        "current_page": 1,
+        "per_page": 15,
+        "total": 0,
+        "last_page": 1
+    },
+    "message": "Success"
+}
+```
+
+Delete, logout, and other no-body commands return `204 No Content`.
+
+### Pagination
+
+Supported by list endpoints unless stated otherwise.
+
+| Parameter  | Default | Max | Notes                     |
+| ---------- | ------- | --- | ------------------------- |
+| page       | 1       | —   | Page number, minimum `1`. |
+| per_page   | 15      | 100 | Items per page.           |
 
 ---
 
@@ -102,7 +129,8 @@ POST /auth/register
     "data": {
         "user": {},
         "token": "..."
-    }
+    },
+    "message": "User registered successfully"
 }
 ```
 
@@ -129,7 +157,8 @@ POST /auth/login
 {
     "data": {
         "token": "..."
-    }
+    },
+    "message": "User logged in successfully"
 }
 ```
 
@@ -222,7 +251,8 @@ sort
             "price": 250
         }
     ],
-    "meta": {}
+    "meta": {},
+    "message": "Success"
 }
 ```
 
@@ -246,10 +276,24 @@ GET /products/popular
 GET /sections
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+```
+
 ## Categories
 
 ```http
 GET /categories
+```
+
+### Query Parameters
+
+```text
+page
+per_page
 ```
 
 ## Brands
@@ -258,10 +302,24 @@ GET /categories
 GET /brands
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+```
+
 ## Manufacturers
 
 ```http
 GET /manufacturers
+```
+
+### Query Parameters
+
+```text
+page
+per_page
 ```
 
 ---
@@ -287,11 +345,13 @@ manufacturer_id
 
 min_price
 max_price
+is_prescription
+sort
 ```
 
 ### Notes
 
-All search queries are executed via Elasticsearch.
+Search is executed by the backend with PostgreSQL filters over product fields.
 
 ### Example
 
@@ -307,6 +367,13 @@ All search queries are executed via Elasticsearch.
 
 ```http
 GET /favorites
+```
+
+### Query Parameters
+
+```text
+page
+per_page
 ```
 
 ## Add Favorite
@@ -335,6 +402,13 @@ DELETE /favorites/{productId}
 
 ```http
 GET /cart
+```
+
+### Query Parameters
+
+```text
+page
+per_page
 ```
 
 ## Add Item
@@ -400,7 +474,12 @@ POST /orders
     "delivery_apartment": null,
     "delivery_postal_code": null,
 
-    "comment": "Call before delivery"
+    "items": [
+        {
+            "product_id": "uuid",
+            "quantity": 1
+        }
+    ]
 }
 ```
 
@@ -451,6 +530,13 @@ available_quantity < requested_quantity
 GET /orders
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+```
+
 ## Order Details
 
 ```http
@@ -473,6 +559,13 @@ POST /orders/{id}/cancel
 GET /pharmacies
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+```
+
 ## Pharmacy Details
 
 ```http
@@ -485,15 +578,34 @@ GET /pharmacies/{id}
 GET /pharmacies/{id}/products
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+
+category_id
+brand_id
+manufacturer_id
+
+min_price
+max_price
+
+is_prescription
+sort
+```
+
 ---
 
 # ADMIN API
 
-Requires role:
+Admin CRUD endpoints require role:
 
 ```text
 ADMIN
 ```
+
+Inventory and order-management endpoints are documented separately and allow `ADMIN` and `MANAGER`.
 
 ---
 
@@ -503,6 +615,26 @@ ADMIN
 POST   /admin/products
 PUT    /admin/products/{id}
 DELETE /admin/products/{id}
+```
+
+### Create/Update Request
+
+```json
+{
+    "name": "Aspirin",
+    "slug": "aspirin",
+    "description": "Pain reliever",
+    "price": 250,
+    "old_price": 300,
+    "is_popular": true,
+    "is_prescription": false,
+    "info": {
+        "dosage": "500mg"
+    },
+    "category_id": 1,
+    "brand_id": 1,
+    "manufacturer_id": 1
+}
 ```
 
 ---
@@ -515,6 +647,16 @@ PUT    /admin/categories/{id}
 DELETE /admin/categories/{id}
 ```
 
+### Create/Update Request
+
+```json
+{
+    "name": "Pain Relievers",
+    "description": "Medicines for pain relief",
+    "section_id": 1
+}
+```
+
 ---
 
 # ADMIN SECTIONS
@@ -523,6 +665,15 @@ DELETE /admin/categories/{id}
 POST   /admin/sections
 PUT    /admin/sections/{id}
 DELETE /admin/sections/{id}
+```
+
+### Create/Update Request
+
+```json
+{
+    "name": "Medicines",
+    "description": "Medicinal products"
+}
 ```
 
 ---
@@ -535,6 +686,14 @@ PUT    /admin/brands/{id}
 DELETE /admin/brands/{id}
 ```
 
+### Create/Update Request
+
+```json
+{
+    "name": "Aspirin"
+}
+```
+
 ---
 
 # ADMIN MANUFACTURERS
@@ -545,6 +704,15 @@ PUT    /admin/manufacturers/{id}
 DELETE /admin/manufacturers/{id}
 ```
 
+### Create/Update Request
+
+```json
+{
+    "name": "Bayer",
+    "country": "Germany"
+}
+```
+
 ---
 
 # ADMIN PHARMACIES
@@ -553,6 +721,16 @@ DELETE /admin/manufacturers/{id}
 POST   /admin/pharmacies
 PUT    /admin/pharmacies/{id}
 DELETE /admin/pharmacies/{id}
+```
+
+### Create/Update Request
+
+```json
+{
+    "name": "Central Pharmacy",
+    "address": "1 Main St",
+    "working_hours": "09:00-21:00"
+}
 ```
 
 ---
@@ -570,6 +748,14 @@ MANAGER
 
 ```http
 GET /admin/inventory
+```
+
+### Query Parameters
+
+```text
+pharmacy_id
+page
+per_page
 ```
 
 ## Inventory Details
@@ -607,6 +793,13 @@ MANAGER
 GET /admin/orders
 ```
 
+### Query Parameters
+
+```text
+page
+per_page
+```
+
 ## Order Details
 
 ```http
@@ -629,14 +822,22 @@ PATCH /admin/orders/{id}/status
 
 ```text
 new → processing → shipping → delivered → completed
+new → cancelled
+processing → cancelled
 ```
 
-Cancellation allowed from:
+Allowed status transitions:
 
 ```text
-new
-processing
+new: processing, cancelled
+processing: shipping, cancelled
+shipping: delivered
+delivered: completed
+completed: none
+cancelled: none
 ```
+
+`POST /orders/{id}/cancel` is allowed only when the current status is `new` or `processing`.
 
 ---
 
@@ -654,8 +855,9 @@ Content-Type: multipart/form-data
 ```json
 {
     "data": {
-        "image_url": "https://..."
-    }
+        "image_url": "/storage/products/..."
+    },
+    "message": "Created"
 }
 ```
 
@@ -674,9 +876,9 @@ DELETE /admin/products/{id}/images/{imageId}
 | Auth             | ✓    | ✓       | ✓     |
 | Catalog          | ✓    | ✓       | ✓     |
 | Search           | ✓    | ✓       | ✓     |
-| Favorites        | ✓    | ✗       | ✗     |
-| Cart             | ✓    | ✗       | ✗     |
-| Orders (Own)     | ✓    | ✗       | ✗     |
+| Favorites        | ✓    | ✓       | ✓     |
+| Cart             | ✓    | ✓       | ✓     |
+| Orders (Own)     | ✓    | ✓       | ✓     |
 | Inventory        | ✗    | ✓       | ✓     |
 | Order Management | ✗    | ✓       | ✓     |
 | Admin CRUD       | ✗    | ✗       | ✓     |

@@ -20,12 +20,15 @@ use App\Modules\Catalog\Presentation\Requests\UploadProductImageRequest;
 use App\Modules\Catalog\Presentation\Resources\ProductImageResource;
 use App\Modules\Catalog\Presentation\Resources\ProductResource;
 use App\Modules\Pharmacies\Infrastructure\Persistence\Eloquent\PharmacyModel;
+use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class AdminCatalogController extends Controller
 {
+    use ApiResponse;
+
     public function createProduct(CreateProductRequest $request, CreateProductUseCase $useCase): JsonResponse
     {
         $dto = new CreateProductDTO(
@@ -45,7 +48,7 @@ class AdminCatalogController extends Controller
 
         $product = $useCase($dto);
 
-        return response()->json(new ProductResource($product), 201);
+        return $this->created(new ProductResource($product));
     }
 
     public function updateProduct(UpdateProductRequest $request, UpdateProductUseCase $useCase, string $id): JsonResponse
@@ -68,14 +71,14 @@ class AdminCatalogController extends Controller
 
         $product = $useCase($dto);
 
-        return response()->json(new ProductResource($product));
+        return $this->ok(new ProductResource($product));
     }
 
     public function deleteProduct(DeleteProductUseCase $useCase, string $id): JsonResponse
     {
         $useCase($id);
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function uploadImage(UploadProductImageRequest $request, UploadProductImageUseCase $useCase, string $id): JsonResponse
@@ -90,14 +93,14 @@ class AdminCatalogController extends Controller
 
         $productImage = $useCase($dto);
 
-        return response()->json(new ProductImageResource($productImage), 201);
+        return $this->created(new ProductImageResource($productImage));
     }
 
     public function deleteImage(DeleteProductImageUseCase $useCase, string $id, string $imageId): JsonResponse
     {
         $useCase($imageId);
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function createSection(Request $request): JsonResponse
@@ -109,7 +112,7 @@ class AdminCatalogController extends Controller
 
         $section = SectionModel::create($data);
 
-        return response()->json($this->sectionResponse($section), 201);
+        return $this->created($this->sectionResponse($section));
     }
 
     public function updateSection(Request $request, int $id): JsonResponse
@@ -122,14 +125,14 @@ class AdminCatalogController extends Controller
 
         $section->update($data);
 
-        return response()->json($this->sectionResponse($section));
+        return $this->ok($this->sectionResponse($section));
     }
 
     public function deleteSection(int $id): JsonResponse
     {
         SectionModel::findOrFail($id)->delete();
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function createCategory(Request $request): JsonResponse
@@ -142,7 +145,7 @@ class AdminCatalogController extends Controller
 
         $category = CategoryModel::create($data);
 
-        return response()->json($this->categoryResponse($category), 201);
+        return $this->created($this->categoryResponse($category));
     }
 
     public function updateCategory(Request $request, int $id): JsonResponse
@@ -156,14 +159,14 @@ class AdminCatalogController extends Controller
 
         $category->update($data);
 
-        return response()->json($this->categoryResponse($category));
+        return $this->ok($this->categoryResponse($category));
     }
 
     public function deleteCategory(int $id): JsonResponse
     {
         CategoryModel::findOrFail($id)->delete();
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function createBrand(Request $request): JsonResponse
@@ -174,7 +177,7 @@ class AdminCatalogController extends Controller
 
         $brand = BrandModel::create($data);
 
-        return response()->json($this->brandResponse($brand), 201);
+        return $this->created($this->brandResponse($brand));
     }
 
     public function updateBrand(Request $request, int $id): JsonResponse
@@ -186,14 +189,14 @@ class AdminCatalogController extends Controller
 
         $brand->update($data);
 
-        return response()->json($this->brandResponse($brand));
+        return $this->ok($this->brandResponse($brand));
     }
 
     public function deleteBrand(int $id): JsonResponse
     {
         BrandModel::findOrFail($id)->delete();
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function createManufacturer(Request $request): JsonResponse
@@ -205,7 +208,7 @@ class AdminCatalogController extends Controller
 
         $manufacturer = ManufacturerModel::create($data);
 
-        return response()->json($this->manufacturerResponse($manufacturer), 201);
+        return $this->created($this->manufacturerResponse($manufacturer));
     }
 
     public function updateManufacturer(Request $request, int $id): JsonResponse
@@ -218,14 +221,14 @@ class AdminCatalogController extends Controller
 
         $manufacturer->update($data);
 
-        return response()->json($this->manufacturerResponse($manufacturer));
+        return $this->ok($this->manufacturerResponse($manufacturer));
     }
 
     public function deleteManufacturer(int $id): JsonResponse
     {
         ManufacturerModel::findOrFail($id)->delete();
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     public function createPharmacy(Request $request): JsonResponse
@@ -238,7 +241,7 @@ class AdminCatalogController extends Controller
 
         $pharmacy = PharmacyModel::create($data);
 
-        return response()->json($this->pharmacyResponse($pharmacy), 201);
+        return $this->created($this->pharmacyResponse($pharmacy));
     }
 
     public function updatePharmacy(Request $request, int $id): JsonResponse
@@ -252,14 +255,14 @@ class AdminCatalogController extends Controller
 
         $pharmacy->update($data);
 
-        return response()->json($this->pharmacyResponse($pharmacy));
+        return $this->ok($this->pharmacyResponse($pharmacy));
     }
 
     public function deletePharmacy(int $id): JsonResponse
     {
         PharmacyModel::findOrFail($id)->delete();
 
-        return response()->json(null, 204);
+        return $this->noContent();
     }
 
     private function sectionResponse(SectionModel $section): array

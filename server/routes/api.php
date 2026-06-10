@@ -24,6 +24,7 @@ Route::get('/search/products', [SearchController::class, 'searchProducts']);
 use App\Modules\Pharmacies\Presentation\Controllers\PharmacyController;
 
 Route::get('/pharmacies', [PharmacyController::class, 'list']);
+Route::get('/pharmacies/{id}/products', [PharmacyController::class, 'products']);
 Route::get('/pharmacies/{id}', [PharmacyController::class, 'show']);
 
 use App\Modules\Catalog\Presentation\Controllers\AdminCatalogController;

@@ -4,7 +4,7 @@
 
 - PostgreSQL is the primary database and source of truth.
 - All business data is stored in PostgreSQL.
-- Full-text search is handled exclusively by Elasticsearch.
+- Product search is handled by PostgreSQL queries over product fields.
 
 ---
 
@@ -486,38 +486,34 @@ Future price changes do not affect existing orders.
 
 # Search
 
-## Elasticsearch Product Index
+## Product Search
 
-Separate Elasticsearch index.
+Search is performed against PostgreSQL product data.
 
-Not a source of truth.
-
-Source of truth:
-
-```text
-PostgreSQL
-```
-
-Indexed fields:
+Searchable fields:
 
 ```text
 id
 name
 description
-category
-brand
-manufacturer
+slug
+category_id
+brand_id
+manufacturer_id
 is_prescription
 price
-attributes
 ```
 
-Synchronization triggers:
+Supported filters:
 
 ```text
-Product created
-Product updated
-Product deleted
+query
+category_id
+brand_id
+manufacturer_id
+min_price
+max_price
+is_prescription
 ```
 
 ---
@@ -526,8 +522,7 @@ Product deleted
 
 ```text
 PostgreSQL = Source of Truth
-Elasticsearch = Search Engine
-S3 = File Storage
+Local public storage = Product image files
 ```
 
-Neither Elasticsearch nor S3 can be considered authoritative sources for business data.
+The database stores image URLs and metadata, while image binary files are stored on the application server.

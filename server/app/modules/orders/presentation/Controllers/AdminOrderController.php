@@ -8,16 +8,23 @@ use App\Modules\Orders\Application\UseCases\ListAllOrdersUseCase;
 use App\Modules\Orders\Application\UseCases\UpdateOrderStatusUseCase;
 use App\Modules\Orders\Presentation\Requests\UpdateOrderStatusRequest;
 use App\Modules\Orders\Presentation\Resources\OrderResource;
+use App\Support\ApiResponse;
+use App\Support\PaginatesArrays;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class AdminOrderController extends Controller
 {
-    public function list(ListAllOrdersUseCase $useCase): JsonResponse
+    use ApiResponse;
+    use PaginatesArrays;
+
+    public function list(Request $request, ListAllOrdersUseCase $useCase): JsonResponse
     {
         $orders = $useCase();
+        $result = $this->paginateArray($orders, $request);
 
-        return response()->json(OrderResource::collection($orders));
+        return $this->ok(OrderResource::collection($result['data']), $result['meta']);
     }
 
     public function show(GetOrderUseCase $useCase, string $id): JsonResponse
@@ -27,7 +34,7 @@ class AdminOrderController extends Controller
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        return response()->json(new OrderResource($order));
+        return $this->ok(new OrderResource($order));
     }
 
     public function updateStatus(UpdateOrderStatusRequest $request, UpdateOrderStatusUseCase $useCase, string $id): JsonResponse
@@ -39,6 +46,6 @@ class AdminOrderController extends Controller
 
         $order = $useCase($dto);
 
-        return response()->json(new OrderResource($order));
+        return $this->ok(new OrderResource($order));
     }
 }

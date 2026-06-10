@@ -9,12 +9,17 @@ use App\Modules\Orders\Application\UseCases\GetOrderUseCase;
 use App\Modules\Orders\Application\UseCases\ListOrdersUseCase;
 use App\Modules\Orders\Presentation\Requests\CreateOrderRequest;
 use App\Modules\Orders\Presentation\Resources\OrderResource;
+use App\Support\ApiResponse;
+use App\Support\PaginatesArrays;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class OrderController extends Controller
 {
+    use ApiResponse;
+    use PaginatesArrays;
+
     public function create(CreateOrderRequest $request, CreateOrderUseCase $useCase): JsonResponse
     {
         $dto = new CreateOrderDTO(
@@ -33,14 +38,15 @@ class OrderController extends Controller
 
         $order = $useCase($dto);
 
-        return response()->json(new OrderResource($order), 201);
+        return $this->created(new OrderResource($order));
     }
 
     public function list(Request $request, ListOrdersUseCase $useCase): JsonResponse
     {
         $orders = $useCase($request->user()->id);
+        $result = $this->paginateArray($orders, $request);
 
-        return response()->json(OrderResource::collection($orders));
+        return $this->ok(OrderResource::collection($result['data']), $result['meta']);
     }
 
     public function show(GetOrderUseCase $useCase, string $id): JsonResponse
@@ -50,13 +56,13 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        return response()->json(new OrderResource($order));
+        return $this->ok(new OrderResource($order));
     }
 
     public function cancel(Request $request, CancelOrderUseCase $useCase, string $id): JsonResponse
     {
         $order = $useCase($id, $request->user()->id);
 
-        return response()->json(new OrderResource($order));
+        return $this->ok(new OrderResource($order));
     }
 }

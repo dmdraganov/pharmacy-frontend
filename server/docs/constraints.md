@@ -44,18 +44,13 @@ Prohibited:
 
 # Search Constraints
 
-Only search engine:
-
-- Elasticsearch
+Product search must be implemented inside the backend with PostgreSQL queries.
+Simple matching by product name, slug, and description is sufficient.
 
 Prohibited:
 
-- LIKE
-- ILIKE
-- to_tsvector
+- External search engines
 - PostgreSQL Full-Text Search
-
-All product search functionality must use Elasticsearch.
 
 ---
 
@@ -63,12 +58,12 @@ All product search functionality must use Elasticsearch.
 
 Allowed:
 
-- S3
-- MinIO
-- Cloudflare R2
+- Local server filesystem
+- Laravel `public` filesystem disk
 
 Prohibited:
 
+- External object storage services
 - Storing images inside the database
 - Storing files as Base64
 

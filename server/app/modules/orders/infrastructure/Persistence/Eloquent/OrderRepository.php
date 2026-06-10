@@ -73,6 +73,11 @@ class OrderRepository implements OrderRepositoryContract
             ?? DB::table('order_statuses')->where('name', $code)->value('id');
     }
 
+    public function getStatusCodeById(int $id): ?string
+    {
+        return DB::table('order_statuses')->where('id', $id)->value('code');
+    }
+
     private function toDomain(OrderModel $orderModel): Order
     {
         $items = $orderModel->items->map(fn ($itemModel) => new OrderItem(

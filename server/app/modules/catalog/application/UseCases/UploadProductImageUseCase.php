@@ -17,12 +17,12 @@ class UploadProductImageUseCase implements UseCase
 
     public function __invoke(UploadProductImageDTO $data): ProductImage
     {
-        $path = $data->image->store('products', 's3');
+        $path = $data->image->store('products', 'public');
 
         $productImage = new ProductImage(
             id: Str::uuid()->toString(),
             productId: $data->productId,
-            imageUrl: Storage::disk('s3')->url($path),
+            imageUrl: Storage::disk('public')->url($path),
             altText: $data->altText,
             sortOrder: $data->sortOrder,
             isMain: $data->isMain,

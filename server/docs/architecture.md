@@ -98,8 +98,7 @@ Contains technical implementations.
 Examples:
 
 - Eloquent Repositories
-- Elasticsearch Clients
-- S3 Storage
+- Local File Storage
 - Sanctum Integration
 
 ---
@@ -167,7 +166,7 @@ Orders and shopping cart management.
 
 ### search
 
-Elasticsearch integration.
+Simple product search.
 
 ---
 
@@ -179,12 +178,7 @@ Direct access to another module’s internal services is prohibited.
 
 ---
 
-# Elasticsearch
+# Search
 
-Product data is synchronized with Elasticsearch on:
-
-- Create
-- Update
-- Delete
-
-All search operations are performed exclusively through Elasticsearch.
+Product search is implemented with PostgreSQL queries through the catalog repository.
+No external search service is used.

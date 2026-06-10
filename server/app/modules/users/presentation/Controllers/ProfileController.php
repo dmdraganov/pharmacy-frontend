@@ -8,12 +8,15 @@ use App\Modules\Users\Domain\Role;
 use App\Modules\Users\Domain\User;
 use App\Modules\Users\Presentation\Requests\UpdateProfileRequest;
 use App\Modules\Users\Presentation\Resources\UserResource;
+use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class ProfileController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(private readonly UpdateProfileUseCase $updateProfileUseCase) {}
 
     public function show(Request $request): JsonResponse
@@ -31,7 +34,7 @@ class ProfileController extends Controller
             roles: $userModel->roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
         );
 
-        return response()->json(new UserResource($user));
+        return $this->ok(new UserResource($user));
     }
 
     public function update(UpdateProfileRequest $request): JsonResponse
@@ -45,6 +48,6 @@ class ProfileController extends Controller
 
         $user = ($this->updateProfileUseCase)($dto);
 
-        return response()->json(new UserResource($user));
+        return $this->ok(new UserResource($user));
     }
 }

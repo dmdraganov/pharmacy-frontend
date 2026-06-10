@@ -7,6 +7,8 @@ use App\Modules\Catalog\Domain\Events\ProductDeleted;
 use App\Modules\Catalog\Domain\Events\ProductUpdated;
 use App\Modules\Catalog\Domain\Product;
 use App\Modules\Catalog\Domain\ProductRepositoryContract;
+use App\Modules\Inventory\Infrastructure\Persistence\Eloquent\InventoryModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Event;
 
 class ProductRepository implements ProductRepositoryContract
@@ -58,7 +60,25 @@ class ProductRepository implements ProductRepositoryContract
     public function list(array $criteria = []): array
     {
         $query = ProductModel::query();
+        $this->applyCriteria($query, $criteria);
 
+        return $this->paginate($query, $criteria);
+    }
+
+    public function listByPharmacy(int $pharmacyId, array $criteria = []): array
+    {
+        $productIds = InventoryModel::where('pharmacy_id', $pharmacyId)
+            ->whereRaw('(stock_quantity - reserved_quantity) > 0')
+            ->pluck('product_id');
+
+        $query = ProductModel::query()->whereIn('id', $productIds);
+        $this->applyCriteria($query, $criteria);
+
+        return $this->paginate($query, $criteria);
+    }
+
+    private function applyCriteria(Builder $query, array $criteria): void
+    {
         foreach (['category_id', 'brand_id', 'manufacturer_id'] as $field) {
             if (array_key_exists($field, $criteria) && $criteria[$field] !== null && $criteria[$field] !== '') {
                 $query->where($field, $criteria[$field]);
@@ -71,6 +91,16 @@ class ProductRepository implements ProductRepositoryContract
 
         if (array_key_exists('is_prescription', $criteria) && $criteria['is_prescription'] !== null && $criteria['is_prescription'] !== '') {
             $query->where('is_prescription', filter_var($criteria['is_prescription'], FILTER_VALIDATE_BOOLEAN));
+        }
+
+        if (! empty($criteria['query'])) {
+            $searchQuery = mb_strtolower((string) $criteria['query']);
+            $query->where(function ($builder) use ($searchQuery) {
+                $builder
+                    ->whereRaw('LOWER(name) LIKE ?', ['%'.$searchQuery.'%'])
+                    ->orWhereRaw('LOWER(description) LIKE ?', ['%'.$searchQuery.'%'])
+                    ->orWhereRaw('LOWER(slug) LIKE ?', ['%'.$searchQuery.'%']);
+            });
         }
 
         if (! empty($criteria['min_price'])) {
@@ -87,8 +117,23 @@ class ProductRepository implements ProductRepositoryContract
             'newest' => $query->latest(),
             default => $query->orderBy('name'),
         };
+    }
 
-        return $query->get()->map(fn ($model) => $this->toDomain($model))->all();
+    private function paginate(Builder $query, array $criteria): array
+    {
+        $perPage = min(max((int) ($criteria['per_page'] ?? 15), 1), 100);
+        $page = max((int) ($criteria['page'] ?? 1), 1);
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page);
+
+        return [
+            'data' => $paginator->getCollection()->map(fn ($model) => $this->toDomain($model))->all(),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'last_page' => $paginator->lastPage(),
+            ],
+        ];
     }
 
     private function toDomain(ProductModel $productModel): Product
