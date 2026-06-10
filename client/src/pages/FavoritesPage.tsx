@@ -1,14 +1,20 @@
 import { memo, useMemo } from 'react';
-import { useFavoriteIds } from '@/features/favorites';
-import { getProducts } from '@/shared/api';
+import { useQuery } from '@tanstack/react-query';
+import { getFavoriteIds, getProducts } from '@/shared/api';
 import { ProductCardWithCart } from '@/features/cart';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
 
 const FavoritesPage = memo(() => {
-  const { data: products, isLoading, error } = useDataFetching(getProducts);
-  const favoriteIds = useFavoriteIds();
+  const {
+    data,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['favorites', 'products'],
+    queryFn: () => Promise.all([getProducts(), getFavoriteIds()]),
+  });
+  const [products, favoriteIds] = data || [[], []];
 
   const favoriteProducts = useMemo(
     () => (products || []).filter((p) => favoriteIds.includes(p.id)),

@@ -1,17 +1,23 @@
-import { pharmacies } from './mocks/pharmacies';
+import { apiRequest } from './apiClient';
 import type { Pharmacy } from '@/entities/pharmacy';
 
-/**
- * Имитирует задержку сети
- * @param delay - время задержки в мс
- */
-const sleep = (delay = 500) =>
-  new Promise((resolve) => setTimeout(resolve, delay));
+interface ApiPharmacy {
+  id: number | string;
+  name: string;
+  address: string;
+  working_hours?: string | null;
+}
 
-/**
- * Получить список аптек для самовывоза
- */
+const mapPharmacy = (pharmacy: ApiPharmacy): Pharmacy => ({
+  id: String(pharmacy.id),
+  name: pharmacy.name,
+  address: pharmacy.address,
+  workingHours: pharmacy.working_hours || '',
+});
+
 export const getPharmacies = async (): Promise<Pharmacy[]> => {
-  await sleep();
-  return Promise.resolve(pharmacies);
+  const response = await apiRequest<ApiPharmacy[]>('/pharmacies', {
+    params: { per_page: 100 },
+  });
+  return response.data.map(mapPharmacy);
 };

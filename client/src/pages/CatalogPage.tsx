@@ -1,11 +1,18 @@
 import { useState, useMemo, memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { getSections } from '@/shared/api';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Spinner from '@/shared/ui/Spinner';
 
 const CatalogPage = memo(() => {
-  const { data: sections, isLoading, error } = useDataFetching(getSections);
+  const {
+    data: sections,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['sections'],
+    queryFn: getSections,
+  });
   const [hoveredSectionId, setHoveredSectionId] = useState<string | null>(null);
 
   const hoveredSection = useMemo(

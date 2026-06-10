@@ -1,24 +1,33 @@
 import { memo, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/features/auth';
-import { useOrderStore, type OrderStatus, type Order } from '@/entities/order';
+import { type OrderStatus, type Order } from '@/entities/order';
 import { OrderList } from '@/widgets/order/OrderList';
 import { OrderHistory } from '@/widgets/order/OrderHistory';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
 import TabButton from '@/shared/ui/TabButton';
+import { getOrders } from '@/shared/api';
 
 const ACTIVE_STATUSES: OrderStatus[] = ['new', 'processing', 'shipping'];
 type Tab = 'current' | 'history';
 
 const AccountOrdersPage = memo(() => {
   const { user, isAuthLoading } = useAuthStore();
-  const { orders } = useOrderStore();
+  const {
+    data: orders = [],
+    isLoading: isOrdersLoading,
+    error,
+  } = useQuery({
+    queryKey: ['orders'],
+    queryFn: getOrders,
+    enabled: Boolean(user),
+  });
   const [activeTab, setActiveTab] = useState<Tab>('current');
 
   const userOrders = useMemo(() => {
     if (!user) return [];
     return orders
-      .filter((o) => o.userId === user.id)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [orders, user]);
 
@@ -46,10 +55,18 @@ const AccountOrdersPage = memo(() => {
     );
   }
 
-  if (isAuthLoading) {
+  if (isAuthLoading || isOrdersLoading) {
     return (
       <div className='flex h-48 items-center justify-center'>
         <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='flex h-48 items-center justify-center text-center text-danger'>
+        <p>Не удалось загрузить заказы.</p>
       </div>
     );
   }

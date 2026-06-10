@@ -1,14 +1,11 @@
 import { memo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import Badge, { type BadgeVariant } from '@/shared/ui/Badge';
-import {
-  type Order,
-  type OrderStatus,
-  OrderItemRow,
-  useOrderStore,
-} from '@/entities/order';
+import { type Order, type OrderStatus, OrderItemRow } from '@/entities/order';
 import { getProductImage } from '@/entities/product';
 import Button from '@/shared/ui/Button';
 import Spinner from '@/shared/ui/Spinner';
+import { cancelOrder } from '@/shared/api';
 
 const statusMap: Record<OrderStatus, { text: string; variant: BadgeVariant }> =
   {
@@ -38,12 +35,13 @@ const OrderCard = memo(({ order }: OrderCardProps) => {
   const statusInfo = statusMap[status];
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
-  const { cancelOrder } = useOrderStore();
+  const queryClient = useQueryClient();
 
   const handleCancel = async () => {
     setIsCancelling(true);
     try {
       await cancelOrder(id);
+      await queryClient.invalidateQueries({ queryKey: ['orders'] });
     } catch (error) {
       console.error('Failed to cancel order:', error);
       // Optionally show an error to the user
@@ -166,7 +164,7 @@ const OrderCard = memo(({ order }: OrderCardProps) => {
             disabled={isCancelling}
             className='flex-1 rounded-none border-l border-border-default bg-background-default text-text-danger hover:bg-background-danger-hover'
           >
-            {isCancelling ? <Spinner size='sm' /> : 'Отменить заказ'}
+            {isCancelling ? <Spinner /> : 'Отменить заказ'}
           </Button>
         )}
       </div>

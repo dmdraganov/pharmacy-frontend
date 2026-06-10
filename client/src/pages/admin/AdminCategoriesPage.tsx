@@ -1,9 +1,16 @@
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '@/shared/api';
 import Spinner from '@/shared/ui/Spinner';
 
 const AdminCategoriesPage = () => {
-  const { data: categories, isLoading, error } = useDataFetching(getCategories);
+  const {
+    data: categories,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  });
 
   if (isLoading) {
     return (

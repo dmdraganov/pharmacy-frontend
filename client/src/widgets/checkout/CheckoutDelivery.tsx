@@ -1,6 +1,6 @@
 import { memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getPharmacies } from '@/shared/api';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Input from '@/shared/ui/Input';
 import Spinner from '@/shared/ui/Spinner';
 import TabButton from '@/shared/ui/TabButton';
@@ -57,7 +57,7 @@ const PickupSelector = ({
   selectedId,
   onSelect,
 }: {
-  pharmacies: Pharmacy[] | null;
+  pharmacies?: Pharmacy[];
   error: Error | null;
   selectedId: string | null;
   onSelect: (id: string) => void;
@@ -95,6 +95,10 @@ interface CheckoutDeliveryProps {
   setAddress: (address: Address) => void;
   selectedPharmacy: string | null;
   setSelectedPharmacy: (id: string | null) => void;
+  errors?: {
+    selectedPharmacy?: string;
+  };
+  isCourierDisabled?: boolean;
 }
 
 export const CheckoutDelivery = memo(
@@ -105,13 +109,16 @@ export const CheckoutDelivery = memo(
     setAddress,
     selectedPharmacy,
     setSelectedPharmacy,
+    isCourierDisabled = false,
   }: CheckoutDeliveryProps) => {
     const {
       data: pharmacies,
       isLoading,
       error,
-    } = useDataFetching(getPharmacies, {
-      skip: deliveryMethod !== 'pickup',
+    } = useQuery({
+      queryKey: ['pharmacies'],
+      queryFn: getPharmacies,
+      enabled: deliveryMethod === 'pickup',
     });
 
     const handleAddressChange = (field: keyof Address, value: string) => {
@@ -128,6 +135,7 @@ export const CheckoutDelivery = memo(
           <TabButton
             onClick={() => setDeliveryMethod('courier')}
             isActive={deliveryMethod === 'courier'}
+            disabled={isCourierDisabled}
           >
             Курьерская доставка
           </TabButton>
@@ -138,6 +146,11 @@ export const CheckoutDelivery = memo(
             Самовывоз
           </TabButton>
         </div>
+        {isCourierDisabled && (
+          <p className='mb-4 text-sm text-warning-text'>
+            Для рецептурных товаров доступен только самовывоз.
+          </p>
+        )}
 
         {deliveryMethod === 'courier' && (
           <CourierForm

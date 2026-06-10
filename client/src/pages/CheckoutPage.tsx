@@ -1,6 +1,7 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAllCartTotals, useCartItems, useCartStore } from '@/features/cart';
+import { useCartItems, useCartStore } from '@/features/cart';
 import { useAuthStore } from '@/features/auth';
 import { CheckoutOrderSummary } from '@/widgets/checkout/CheckoutOrderSummary';
 import { CheckoutDelivery } from '@/widgets/checkout/CheckoutDelivery';
@@ -10,7 +11,7 @@ import { CheckoutPrescription } from '@/widgets/checkout/CheckoutPrescription';
 import { CheckoutActions } from '@/widgets/checkout/CheckoutActions';
 import { CheckoutComments } from '@/widgets/checkout/CheckoutComments';
 import Button from '@/shared/ui/Button';
-import { useOrderStore, type Order, type OrderItem } from '@/entities/order';
+import { createOrder } from '@/shared/api';
 import { ROUTES } from '@/shared/config/router';
 
 // --- Validation ---
@@ -55,11 +56,14 @@ const OrderSuccessMessage = () => (
 
 const CheckoutPage = memo(() => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const { clearCart } = useCartStore();
-  const { addOrder } = useOrderStore();
   const cartItems = useCartItems();
-  const { total } = useAllCartTotals();
+  const hasPrescriptionItems = useMemo(
+    () => Object.values(cartItems).some((item) => item.isPrescription),
+    [cartItems]
+  );
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
@@ -74,6 +78,9 @@ const CheckoutPage = memo(() => {
   const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
     'courier'
   );
+  const effectiveDeliveryMethod = hasPrescriptionItems
+    ? 'pickup'
+    : deliveryMethod;
   const [deliveryAddress, setDeliveryAddress] = useState<DeliveryAddress>({
     city: '',
     street: '',
@@ -89,6 +96,19 @@ const CheckoutPage = memo(() => {
   const [comment, setComment] = useState('');
 
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const createOrderMutation = useMutation({
+    mutationFn: createOrder,
+    onSuccess: async () => {
+      await clearCart();
+      await queryClient.invalidateQueries({ queryKey: ['orders'] });
+      setIsProcessing(false);
+      setIsOrderPlaced(true);
+      setTimeout(() => navigate(ROUTES.account.orders), 2000);
+    },
+    onError: () => {
+      setIsProcessing(false);
+    },
+  });
 
   // --- Validation Logic ---
   const validateForm = useCallback((): boolean => {
@@ -108,7 +128,7 @@ const CheckoutPage = memo(() => {
     }
 
     // Validate Delivery
-    if (deliveryMethod === 'courier') {
+    if (effectiveDeliveryMethod === 'courier') {
       if (!deliveryAddress.city) {
         if (!newErrors.deliveryAddress) newErrors.deliveryAddress = {};
         newErrors.deliveryAddress.city = 'Город обязателен';
@@ -121,7 +141,7 @@ const CheckoutPage = memo(() => {
         if (!newErrors.deliveryAddress) newErrors.deliveryAddress = {};
         newErrors.deliveryAddress.house = 'Дом обязателен';
       }
-    } else if (deliveryMethod === 'pickup') {
+    } else if (effectiveDeliveryMethod === 'pickup') {
       if (!selectedPharmacyId) {
         newErrors.selectedPharmacy = 'Выберите пункт самовывоза';
       }
@@ -129,7 +149,7 @@ const CheckoutPage = memo(() => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [contactInfo, deliveryMethod, deliveryAddress, selectedPharmacyId]);
+  }, [contactInfo, effectiveDeliveryMethod, deliveryAddress, selectedPharmacyId]);
 
   // --- Order Confirmation ---
   const handleConfirmOrder = useCallback(() => {
@@ -141,57 +161,27 @@ const CheckoutPage = memo(() => {
     if (items.length === 0 || !user) return;
 
     setIsProcessing(true);
-
-    const deliveryInfo =
-      deliveryMethod === 'courier'
-        ? [
-            deliveryAddress.city,
-            deliveryAddress.street,
-            deliveryAddress.house && `д. ${deliveryAddress.house}`,
-            deliveryAddress.apartment && `кв. ${deliveryAddress.apartment}`,
-          ]
-            .filter(Boolean)
-            .join(', ') || 'Адрес не указан'
-        : 'Самовывоз';
-
-    setTimeout(() => {
-      const newOrder: Order = {
-        id: new Date().toISOString(),
-        userId: user.id,
-        date: new Date().toISOString(),
-        status: 'new',
-        items: items.map((item) => ({
-          product: item,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-        total,
-        deliveryMethod: deliveryMethod === 'courier' ? 'delivery' : 'pickup',
-        deliveryInfo,
-        deliveryAddress: deliveryMethod === 'courier' ? deliveryAddress : null,
-        paymentMethod,
-        comment: comment || undefined,
-      };
-
-      addOrder(newOrder);
-      clearCart();
-      setIsProcessing(false);
-      setIsOrderPlaced(true);
-
-      setTimeout(() => navigate(ROUTES.account.orders), 2000);
-    }, 1500);
+    createOrderMutation.mutate({
+      deliveryMethod:
+        effectiveDeliveryMethod === 'courier' ? 'delivery' : 'pickup',
+      paymentMethod,
+      pharmacyId: selectedPharmacyId,
+      deliveryAddress:
+        effectiveDeliveryMethod === 'courier' ? deliveryAddress : null,
+      items: items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    });
   }, [
     validateForm,
     cartItems,
     user,
-    deliveryMethod,
+    effectiveDeliveryMethod,
     deliveryAddress,
+    selectedPharmacyId,
     paymentMethod,
-    total,
-    addOrder,
-    clearCart,
-    navigate,
-    comment,
+    createOrderMutation,
   ]);
 
   if (isOrderPlaced) {
@@ -219,13 +209,18 @@ const CheckoutPage = memo(() => {
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <main className='flex flex-col gap-6 lg:col-span-2'>
           <CheckoutDelivery
-            deliveryMethod={deliveryMethod}
-            setDeliveryMethod={setDeliveryMethod}
+            deliveryMethod={effectiveDeliveryMethod}
+            setDeliveryMethod={(method) => {
+              if (!hasPrescriptionItems || method === 'pickup') {
+                setDeliveryMethod(method);
+              }
+            }}
             address={deliveryAddress}
             setAddress={setDeliveryAddress}
             selectedPharmacy={selectedPharmacyId}
             setSelectedPharmacy={setSelectedPharmacyId}
             errors={errors}
+            isCourierDisabled={hasPrescriptionItems}
           />
           <CheckoutContactInfo
             contactInfo={contactInfo}

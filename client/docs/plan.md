@@ -1,132 +1,290 @@
-# План разработки интернет-аптеки
+# План интеграции frontend с Laravel backend
 
-Настоящий план основан на архитектурной документации, ограничениях и гайдлайнах, изложенных в директории `/docs`.
+## Исходная задача
 
-## Этап 1: Настройка проекта
+Связать React frontend из `client` с Laravel backend из `server`.
 
-**Частично выполнено:**
+Текущий frontend использует моковые данные и локальные fake-фичи. Нужно заменить их реальными запросами к backend API, описанному в `server/docs/api.md` и соседних документах `server/docs`.
 
-- Проект инициализирован с использованием Vite, React и TypeScript.
-- Установлены все необходимые зависимости.
-- Настроены ESLint, Prettier и `tsconfig.json`.
+Основные требования:
 
-**Предстоящие задачи на этапе 1:**
+- Загружать серверные данные через TanStack Query.
+- Убрать или минимизировать использование моков для пользовательских бизнес-сценариев.
+- Переделать fake-фичи: auth, каталог, поиск, избранное, корзина, оформление и просмотр заказов.
+- Доработать UI под более проработанный backend: фильтры, пагинация, статусы, админские операции, inventory, формы CRUD и состояния ошибок.
+- Сохранить существующую Feature-Sliced структуру frontend.
 
-- **Задача 1.1: Формирование базовой структуры директорий**
-  - Создать папки в соответствии с Feature-based архитектурой:
-    - `src/app`
-    - `src/data`
-    - `src/entities`
-    - `src/features`
-    - `src/shared`
+## Что уже выполнено
 
-**Ключевые моменты конфигурации Tailwind CSS v4:**
+Работа была остановлена пользователем до полной проверки сборки, поэтому список ниже отражает уже внесённые изменения, а не финальное завершённое состояние.
 
-- **Vite Plugin:** В `vite.config.ts` должен быть подключен плагин `@tailwindcss/vite`.
+### API слой
 
-  ```ts
-  import tailwindcss from '@tailwindcss/vite';
-  import { defineConfig } from 'vite';
+- Добавлен общий API client: `client/src/shared/api/apiClient.ts`.
+- Поддержаны:
+  - base URL из `VITE_API_URL` с fallback на `/api`;
+  - Laravel response envelope `{ data, meta, message }`;
+  - `204 No Content`;
+  - Bearer token для Sanctum;
+  - единый `ApiError`.
+- В `STORAGE_KEYS` добавлен ключ `AUTH_TOKEN`.
 
-  export default defineConfig({
-    plugins: [tailwindcss()],
-  });
-  ```
+### TanStack Query
 
-- **CSS Entry Point:** В основном CSS-файле (например, `src/index.css`) используется директива `@import "tailwindcss";` для включения стилей Tailwind.
+- В `client/src/app/main.tsx` подключён `QueryClientProvider`.
+- Для queries задан базовый `staleTime` и retry.
 
-## Этап 2: Определение данных и сущностей
+### Catalog API
 
-- **Задача 2.1: Типизация моделей**
-  - В `src/entities/` создать файлы с TypeScript-интерфейсами для основных сущностей: `Section`, `Category`, `Product`.
-  - **Важно:** согласно `docs/constraints.md`, для определения моделей следует использовать `interface`, а не `type`.
+- `productsApi.ts` переведён с моков на backend:
+  - `GET /products`;
+  - `GET /products/{id}`;
+  - `GET /products/popular`;
+  - `GET /search/products`.
+- Добавлен маппинг backend `snake_case` полей в frontend `camelCase` модель `Product`.
+- `sectionsApi.ts` переведён на:
+  - `GET /sections`;
+  - `GET /categories`.
+- Так как backend отдаёт sections и categories отдельными endpoint-ами, frontend собирает структуру `Section -> categories` на клиенте.
+- `pharmaciesApi.ts` переведён на `GET /pharmacies`.
 
-- **Задача 2.2: Создание моковых данных**
-  - В `src/data/` создать статические массивы с данными для товаров, разделов и категорий.
+### Auth
 
-## Этап 3: Создание общего слоя (Shared)
+- `authApi.ts` переведён с моковых пользователей на backend:
+  - `POST /auth/login`;
+  - `POST /auth/register`;
+  - `POST /auth/logout`;
+  - `GET /auth/me`;
+  - `PATCH /users/profile`.
+- `features/auth/model/store.ts` теперь:
+  - сохраняет token отдельно;
+  - проверяет текущего пользователя через `/auth/me`;
+  - обновляет профиль через backend.
 
-- **Задача 3.1: Разработка UI-Kit**
-  - Создать набор переиспользуемых UI-компонентов в `src/shared/ui/`: `Button`, `Input`, `Badge`, `Logo`, `Spinner` и т.д.
-  - Компоненты не должны содержать бизнес-логики.
+### Корзина
 
-- **Задача 3.2: Создание общих компонентов-макетов**
-  - `Header`: включает логотип, навигацию, панель поиска и иконки для корзины и избранного.
-  - `Footer`: содержит ссылки и контактную информацию.
-  - `ProductCard`: карточка для отображения товара в списках.
-  - `PageLayout`: общая обертка для страниц, включающая `Header` и `Footer`.
+- Добавлен `cartApi.ts`:
+  - `GET /cart`;
+  - `POST /cart`;
+  - `PATCH /cart/{cartItemId}`;
+  - `DELETE /cart/{cartItemId}`;
+  - `DELETE /cart`.
+- В `CartItem` добавлен `cartItemId`, потому что backend обновляет и удаляет строку корзины по id cart item, а UI раньше работал только с product id.
+- `features/cart/model/store.ts` частично переведён на backend:
+  - добавлен `syncCart`;
+  - `addToCart`, `updateQuantity`, `removeFromCart`, `clearCart` вызывают backend и затем синхронизируют состояние.
+- Так как `CartItemResource` backend сейчас отдаёт только `id`, `product_id`, `quantity`, frontend догружает товар через `GET /products/{id}`.
 
-- **Задача 3.3: Реализация утилит**
-  - Создать хук `useLocalStorage` в `src/shared/lib/` для инкапсуляции логики сохранения состояния в `localStorage`. Это будет единственное место в приложении с прямым доступом к `localStorage`.
+### Избранное
 
-## Этап 4: Глобальное управление состоянием
+- Добавлен `favoritesApi.ts`:
+  - `GET /favorites`;
+  - `POST /favorites`;
+  - `DELETE /favorites/{productId}`.
+- `features/favorites/model/store.ts` частично переведён на backend:
+  - добавлен `syncFavorites`;
+  - `toggleFavorite` вызывает add/remove endpoint и затем синхронизирует список.
+- Страница `FavoritesPage` переведена на Query-загрузку продуктов и favorite ids.
 
-- **Задача 4.1: Контекст корзины**
-  - Определить `CartContext` и хук `useCart` внутри `src/features/cart/`.
-  - Провайдер (`CartProvider`) разместить в `src/app/providers` и подключить в `main.tsx`, чтобы обернуть все приложение.
-  - Логика: `addToCart`, `removeFromCart`, `updateQuantity`, `clearCart`.
-  - Для персистентности использовать хук `useLocalStorage` из `shared`-слоя.
+### Заказы
 
-- **Задача 4.2: Контекст избранного**
-  - По аналогии с корзиной, определить `FavoritesContext` и хук `useFavorites` в `src/features/favorites/`.
-  - Провайдер (`FavoritesProvider`) разместить в `src/app/providers` и подключить в `main.tsx`.
-  - Логика: `toggleFavorite`.
-  - Для персистентности использовать хук `useLocalStorage`.
+- Добавлен `ordersApi.ts`:
+  - `GET /orders`;
+  - `POST /orders`;
+  - `POST /orders/{id}/cancel`.
+- Добавлен маппинг backend `status_id`, `delivery_method_id`, `payment_method_id` в существующие frontend enum/string значения.
+- `CheckoutPage` частично переведён с fake `setTimeout + local order store` на `POST /orders`.
+- При успешном создании заказа:
+  - очищается корзина;
+  - инвалидируется query `orders`;
+  - пользователь переводится к заказам.
+- `AccountOrdersPage` переведена с локального order store на `GET /orders`.
+- `OrderList` отменяет заказ через backend и инвалидирует `orders`.
 
-## Этап 5: Настройка маршрутизации
+### Страницы и widgets, уже переведённые на Query
 
-- **Задача 5.1: Конфигурация роутера**
-  - В `src/app/` инициализировать `react-router-dom`.
-  - Создать компонент `AppRouter`, определяющий все маршруты приложения.
-  - Использовать `React.lazy` для ленивой загрузки страниц.
+- `HomePage`
+- `CatalogPage`
+- `ProductListPage`
+- `ProductPage`
+- `SearchPage` через `useSearch`
+- `FavoritesPage`
+- `AccountOrdersPage`
+- `AdminProductsPage` для чтения товаров/секций
+- `AdminCategoriesPage` для чтения категорий
+- `CheckoutDelivery` для списка аптек
 
-- **Задача 5.2: Определение маршрутов**
-  - Настроить все пути согласно `docs/routes.md`:
-    - `/` (Главная)
-    - `/catalog`
-    - `/catalog/:section`
-    - `/catalog/:section/:category`
-    - `/cart`
-    - `/favorites`
-    - `/delivery`
-    - `/product/:id`
+## Важные замечания по текущему состоянию
 
-## Этап 6: Реализация функций и страниц
+- Работа была остановлена до запуска `npm run build` и `npm run lint`.
+- В текущем состоянии могут быть TypeScript/ESLint ошибки, которые нужно исправить перед продолжением.
+- Последняя попытка изменить `FavoriteButton` не была применена: нужно отдельно добавить invalidation Query cache после toggle favorite.
+- В рабочем дереве до начала интеграции уже были чужие изменения:
+  - `client/package.json`;
+  - `client/package-lock.json`;
+  - `docker-compose.yml`;
+  - новый `client/AGENTS.md`.
+- Эти изменения не откатывались.
 
-- **Задача 6.1: Главная страница (`/`)**
-  - Создать статическую главную страницу.
+## Что нужно доделать дальше
 
-- **Задача 6.2: Каталог (`feature: catalog`)**
-  - Реализовать страницу со списком разделов (`/catalog`).
-  - Создать страницу для товаров определенного раздела/категории (`/catalog/:section/...`).
-  - Реализовать пагинацию для списка товаров.
+### 1. Стабилизировать уже внесённую интеграцию
 
-- **Задача 6.3: Страница товара (`feature: product-details`)**
-  - Показать детальную информацию о товаре: изображение, название, бренд, цена, описание.
-  - Добавить кнопку "Добавить в корзину" и иконку "Добавить в избранное".
+- `npm run build` запущен повторно после возобновления работы; найдены TypeScript ошибки в auth store, HomePage queryFn, products params, CheckoutDelivery props и Spinner props.
+- Исправлены найденные TypeScript ошибки первого прохода:
+  - `checkAuth` больше не вызывает `/auth/me` без token;
+  - `getProducts` вызывается в Query через `() => getProducts()`;
+  - `ProductsParams` совместим с `apiRequest.params`;
+  - `CheckoutDelivery` принимает `errors`;
+  - `OrderList` больше не передаёт неподдерживаемый `size` в `Spinner`.
+- Добавлена Query invalidation для `FavoriteButton` после toggle favorite.
+- Повторный `npm run build` после исправлений прошёл успешно.
+- `npm run lint` прошёл успешно без предупреждений после исправлений checkout и ProductListPage.
+- Финальный на этом этапе `npm run build` прошёл успешно.
+- После добавления fallback-полей brand/manufacturer повторный `npm run build` также прошёл успешно.
+- Исправить TypeScript ошибки после перевода store actions на async.
+- Проверить места, где callbacks ожидают sync-функции, но теперь получают Promise.
+- Проверить fallback-режим для неавторизованного пользователя: корзина/избранное сейчас частично остаются localStorage, но backend endpoints требуют auth.
 
-- **Задача 6.4: Корзина (`feature: cart`)**
-  - Отобразить список добавленных товаров, их количество и общую стоимость.
-  - Реализовать "пустое" состояние корзины с кнопкой для перехода в каталог.
+### 2. Убрать оставшиеся пользовательские моки
 
-- **Задача 6.5: Избранное (`feature: favorites`)**
-  - Отобразить список избранных товаров.
-  - Реализовать "пустое" состояние с кнопкой для перехода в каталог.
+- Удалён `entities/order/model/store.ts`, который содержал mock orders и mock products.
+- `AdminOrdersPage` переведён с `useOrderStore` и `mockUsers` на `/admin/orders` и `/admin/orders/{id}/status`.
+- `AdminDashboardPage` переведён с local order seed и fake metrics на `/admin/orders`.
+- `AdminProductsPage` больше не генерирует fake stock; остатки берутся из `/admin/inventory` для первой аптеки из `/pharmacies`.
+- Проверить все импорты из `shared/api/mocks`.
+- Решить, удалять ли старые mock-файлы или оставить как dev fixtures, но не использовать в runtime.
 
-- **Задача 6.6: Поиск (`feature: search`)**
-  - Реализовать логику поиска по товарам в `Header`. Фильтрация выполняется на стороне клиента.
+### 3. Доработать каталог под backend
 
-- **Задача 6.7: Статические страницы**
-  - Создать страницу "Доставка и оплата" (`/delivery`).
+- `ProductListPage` переведён на `getProductsPage` и backend pagination `meta`.
+- Для `/products` уже передаются:
+  - `category_id`;
+  - `min_price`;
+  - `max_price`;
+  - `is_prescription`;
+- Пагинация каталога подключена через общий `Pagination`.
+- Ещё нужно передавать:
+  - `brand_id`;
+  - `manufacturer_id`;
+  - `sort`.
+- Доработать UI фильтров под backend справочники:
+  - categories;
+  - brands;
+  - manufacturers;
+  - prescription flag;
+  - price range;
+  - sort.
+- Сейчас `sectionId` у `Product` не приходит напрямую, а backend `/products` не принимает `section_id`; фильтрация section строится через category -> section на клиенте. Для полноценной серверной пагинации разделов нужен backend параметр `section_id` или поддержка массива `category_id`.
 
-## Этап 7: Финализация
+### 4. Доработать карточку и страницу товара
 
-- **Задача 7.1: Адаптивность**
-  - Проверить и обеспечить корректное отображение всех страниц на мобильных устройствах и планшетах.
+- Backend `ProductResource` сейчас не отдаёт brand name, manufacturer name, images и attributes.
+- Во frontend `Product` добавлены `brandId`, `manufacturerId`, `manufacturer`.
+- Пока backend не отдаёт вложенные brand/manufacturer, UI показывает fallback вида `Бренд #id` и `Производитель #id`, чтобы поле не было пустым.
+- Нужно выбрать подход:
+  - доработать backend resource, чтобы отдавать вложенные данные;
+  - или догружать справочники на frontend и маппить `brand_id`, `manufacturer_id`.
+- UI должен показывать:
+  - бренд;
+  - производителя;
+  - рецепт/без рецепта;
+  - старую цену;
+  - характеристики/JSON `info`;
+  - изображения из backend storage, когда backend начнёт их отдавать.
 
-- **Задача 7.2: Оптимизация**
-  - Применить `React.memo` где необходимо, чтобы избежать лишних ре-рендеров.
-  - Настроить предзагрузку (preload) критически важных маршрутов.
+### 5. Доработать корзину
 
-- **Задача 7.3: Доступность (a11y)**
-  - Проверить семантическую корректность разметки и доступность интерфейса для пользователей с ограниченными возможностями.
+- Сейчас backend cart item не содержит product, поэтому frontend делает N+1 запросы к `/products/{id}`.
+- Лучше доработать backend `CartItemResource`, чтобы он отдавал вложенный product или минимальный product snapshot.
+- UI нужно дополнить:
+  - loading state для операций add/update/remove;
+  - rollback при ошибке;
+  - сообщение об ошибке;
+  - состояние для неавторизованного пользователя.
+
+### 6. Доработать избранное
+
+- Проверить реальный формат `GET /favorites`; текущий frontend ожидает `product_id`, `productId` или `id`.
+- Лучше доработать backend resource для favorites, чтобы contract был явным.
+- UI нужно дополнить:
+  - loading/disabled state на кнопке сердца;
+  - error state;
+  - Query invalidation;
+  - поведение для неавторизованного пользователя.
+
+### 7. Доработать оформление заказа
+
+- Сверить frontend ids delivery/payment methods с backend lookup tables.
+- Сейчас frontend предполагает:
+  - delivery `1 = delivery`, `2 = pickup`;
+  - payment `1 = online`, `2 = on receipt`.
+- Нужно подтвердить это по seed/data или добавить endpoint для lookup tables.
+- Добавить отображение validation errors от backend.
+- Business rule по рецептурным товарам учтён в UI: если в корзине есть prescription product, курьерская доставка отключается и автоматически выбирается pickup.
+- Уточнить, нужен ли backend contact info/comment в заказе: текущий API create order не принимает contact/comment.
+
+### 8. Доработать заказы
+
+- `GET /orders` отдаёт item product_id, поэтому frontend сейчас догружает товары по одному.
+- Лучше доработать backend `OrderItemResource`, чтобы он отдавал product snapshot.
+- UI заказов должен поддерживать:
+  - loading/error states;
+  - отмену с backend;
+  - повтор заказа с backend cart;
+  - корректные статусы по backend flow.
+
+### 9. Доработать admin UI
+
+Backend поддерживает более широкий admin API, чем текущий UI.
+
+Нужно добавить или переделать:
+
+- CRUD товаров:
+  - создание;
+  - редактирование;
+  - удаление;
+  - загрузка изображений;
+  - удаление изображений.
+- CRUD sections/categories/brands/manufacturers/pharmacies.
+- Inventory management:
+  - список `/admin/inventory`;
+  - фильтр по `pharmacy_id`;
+  - update stock.
+- Order management:
+  - список `/admin/orders`;
+  - изменение статуса `/admin/orders/{id}/status`;
+  - UI allowed transitions.
+- RBAC-aware UI:
+  - ADMIN;
+  - MANAGER;
+  - USER.
+
+### 10. Доработать UI в целом
+
+Так как backend более проработан, текущий frontend UI нужно расширить:
+
+- Пагинация в списках товаров, заказов, избранного, корзины.
+- Табличные и мобильные состояния для admin screens.
+- Формы с backend validation errors.
+- Empty/loading/error states для каждого query и mutation.
+- Disabled states на кнопках во время mutations.
+- User feedback после успешных операций.
+- Более точные фильтры и сортировка.
+- Отображение server-side справочников вместо hardcoded/fake значений.
+
+## Текущий результат проверки
+
+- `npm run lint` проходит без ошибок и предупреждений.
+- `npm run build` проходит успешно.
+- Vite dev server запущен на `http://localhost:5173/`.
+- Runtime-импортов из `shared/api/mocks` больше не найдено.
+- До начала работы уже были изменены `client/package.json`, `client/package-lock.json`, `docker-compose.yml` и добавлен `client/AGENTS.md`; эти изменения не откатывались.
+
+## Рекомендуемый порядок продолжения
+
+1. Проверить приложение вручную вместе с запущенным backend и реальными данными.
+2. Доработать backend responses для product/cart/favorites/order items, чтобы убрать N+1 догрузку товаров.
+3. Добавить полноценные admin CRUD формы и inventory update UI.
+4. Расширить catalog/search UI: `brand_id`, `manufacturer_id`, sort, полноценная section pagination.
+5. В конце пройтись по UX states, responsive layout и regression build/lint.

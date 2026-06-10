@@ -1,80 +1,170 @@
-import { useEffect, useState, useMemo } from 'react';
-import { useOrderStore, type OrderStatus } from '@/entities/order';
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getAdminOrders, updateAdminOrderStatus } from '@/shared/api';
+import type { Order, OrderStatus } from '@/entities/order';
 import Spinner from '@/shared/ui/Spinner';
-import { users as mockUsers } from '@/shared/api/mocks/users';
-import type { User } from '@/entities/user';
+
+const getStatusLabel = (status: OrderStatus) => {
+  switch (status) {
+    case 'new':
+      return 'Новый';
+    case 'processing':
+      return 'В обработке';
+    case 'shipping':
+      return 'Доставляется';
+    case 'delivered':
+      return 'Доставлен';
+    case 'completed':
+      return 'Завершён';
+    case 'cancelled':
+      return 'Отменён';
+    default:
+      return status;
+  }
+};
+
+const getStatusClasses = (status: OrderStatus) => {
+  switch (status) {
+    case 'completed':
+    case 'delivered':
+      return 'bg-success-subtle text-success';
+    case 'cancelled':
+      return 'bg-danger-subtle text-danger';
+    default:
+      return 'bg-warning-subtle text-warning-text';
+  }
+};
+
+const getAvailableActions = (
+  status: OrderStatus
+): Array<{ action: OrderStatus; label: string; className: string }> => {
+  switch (status) {
+    case 'new':
+      return [
+        {
+          action: 'processing',
+          label: 'В обработку',
+          className: 'bg-success-subtle text-success-emphasis',
+        },
+        {
+          action: 'cancelled',
+          label: 'Отменить',
+          className: 'bg-danger-subtle text-danger-emphasis',
+        },
+      ];
+    case 'processing':
+      return [
+        {
+          action: 'shipping',
+          label: 'Отгрузить',
+          className: 'bg-primary-subtle text-primary',
+        },
+        {
+          action: 'cancelled',
+          label: 'Отменить',
+          className: 'bg-danger-subtle text-danger-emphasis',
+        },
+      ];
+    case 'shipping':
+      return [
+        {
+          action: 'delivered',
+          label: 'Доставлен',
+          className: 'bg-success-subtle text-success-emphasis',
+        },
+      ];
+    case 'delivered':
+      return [
+        {
+          action: 'completed',
+          label: 'Завершить',
+          className: 'bg-success-subtle text-success-emphasis',
+        },
+      ];
+    default:
+      return [];
+  }
+};
+
+const OrderActions = ({
+  order,
+  loadingAction,
+  onAction,
+}: {
+  order: Order;
+  loadingAction: string | null;
+  onAction: (orderId: string, status: OrderStatus) => void;
+}) => {
+  const actions = getAvailableActions(order.status);
+
+  if (actions.length === 0) {
+    return <span className='text-xs text-text-muted'>Нет действий</span>;
+  }
+
+  return (
+    <div className='flex flex-wrap items-center justify-center gap-2'>
+      {actions.map((action) => {
+        const actionKey = `${action.action}-${order.id}`;
+        return (
+          <button
+            key={action.action}
+            onClick={() => onAction(order.id, action.action)}
+            disabled={loadingAction === actionKey}
+            className={`rounded-md px-2 py-1 text-xs disabled:opacity-50 ${action.className}`}
+          >
+            {loadingAction === actionKey ? '...' : action.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const AdminOrdersPage = () => {
-  const { orders, cancelOrder, confirmOrder, shipOrder, _seedInitialOrders } =
-    useOrderStore();
+  const queryClient = useQueryClient();
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const {
+    data: orders = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['admin', 'orders'],
+    queryFn: getAdminOrders,
+  });
 
-  const userMap = useMemo(() => {
-    return new Map<string, User>(mockUsers.map((user) => [user.id, user]));
-  }, []);
-
-  useEffect(() => {
-    _seedInitialOrders();
-  }, [_seedInitialOrders]);
-
-  const handleAction = async (
-    orderId: string,
-    action: 'confirm' | 'ship' | 'cancel'
-  ) => {
-    setLoadingAction(`${action}-${orderId}`);
-    try {
-      switch (action) {
-        case 'confirm':
-          await confirmOrder(orderId);
-          break;
-        case 'ship':
-          await shipOrder(orderId);
-          break;
-        case 'cancel':
-          await cancelOrder(orderId);
-          break;
-      }
-    } catch (error) {
-      console.error(`Failed to ${action} order:`, error);
-      alert((error as Error).message);
-    } finally {
+  const updateStatusMutation = useMutation({
+    mutationFn: ({
+      orderId,
+      status,
+    }: {
+      orderId: string;
+      status: OrderStatus;
+    }) => updateAdminOrderStatus(orderId, status),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['admin', 'orders'] });
+    },
+    onSettled: () => {
       setLoadingAction(null);
-    }
+    },
+  });
+
+  const handleAction = (orderId: string, status: OrderStatus) => {
+    setLoadingAction(`${status}-${orderId}`);
+    updateStatusMutation.mutate({ orderId, status });
   };
 
-  const getStatusLabel = (status: OrderStatus) => {
-    switch (status) {
-      case 'new':
-        return 'Новый';
-      case 'processing':
-        return 'В обработке';
-      case 'shipping':
-        return 'Доставляется';
-      case 'completed':
-        return 'Завершён';
-      case 'cancelled':
-        return 'Отменён';
-      default:
-        return status;
-    }
-  };
-
-  const getStatusClasses = (status: OrderStatus) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-success-subtle text-success';
-      case 'cancelled':
-        return 'bg-danger-subtle text-danger';
-      default:
-        return 'bg-warning-subtle text-warning-text';
-    }
-  };
-
-  if (orders.length === 0) {
+  if (isLoading) {
     return (
       <div className='flex h-96 items-center justify-center'>
         <Spinner />
-        <p className='ml-4'>Загрузка данных о заказах...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='flex h-96 items-center justify-center text-center text-danger'>
+        <p>Не удалось загрузить заказы.</p>
       </div>
     );
   }
@@ -83,11 +173,10 @@ const AdminOrdersPage = () => {
     <div>
       <h1 className='mb-4 text-2xl font-bold text-text-default'>Заказы</h1>
       <div className='my-6 overflow-x-auto rounded bg-background-default shadow-md'>
-        {/* Desktop Table */}
         <table className='hidden min-w-full table-auto md:table'>
           <thead>
             <tr className='text-text-muted bg-background-muted text-sm uppercase leading-normal'>
-              <th className='px-6 py-3 text-left'>ID Заказа</th>
+              <th className='px-6 py-3 text-left'>ID заказа</th>
               <th className='px-6 py-3 text-left'>Заказчик</th>
               <th className='px-6 py-3 text-left'>Дата</th>
               <th className='px-6 py-3 text-center'>Статус</th>
@@ -97,109 +186,21 @@ const AdminOrdersPage = () => {
             </tr>
           </thead>
           <tbody className='text-sm font-light text-text-muted'>
-            {orders.map((order) => {
-              const user = userMap.get(order.userId);
-              return (
-                <tr
-                  key={order.id}
-                  className='border-b border-border-default hover:bg-background-muted-hover'
-                >
-                  <td className='whitespace-nowrap px-6 py-3 text-left text-text-default'>
-                    {order.id}
-                  </td>
-                  <td className='px-6 py-3 text-left text-text-default'>
-                    {user
-                      ? `${user.firstName} ${user.lastName} (ID: ${user.id})`
-                      : `Unknown User (ID: ${order.userId})`}
-                  </td>
-                  <td className='px-6 py-3 text-left text-text-default'>
-                    {new Date(order.date).toLocaleDateString()}
-                  </td>
-                  <td className='px-6 py-3 text-center'>
-                    <span
-                      className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
-                        order.status
-                      )}`}
-                    >
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </td>
-                  <td className='px-6 py-3 text-left text-text-default'>
-                    <ul className='list-inside list-disc'>
-                      {order.items.map((item) => (
-                        <li key={item.product.id}>
-                          {item.product.name} ({item.quantity} x {item.price} ₽)
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td className='px-6 py-3 text-center font-semibold text-text-default'>
-                    {order.total.toFixed(2)} ₽
-                  </td>
-                  <td className='px-6 py-3 text-center'>
-                    <div className='flex items-center justify-center space-x-2'>
-                      {order.status === 'new' && (
-                        <button
-                          onClick={() => handleAction(order.id, 'confirm')}
-                          disabled={loadingAction === `confirm-${order.id}`}
-                          className='rounded-md bg-success-subtle px-2 py-1 text-xs text-success-emphasis disabled:opacity-50'
-                        >
-                          {loadingAction === `confirm-${order.id}`
-                            ? '...'
-                            : 'Подтвердить'}
-                        </button>
-                      )}
-                      {order.status === 'processing' && (
-                        <button
-                          onClick={() => handleAction(order.id, 'ship')}
-                          disabled={loadingAction === `ship-${order.id}`}
-                          className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary disabled:opacity-50'
-                        >
-                          {loadingAction === `ship-${order.id}`
-                            ? '...'
-                            : 'Отгрузить'}
-                        </button>
-                      )}
-                      {order.status === 'new' && (
-                        <button
-                          onClick={() => handleAction(order.id, 'cancel')}
-                          disabled={loadingAction === `cancel-${order.id}`}
-                          className='rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis disabled:opacity-50'
-                        >
-                          {loadingAction === `cancel-${order.id}`
-                            ? '...'
-                            : 'Отменить'}
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        {/* Mobile Cards */}
-        <div className='md:hidden'>
-          {orders.map((order) => {
-            const user = userMap.get(order.userId);
-            return (
-              <div
+            {orders.map((order) => (
+              <tr
                 key={order.id}
-                className='border-b border-border-default p-4'
+                className='border-b border-border-default hover:bg-background-muted-hover'
               >
-                <div className='mb-2 flex items-start justify-between'>
-                  <div>
-                    <h3 className='font-bold text-text-default'>{order.id}</h3>
-                    <p className='text-sm'>
-                      {new Date(order.date).toLocaleDateString()}
-                    </p>
-                    <p className='text-sm text-text-muted'>
-                      {user
-                        ? `${user.firstName} ${user.lastName} (ID: ${user.id})`
-                        : `Unknown User (ID: ${order.userId})`}
-                    </p>
-                  </div>
+                <td className='whitespace-nowrap px-6 py-3 text-left text-text-default'>
+                  {order.id}
+                </td>
+                <td className='px-6 py-3 text-left text-text-muted'>
+                  Не указан в API
+                </td>
+                <td className='px-6 py-3 text-left text-text-default'>
+                  {new Date(order.date).toLocaleDateString('ru-RU')}
+                </td>
+                <td className='px-6 py-3 text-center'>
                   <span
                     className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
                       order.status
@@ -207,59 +208,79 @@ const AdminOrdersPage = () => {
                   >
                     {getStatusLabel(order.status)}
                   </span>
-                </div>
-                <div>
-                  <h4 className='font-semibold text-text-default'>Состав:</h4>
-                  <ul className='list-inside list-disc pl-2 text-sm'>
+                </td>
+                <td className='px-6 py-3 text-left text-text-default'>
+                  <ul className='list-inside list-disc'>
                     {order.items.map((item) => (
                       <li key={item.product.id}>
                         {item.product.name} ({item.quantity} x {item.price} ₽)
                       </li>
                     ))}
                   </ul>
+                </td>
+                <td className='px-6 py-3 text-center font-semibold text-text-default'>
+                  {order.total.toFixed(2)} ₽
+                </td>
+                <td className='px-6 py-3 text-center'>
+                  <OrderActions
+                    order={order}
+                    loadingAction={loadingAction}
+                    onAction={handleAction}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className='md:hidden'>
+          {orders.map((order) => (
+            <div key={order.id} className='border-b border-border-default p-4'>
+              <div className='mb-2 flex items-start justify-between'>
+                <div>
+                  <h3 className='font-bold text-text-default'>{order.id}</h3>
+                  <p className='text-sm'>
+                    {new Date(order.date).toLocaleDateString('ru-RU')}
+                  </p>
+                  <p className='text-sm text-text-muted'>
+                    Заказчик не указан в API
+                  </p>
                 </div>
-                <p className='mt-2 text-right font-bold text-text-default'>
-                  Итого: {order.total.toFixed(2)} ₽
-                </p>
-                <div className='mt-4 flex items-center justify-end space-x-2'>
-                  {order.status === 'new' && (
-                    <button
-                      onClick={() => handleAction(order.id, 'confirm')}
-                      disabled={loadingAction === `confirm-${order.id}`}
-                      className='rounded-md bg-success-subtle px-2 py-1 text-xs text-success-emphasis disabled:opacity-50'
-                    >
-                      {loadingAction === `confirm-${order.id}`
-                        ? '...'
-                        : 'Подтвердить'}
-                    </button>
-                  )}
-                  {order.status === 'processing' && (
-                    <button
-                      onClick={() => handleAction(order.id, 'ship')}
-                      disabled={loadingAction === `ship-${order.id}`}
-                      className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary disabled:opacity-50'
-                    >
-                      {loadingAction === `ship-${order.id}`
-                        ? '...'
-                        : 'Отгрузить'}
-                    </button>
-                  )}
-                  {order.status === 'new' && (
-                    <button
-                      onClick={() => handleAction(order.id, 'cancel')}
-                      disabled={loadingAction === `cancel-${order.id}`}
-                      className='rounded-md bg-danger-subtle px-2 py-1 text-xs text-danger-emphasis disabled:opacity-50'
-                    >
-                      {loadingAction === `cancel-${order.id}`
-                        ? '...'
-                        : 'Отменить'}
-                    </button>
-                  )}
-                </div>
+                <span
+                  className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
+                    order.status
+                  )}`}
+                >
+                  {getStatusLabel(order.status)}
+                </span>
               </div>
-            );
-          })}
+              <div>
+                <h4 className='font-semibold text-text-default'>Состав:</h4>
+                <ul className='list-inside list-disc pl-2 text-sm'>
+                  {order.items.map((item) => (
+                    <li key={item.product.id}>
+                      {item.product.name} ({item.quantity} x {item.price} ₽)
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className='mt-2 text-right font-bold text-text-default'>
+                Итого: {order.total.toFixed(2)} ₽
+              </p>
+              <div className='mt-4 flex justify-end'>
+                <OrderActions
+                  order={order}
+                  loadingAction={loadingAction}
+                  onAction={handleAction}
+                />
+              </div>
+            </div>
+          ))}
         </div>
+
+        {orders.length === 0 && (
+          <p className='p-6 text-center text-text-muted'>Заказов пока нет.</p>
+        )}
       </div>
     </div>
   );

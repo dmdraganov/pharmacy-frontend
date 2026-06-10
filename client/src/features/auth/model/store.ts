@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import * as api from '@/shared/api';
+import { getAuthToken } from '@/shared/api/apiClient';
 import type { User } from '@/entities/user';
 import { STORAGE_KEYS } from '@/shared/config/constants';
 
@@ -12,14 +13,14 @@ interface AuthState {
   isUpdateLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (userData: Omit<User, 'id' | 'role'>) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       isAuthLoading: true,
       isLoginLoading: false,
@@ -42,15 +43,15 @@ export const useAuthStore = create<AuthState>()(
           set({ isRegisterLoading: false });
         }
       },
-      logout: () => {
+      logout: async () => {
+        await api.logout();
         set({ user: null });
       },
       updateProfile: async (data) => {
         set({ isUpdateLoading: true });
         try {
-          set((state) => ({
-            user: state.user ? { ...state.user, ...data } : null,
-          }));
+          const user = await api.updateProfile(data);
+          set({ user });
         } finally {
           set({ isUpdateLoading: false });
         }
@@ -58,11 +59,11 @@ export const useAuthStore = create<AuthState>()(
       checkAuth: async () => {
         set({ isAuthLoading: true });
         try {
-          const { user } = get();
-          if (!user) {
+          if (!getAuthToken()) {
+            set({ user: null });
             return;
           }
-          const freshUser = await api.getMe(user.id);
+          const freshUser = await api.getMe();
           set({ user: freshUser });
         } catch (_error) {
           set({ user: null });

@@ -15,6 +15,9 @@ export interface Product {
   id: string;
   name: string;
   brand: string;
+  brandId?: string;
+  manufacturerId?: string;
+  manufacturer?: string;
   sectionId: string;
   categoryId: string;
   price: number;

@@ -1,7 +1,7 @@
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '@/shared/api';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Spinner from '@/shared/ui/Spinner';
 import { ProductDetails } from '@/widgets/product/ProductDetails';
 import { ProductInfo } from '@/widgets/product/ProductInfo';
@@ -9,14 +9,15 @@ import { ProductInfo } from '@/widgets/product/ProductInfo';
 const ProductPage = memo(() => {
   const { id } = useParams<{ id: string }>();
 
-  const fetchProduct = useCallback(() => {
-    if (!id) {
-      return Promise.resolve(undefined); // Или отклонить Promise
-    }
-    return getProductById(id);
-  }, [id]);
-
-  const { data: product, isLoading, error } = useDataFetching(fetchProduct);
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => getProductById(id!),
+    enabled: Boolean(id),
+  });
 
   if (isLoading) {
     return (

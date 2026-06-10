@@ -1,37 +1,49 @@
-import { sections } from './mocks/sections';
-import type { Section, Category } from '@/entities/section/types';
+import { apiRequest } from './apiClient';
+import type { Category, Section } from '@/entities/section/types';
 
-/**
- * Имитирует задержку сети
- * @param delay - время задержки в мс
- */
-const sleep = (delay = 500) =>
-  new Promise((resolve) => setTimeout(resolve, delay));
+interface ApiSection {
+  id: number | string;
+  name: string;
+}
 
-/**
- * Получить все секции с категориями
- */
-export const getSections = async (): Promise<Section[]> => {
-  await sleep();
-  return Promise.resolve(sections);
-};
+interface ApiCategory {
+  id: number | string;
+  name: string;
+  section_id?: number | string | null;
+}
 
-/**
- * Получить все категории
- */
+const mapCategory = (category: ApiCategory): Category => ({
+  id: String(category.id),
+  name: category.name,
+  sectionId: category.section_id ? String(category.section_id) : '',
+});
+
 export const getCategories = async (): Promise<Category[]> => {
-  await sleep();
-  const allCategories = sections.flatMap((section) => section.categories);
-  return Promise.resolve(allCategories);
+  const response = await apiRequest<ApiCategory[]>('/categories', {
+    params: { per_page: 100 },
+  });
+  return response.data.map(mapCategory);
 };
 
-/**
- * Получить секцию по ее ID
- * @param id - ID секции
- */
+export const getSections = async (): Promise<Section[]> => {
+  const [sectionsResponse, categories] = await Promise.all([
+    apiRequest<ApiSection[]>('/sections', { params: { per_page: 100 } }),
+    getCategories(),
+  ]);
+
+  return sectionsResponse.data.map((section) => {
+    const id = String(section.id);
+    return {
+      id,
+      name: section.name,
+      categories: categories.filter((category) => category.sectionId === id),
+    };
+  });
+};
+
 export const getSectionById = async (
   id: string
 ): Promise<Section | undefined> => {
-  await sleep();
-  return Promise.resolve(sections.find((s) => s.id === id));
+  const sections = await getSections();
+  return sections.find((section) => section.id === id);
 };

@@ -1,4 +1,5 @@
 export const STORAGE_KEYS = {
+  AUTH_TOKEN: 'pharmacy_auth_token',
   USER_PROFILE: 'pharmacy_user_profile',
   CART: 'pharmacy_cart',
   CART_SELECTION: 'pharmacy_cart_selection',

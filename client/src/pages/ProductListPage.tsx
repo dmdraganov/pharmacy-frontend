@@ -1,13 +1,14 @@
-import { memo, useMemo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProducts, getSections } from '@/shared/api';
+import { memo, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { getProductsPage, getSections } from '@/shared/api';
 import {
   applyFilters,
   getAvailableFilters,
 } from '@/features/filter-products/lib';
 import { useFilters } from '@/features/filter-products/useFilters';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
 import Spinner from '@/shared/ui/Spinner';
+import Pagination from '@/shared/ui/Pagination';
 import CatalogLayoutWidget from '@/widgets/layout/CatalogLayoutWidget';
 import FiltersSidebar from '@/widgets/layout/FiltersSidebar';
 
@@ -16,16 +17,31 @@ const ProductListPage = memo(() => {
     section?: string;
     category?: string;
   }>();
-
-  const fetchData = useCallback(
-    () => Promise.all([getProducts(), getSections()]),
-    []
-  );
-
-  const { data, isLoading, error } = useDataFetching(fetchData);
-  const [products, sections] = data || [[], []];
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get('page') || 1);
   const { activeFilters } = useFilters();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['catalog', sectionId, categoryId, activeFilters, page],
+    queryFn: async () => {
+      const [productsPage, sections] = await Promise.all([
+        getProductsPage({
+          page,
+          per_page: 12,
+          category_id: categoryId,
+          min_price: activeFilters.minPrice,
+          max_price: activeFilters.maxPrice,
+          is_prescription: activeFilters.isPrescription,
+        }),
+        getSections(),
+      ]);
+
+      return { productsPage, sections };
+    },
+  });
+  const products = useMemo(() => data?.productsPage.data || [], [data]);
+  const sections = useMemo(() => data?.sections || [], [data]);
+  const meta = data?.productsPage.meta;
 
   const currentSection = useMemo(
     () =>
@@ -48,10 +64,12 @@ const ProductListPage = memo(() => {
       return products.filter((p) => p.categoryId === categoryId);
     }
     if (sectionId) {
-      return products.filter((p) => p.sectionId === sectionId);
+      const sectionCategoryIds =
+        currentSection?.categories.map((category) => category.id) || [];
+      return products.filter((p) => sectionCategoryIds.includes(p.categoryId));
     }
     return []; // Should not happen on this page
-  }, [sectionId, categoryId, products, isLoading]);
+  }, [sectionId, categoryId, products, isLoading, currentSection]);
 
   // 2. Generate available filters from the specific product set.
   const availableFilters = useMemo(
@@ -61,8 +79,8 @@ const ProductListPage = memo(() => {
 
   // 3. Apply active filters to the same specific set for display.
   const displayProducts = useMemo(
-    () => applyFilters(baseProducts, activeFilters),
-    [baseProducts, activeFilters]
+    () => applyFilters(baseProducts, { brands: activeFilters.brands }),
+    [baseProducts, activeFilters.brands]
   );
 
   const title = currentCategory?.name || currentSection?.name || 'Загрузка...';
@@ -104,6 +122,19 @@ const ProductListPage = memo(() => {
       title={title}
       products={displayProducts}
       sidebar={sidebar}
+      footer={
+        meta ? (
+          <Pagination
+            currentPage={meta.current_page}
+            totalPages={meta.last_page}
+            goToPage={(nextPage) => {
+              const nextParams = new URLSearchParams(searchParams);
+              nextParams.set('page', String(nextPage));
+              setSearchParams(nextParams);
+            }}
+          />
+        ) : null
+      }
     />
   );
 });

@@ -47,7 +47,10 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
           <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
           <FavoriteButton productId={product.id} className='mt-2 shrink-0' />
         </div>
-        <p className='mb-4 text-lg text-text-muted'>{product.brand}</p>
+        <div className='mb-4 text-lg text-text-muted'>
+          {product.brand && <p>{product.brand}</p>}
+          {product.manufacturer && <p>{product.manufacturer}</p>}
+        </div>
         {product.isPrescription && (
           <Badge variant='warning' className='mb-4'>
             Рецептурный

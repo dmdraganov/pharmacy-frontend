@@ -2,3 +2,7 @@ export * from './productsApi';
 export * from './authApi';
 export * from './pharmaciesApi';
 export * from './sectionsApi';
+export * from './cartApi';
+export * from './favoritesApi';
+export * from './ordersApi';
+export * from './inventoryApi';

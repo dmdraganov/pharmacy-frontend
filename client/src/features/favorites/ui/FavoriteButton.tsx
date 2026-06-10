@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useIsFavorite, useFavoriteActions } from '@/features/favorites';
 import HeartIcon from '@/shared/ui/HeartIcon';
 
@@ -10,11 +11,13 @@ export const FavoriteButton = ({
   productId,
   className,
 }: FavoriteButtonProps) => {
+  const queryClient = useQueryClient();
   const toggleFavorite = useFavoriteActions();
   const isFavorited = useIsFavorite(productId);
 
-  const handleToggle = () => {
-    toggleFavorite(productId);
+  const handleToggle = async () => {
+    await toggleFavorite(productId);
+    queryClient.invalidateQueries({ queryKey: ['favorites'] });
   };
 
   const baseClasses = 'z-10 cursor-pointer';

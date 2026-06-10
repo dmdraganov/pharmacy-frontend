@@ -1,14 +1,17 @@
-import { useEffect, useMemo } from 'react';
-import { useOrderStore } from '@/entities/order';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getAdminOrders } from '@/shared/api';
 import Spinner from '@/shared/ui/Spinner';
 
 const AdminDashboardPage = () => {
-  const { orders, _seedInitialOrders } = useOrderStore();
-
-  // Ensure data is seeded
-  useEffect(() => {
-    _seedInitialOrders();
-  }, [_seedInitialOrders]);
+  const {
+    data: orders = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['admin', 'orders'],
+    queryFn: getAdminOrders,
+  });
 
   const totalOrders = orders.length;
 
@@ -17,6 +20,22 @@ const AdminDashboardPage = () => {
       .filter((order) => order.status === 'completed')
       .reduce((sum, order) => sum + order.total, 0);
   }, [orders]);
+
+  const activeOrders = useMemo(
+    () =>
+      orders.filter((order) =>
+        ['new', 'processing', 'shipping'].includes(order.status)
+      ).length,
+    [orders]
+  );
+
+  const prescriptionOrders = useMemo(
+    () =>
+      orders.filter((order) =>
+        order.items.some((item) => item.product.isPrescription)
+      ).length,
+    [orders]
+  );
 
   const topProducts = useMemo(() => {
     const productCounts: Record<string, { name: string; count: number }> = {};
@@ -39,17 +58,18 @@ const AdminDashboardPage = () => {
       .slice(0, 5);
   }, [orders]);
 
-  // Adding some fake data for visual appeal
-  const fakeData = {
-    newUsers: 15,
-    bounceRate: '25%',
-  };
-
-  if (orders.length === 0) {
+  if (isLoading) {
     return (
       <div className='flex h-96 items-center justify-center'>
         <Spinner />
-        <p className='ml-4'>Загрузка данных о заказах...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='flex h-96 items-center justify-center text-center text-danger'>
+        <p>Не удалось загрузить данные дашборда.</p>
       </div>
     );
   }
@@ -72,18 +92,18 @@ const AdminDashboardPage = () => {
         </div>
         <div className='rounded-lg border bg-background-default p-6'>
           <h2 className='text-lg font-medium text-text-muted'>
-            Новые пользователи
+            Активные заказы
           </h2>
           <p className='mt-2 text-3xl font-bold text-text-default'>
-            {fakeData.newUsers}
+            {activeOrders}
           </p>
         </div>
         <div className='rounded-lg border bg-background-default p-6'>
           <h2 className='text-lg font-medium text-text-muted'>
-            Процент отказов
+            С рецептурными товарами
           </h2>
           <p className='mt-2 text-3xl font-bold text-text-default'>
-            {fakeData.bounceRate}
+            {prescriptionOrders}
           </p>
         </div>
       </div>
@@ -93,19 +113,23 @@ const AdminDashboardPage = () => {
           <h2 className='mb-4 text-lg font-medium text-text-muted'>
             Топ продаваемых товаров
           </h2>
-          <ul>
-            {topProducts.map((product, index) => (
-              <li
-                key={index}
-                className='flex items-center justify-between border-b py-2'
-              >
-                <span className='text-text-muted'>{product.name}</span>
-                <span className='font-bold text-text-default'>
-                  {product.count} шт.
-                </span>
-              </li>
-            ))}
-          </ul>
+          {topProducts.length > 0 ? (
+            <ul>
+              {topProducts.map((product) => (
+                <li
+                  key={product.name}
+                  className='flex items-center justify-between border-b py-2'
+                >
+                  <span className='text-text-muted'>{product.name}</span>
+                  <span className='font-bold text-text-default'>
+                    {product.count} шт.
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-text-muted'>Нет данных по продажам.</p>
+          )}
         </div>
       </div>
     </div>

@@ -1,37 +1,53 @@
-import { useMemo, useCallback } from 'react';
-import { getProducts, getSections } from '@/shared/api';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import {
+  getAdminInventory,
+  getPharmacies,
+  getProducts,
+  getSections,
+} from '@/shared/api';
 import Spinner from '@/shared/ui/Spinner';
 
 const AdminProductsPage = () => {
-  const fetchData = useCallback(
-    () => Promise.all([getProducts(), getSections()]),
-    []
-  );
-  const { data, isLoading, error } = useDataFetching(fetchData);
-  const [products, sections] = data || [[], []];
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['admin', 'products'],
+    queryFn: async () => {
+      const [products, sections, pharmacies] = await Promise.all([
+        getProducts(),
+        getSections(),
+        getPharmacies(),
+      ]);
+      const selectedPharmacy = pharmacies[0];
+      const inventory = selectedPharmacy
+        ? await getAdminInventory(selectedPharmacy.id)
+        : [];
 
-  const productsWithFakeStock = useMemo(
+      return { products, sections, pharmacies, selectedPharmacy, inventory };
+    },
+  });
+  const products = data?.products || [];
+  const selectedPharmacy = data?.selectedPharmacy;
+
+  const stockByProductId = useMemo(
     () =>
-      products.map((product) => ({
-        ...product,
-        stock:
-          product.id
-            .split('')
-            .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 1000, // Fake stock data
-      })),
-    [products]
+      new Map(
+        (data?.inventory || []).map((item) => [
+          item.productId,
+          item.stockQuantity - item.reservedQuantity,
+        ])
+      ),
+    [data?.inventory]
   );
 
   const categoriesMap = useMemo(() => {
     const map = new Map<string, string>();
-    sections.forEach((section) => {
+    (data?.sections || []).forEach((section) => {
       section.categories.forEach((category) => {
         map.set(category.id, category.name);
       });
     });
     return map;
-  }, [sections]);
+  }, [data?.sections]);
 
   const getCategoryName = (categoryId: string) => {
     return categoriesMap.get(categoryId) || 'N/A';
@@ -62,6 +78,11 @@ const AdminProductsPage = () => {
           Добавить товар
         </button>
       </div>
+      {selectedPharmacy && (
+        <p className='text-sm text-text-muted'>
+          Остатки показаны для аптеки: {selectedPharmacy.name}
+        </p>
+      )}
       <div className='my-6 overflow-x-auto rounded bg-background-default shadow-md'>
         {/* Desktop Table */}
         <table className='hidden min-w-full table-auto md:table'>
@@ -76,7 +97,7 @@ const AdminProductsPage = () => {
             </tr>
           </thead>
           <tbody className='text-sm font-light text-text-muted'>
-            {productsWithFakeStock.map((product) => (
+            {products.map((product) => (
               <tr
                 key={product.id}
                 className='border-b border-border-default hover:bg-background-muted-hover'
@@ -91,7 +112,7 @@ const AdminProductsPage = () => {
                   {product.price} ₽
                 </td>
                 <td className='px-6 py-3 text-center text-text-default'>
-                  {product.stock}
+                  {stockByProductId.get(product.id) ?? '—'}
                 </td>
                 <td className='px-6 py-3 text-center text-text-default'>
                   {product.isPrescription ? 'Да' : 'Нет'}
@@ -113,7 +134,7 @@ const AdminProductsPage = () => {
 
         {/* Mobile Cards */}
         <div className='md:hidden'>
-          {productsWithFakeStock.map((product) => (
+          {products.map((product) => (
             <div
               key={product.id}
               className='border-b border-border-default p-4'
@@ -132,7 +153,7 @@ const AdminProductsPage = () => {
                 </p>
                 <p>
                   <span className='font-semibold'>В наличии: </span>
-                  {product.stock}
+                  {stockByProductId.get(product.id) ?? '—'}
                 </p>
                 <p>
                   <span className='font-semibold'>Рецептурный: </span>

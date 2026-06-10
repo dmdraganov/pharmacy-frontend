@@ -6,12 +6,14 @@ interface CatalogLayoutWidgetProps {
   title: string;
   products: Product[];
   sidebar?: ReactNode;
+  footer?: ReactNode;
 }
 
 const CatalogLayoutWidget = ({
   title,
   products,
   sidebar,
+  footer,
 }: CatalogLayoutWidgetProps) => {
   return (
     <div className='flex grow gap-6'>
@@ -25,6 +27,7 @@ const CatalogLayoutWidget = ({
       {/* Products Grid */}
       <main className='grow overflow-y-auto py-12'>
         <ProductGrid title={title} products={products} />
+        {footer}
       </main>
     </div>
   );

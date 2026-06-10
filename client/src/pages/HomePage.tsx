@@ -1,19 +1,33 @@
 import { memo, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import type { Product } from '@/entities/product';
 import { ProductCardWithCart } from '@/features/cart';
-import { getProducts } from '@/shared/api';
-import { useDataFetching } from '@/shared/hooks/useDataFetching';
+import { getPopularProducts, getProducts } from '@/shared/api';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import Spinner from '@/shared/ui/Spinner';
 import ProductSlider from '@/widgets/product/ProductSlider';
 
 const HomePage = memo(() => {
-  const { data: products, isLoading, error } = useDataFetching(getProducts);
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['products', 'home'],
+    queryFn: () => getProducts(),
+  });
+  const { data: popularFromApi } = useQuery({
+    queryKey: ['products', 'popular'],
+    queryFn: getPopularProducts,
+  });
   const isMobile = useMediaQuery('(max-width: 1023px)');
 
   const popularProducts = useMemo(
-    () => (products || []).filter((p) => p.isPopular),
-    [products]
+    () =>
+      popularFromApi?.length
+        ? popularFromApi
+        : (products || []).filter((p) => p.isPopular),
+    [popularFromApi, products]
   );
   const promotionalProducts = useMemo(
     () => (products || []).filter((p) => p.oldPrice).slice(0, isMobile ? 4 : 8),
