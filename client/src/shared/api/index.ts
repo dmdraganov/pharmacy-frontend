@@ -6,3 +6,5 @@ export * from './cartApi';
 export * from './favoritesApi';
 export * from './ordersApi';
 export * from './inventoryApi';
+export * from './adminProductsApi';
+export * from './adminCategoriesApi';

@@ -21,9 +21,18 @@ export interface OrderAddress {
   apartment: string;
 }
 
+export interface OrderCustomer {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+}
+
 export interface Order {
   id: string;
   userId: string;
+  customer?: OrderCustomer | null;
   date: string;
   status: OrderStatus;
   items: OrderItem[];

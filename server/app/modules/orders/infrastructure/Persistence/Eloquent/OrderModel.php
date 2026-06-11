@@ -2,6 +2,7 @@
 
 namespace App\Modules\Orders\Infrastructure\Persistence\Eloquent;
 
+use App\Modules\Users\Infrastructure\Persistence\Eloquent\UserModel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,5 +32,10 @@ class OrderModel extends Model
     public function items()
     {
         return $this->hasMany(OrderItemModel::class, 'order_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
     }
 }

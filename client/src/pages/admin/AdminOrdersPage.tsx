@@ -86,6 +86,30 @@ const getAvailableActions = (
   }
 };
 
+const getCustomerName = (order: Order) => {
+  const name = [order.customer?.firstName, order.customer?.lastName]
+    .filter(Boolean)
+    .join(' ');
+
+  return name || order.customer?.email || order.userId || 'Не указан';
+};
+
+const CustomerCell = ({ order }: { order: Order }) => (
+  <div className='min-w-0'>
+    <p className='break-words font-medium text-text-default'>
+      {getCustomerName(order)}
+    </p>
+    {order.customer?.email && (
+      <p className='break-all text-xs text-text-muted'>
+        {order.customer.email}
+      </p>
+    )}
+    {order.customer?.phone && (
+      <p className='text-xs text-text-muted'>{order.customer.phone}</p>
+    )}
+  </div>
+);
+
 const OrderActions = ({
   order,
   loadingAction,
@@ -195,7 +219,7 @@ const AdminOrdersPage = () => {
                   {order.id}
                 </td>
                 <td className='px-6 py-3 text-left text-text-muted'>
-                  Не указан в API
+                  <CustomerCell order={order} />
                 </td>
                 <td className='px-6 py-3 text-left text-text-default'>
                   {new Date(order.date).toLocaleDateString('ru-RU')}
@@ -244,9 +268,9 @@ const AdminOrdersPage = () => {
                   <p className='text-sm'>
                     {new Date(order.date).toLocaleDateString('ru-RU')}
                   </p>
-                  <p className='text-sm text-text-muted'>
-                    Заказчик не указан в API
-                  </p>
+                  <div className='mt-1 text-sm text-text-muted'>
+                    <CustomerCell order={order} />
+                  </div>
                 </div>
                 <span
                   className={`rounded-full px-2 py-1 text-xs ${getStatusClasses(
@@ -260,7 +284,7 @@ const AdminOrdersPage = () => {
                 <h4 className='font-semibold text-text-default'>Состав:</h4>
                 <ul className='list-inside list-disc pl-2 text-sm'>
                   {order.items.map((item) => (
-                  <li key={item.product.id} className='break-words'>
+                    <li key={item.product.id} className='break-words'>
                       {item.product.name} ({item.quantity} x {item.price} ₽)
                     </li>
                   ))}

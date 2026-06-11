@@ -32,6 +32,13 @@ class OrderResource extends JsonResource
             'delivery_postal_code' => $this->deliveryPostalCode,
             'total_amount' => $this->totalPrice,
             'created_at' => $this->createdAt?->format(DATE_ATOM),
+            'user' => $this->customer ? [
+                'id' => $this->customer->id,
+                'first_name' => $this->customer->firstName,
+                'last_name' => $this->customer->lastName,
+                'email' => $this->customer->email,
+                'phone' => $this->customer->phone,
+            ] : null,
             'items' => OrderItemResource::collection($this->items),
         ];
     }

@@ -10,6 +10,14 @@ interface ApiOrderItem {
 
 interface ApiOrder {
   id: string;
+  user_id?: string;
+  user?: {
+    id: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    email: string;
+    phone?: string | null;
+  } | null;
   status_id: number;
   delivery_method_id?: number;
   delivery_method_code?: 'pickup' | 'delivery';
@@ -56,10 +64,15 @@ const STATUS_ID_BY_STATUS: Record<OrderStatus, number> = {
   cancelled: 6,
 };
 
-const mapOrder = async (order: ApiOrder): Promise<Order> => {
+const mapOrder = async (
+  order: ApiOrder,
+  productCache?: Map<string, Awaited<ReturnType<typeof getProductById>>>
+): Promise<Order> => {
   const items = await Promise.all(
     (order.items || []).map(async (item) => {
-      const product = await getProductById(item.product_id);
+      const product =
+        productCache?.get(item.product_id) ||
+        (await getProductById(item.product_id));
       return {
         product,
         quantity: item.quantity,
@@ -81,7 +94,16 @@ const mapOrder = async (order: ApiOrder): Promise<Order> => {
 
   return {
     id: order.id,
-    userId: '',
+    userId: order.user?.id || order.user_id || '',
+    customer: order.user
+      ? {
+          id: order.user.id,
+          firstName: order.user.first_name || '',
+          lastName: order.user.last_name || '',
+          phone: order.user.phone || '',
+          email: order.user.email,
+        }
+      : null,
     date: order.created_at || new Date().toISOString(),
     status: STATUS_BY_ID[order.status_id] || 'new',
     items,
@@ -104,6 +126,25 @@ const mapOrder = async (order: ApiOrder): Promise<Order> => {
   };
 };
 
+const mapOrders = async (orders: ApiOrder[]): Promise<Order[]> => {
+  const productIds = Array.from(
+    new Set(
+      orders.flatMap((order) =>
+        (order.items || []).map((item) => item.product_id)
+      )
+    )
+  );
+
+  const products = await Promise.all(
+    productIds.map(
+      async (productId) => [productId, await getProductById(productId)] as const
+    )
+  );
+  const productCache = new Map(products);
+
+  return Promise.all(orders.map((order) => mapOrder(order, productCache)));
+};
+
 export const getOrders = async (): Promise<Order[]> => {
   const response = await apiRequest<ApiOrder[]>('/orders', {
     params: { per_page: 100 },
@@ -114,14 +155,14 @@ export const getOrders = async (): Promise<Order[]> => {
 
     throw error;
   });
-  return Promise.all(response.data.map(mapOrder));
+  return mapOrders(response.data);
 };
 
 export const getAdminOrders = async (): Promise<Order[]> => {
   const response = await apiRequest<ApiOrder[]>('/admin/orders', {
     params: { per_page: 100 },
   });
-  return Promise.all(response.data.map(mapOrder));
+  return mapOrders(response.data);
 };
 
 export const createOrder = async (
@@ -161,9 +202,12 @@ export const updateAdminOrderStatus = async (
   orderId: string,
   status: OrderStatus
 ): Promise<Order> => {
-  const response = await apiRequest<ApiOrder>(`/admin/orders/${orderId}/status`, {
-    method: 'PATCH',
-    body: { status_id: STATUS_ID_BY_STATUS[status] },
-  });
+  const response = await apiRequest<ApiOrder>(
+    `/admin/orders/${orderId}/status`,
+    {
+      method: 'PATCH',
+      body: { status_id: STATUS_ID_BY_STATUS[status] },
+    }
+  );
   return mapOrder(response.data);
 };

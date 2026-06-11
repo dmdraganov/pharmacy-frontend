@@ -3,6 +3,7 @@
 namespace App\Modules\Orders\Infrastructure\Persistence\Eloquent;
 
 use App\Modules\Orders\Domain\Order;
+use App\Modules\Orders\Domain\OrderCustomer;
 use App\Modules\Orders\Domain\OrderItem;
 use App\Modules\Orders\Domain\OrderRepositoryContract;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ class OrderRepository implements OrderRepositoryContract
 {
     public function find(string $id): ?Order
     {
-        $orderModel = OrderModel::with('items')->find($id);
+        $orderModel = OrderModel::with(['items', 'user'])->find($id);
         if (! $orderModel) {
             return null;
         }
@@ -52,6 +53,7 @@ class OrderRepository implements OrderRepositoryContract
     public function list(string $userId): array
     {
         return OrderModel::with('items')
+            ->with('user')
             ->where('user_id', $userId)
             ->get()
             ->map(fn ($model) => $this->toDomain($model))
@@ -60,7 +62,7 @@ class OrderRepository implements OrderRepositoryContract
 
     public function listAll(): array
     {
-        return OrderModel::with('items')
+        return OrderModel::with(['items', 'user'])
             ->latest()
             ->get()
             ->map(fn ($model) => $this->toDomain($model))
@@ -107,6 +109,7 @@ class OrderRepository implements OrderRepositoryContract
             quantity: $itemModel->quantity,
             price: $itemModel->price_at_order
         ))->all();
+        $user = $orderModel->user;
 
         return new Order(
             id: $orderModel->id,
@@ -124,7 +127,14 @@ class OrderRepository implements OrderRepositoryContract
             totalPrice: $orderModel->total_amount,
             createdAt: \DateTimeImmutable::createFromInterface($orderModel->created_at),
             updatedAt: \DateTimeImmutable::createFromInterface($orderModel->updated_at),
-            items: $items
+            items: $items,
+            customer: $user ? new OrderCustomer(
+                id: $user->id,
+                firstName: $user->first_name,
+                lastName: $user->last_name,
+                email: $user->email,
+                phone: $user->phone,
+            ) : null,
         );
     }
 }

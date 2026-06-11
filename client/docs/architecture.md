@@ -15,6 +15,7 @@ React + TypeScript + Vite
 React Router
 Tailwind CSS
 Zustand
+Tanstack Query
 ESLint + Prettier
 
 ## 3. Архитектура

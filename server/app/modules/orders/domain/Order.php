@@ -23,6 +23,7 @@ class Order extends Entity
         public readonly \DateTimeImmutable $createdAt,
         public \DateTimeImmutable $updatedAt,
         /** @var OrderItem[] */
-        public array $items = []
+        public array $items = [],
+        public ?OrderCustomer $customer = null,
     ) {}
 }

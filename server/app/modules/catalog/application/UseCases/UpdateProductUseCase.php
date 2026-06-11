@@ -6,6 +6,7 @@ use App\Modules\Catalog\Application\DTO\UpdateProductDTO;
 use App\Modules\Catalog\Domain\Product;
 use App\Modules\Catalog\Domain\ProductRepositoryContract;
 use App\Shared\Application\UseCase;
+use Illuminate\Validation\ValidationException;
 
 class UpdateProductUseCase implements UseCase
 {
@@ -16,6 +17,10 @@ class UpdateProductUseCase implements UseCase
     public function __invoke(UpdateProductDTO $data): Product
     {
         $product = $this->productRepository->find($data->id);
+
+        if (! $product) {
+            throw ValidationException::withMessages(['product' => 'Product not found']);
+        }
 
         $product->name = $data->name;
         $product->slug = $data->slug;

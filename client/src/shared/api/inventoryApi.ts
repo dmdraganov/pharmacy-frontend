@@ -32,3 +32,18 @@ export const getAdminInventory = async (
   });
   return response.data.map(mapInventoryItem);
 };
+
+export const updateAdminInventory = async (
+  pharmacyId: string,
+  productId: string,
+  stockQuantity: number
+): Promise<InventoryItem> => {
+  const response = await apiRequest<ApiInventoryItem>(
+    `/admin/inventory/${pharmacyId}/${productId}`,
+    {
+      method: 'PATCH',
+      body: { stock_quantity: stockQuantity },
+    }
+  );
+  return mapInventoryItem(response.data);
+};
