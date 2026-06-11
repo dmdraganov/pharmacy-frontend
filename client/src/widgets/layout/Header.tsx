@@ -10,11 +10,14 @@ import { useFavoriteCount } from '@/features/favorites';
 import { useAuthStore } from '@/features/auth';
 import { useDropdown } from '@/shared/hooks/useDropdown';
 import UserIcon from '@/shared/ui/UserIcon';
+import MenuIcon from '@/shared/ui/MenuIcon';
+import CloseIcon from '@/shared/ui/CloseIcon';
 
 const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const cartTotalItems = useCartTotalItems();
   const favoriteCount = useFavoriteCount();
   const user = useAuthStore((state) => state.user);
@@ -56,20 +59,22 @@ const Header = memo(() => {
       <div className='container max-w-7xl mx-auto px-3 md:px-4 lg:px-6'>
         <div
           className={`flex justify-start transition-all duration-300 ease-in-out ${
-            isScrolled ? 'max-h-0 pt-0 opacity-0' : 'max-h-16 pt-4 opacity-100'
+            isScrolled
+              ? 'max-h-0 overflow-hidden pt-0 opacity-0'
+              : 'max-h-20 overflow-visible pt-3 opacity-100 sm:max-h-16 sm:pt-4'
           }`}
         >
           <RegionSelectWithSearch />
         </div>
-        <div className='flex items-center justify-between py-4'>
+        <div className='flex flex-wrap items-center justify-between gap-3 py-3 lg:flex-nowrap lg:py-4'>
           <Logo />
 
-          <div className='flex flex-1 items-center justify-center gap-4 px-8'>
+          <div className='hidden flex-1 items-center justify-center gap-4 px-8 lg:flex'>
             <Button onClick={handleCatalogToggle}>Каталог</Button>
             <SearchInput />
           </div>
 
-          <nav className='flex items-center space-x-4'>
+          <nav className='hidden items-center space-x-4 lg:flex'>
             <Link
               to={ROUTES.favorites}
               className='relative text-text-muted hover:text-text-default'
@@ -154,7 +159,101 @@ const Header = memo(() => {
               </Link>
             )}
           </nav>
+
+          <div className='flex items-center justify-end gap-2 lg:hidden'>
+            <Button
+              onClick={handleCatalogToggle}
+              className='shrink-0 px-3 py-2 text-sm'
+            >
+              Каталог
+            </Button>
+            <button
+              type='button'
+              onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+              className='inline-flex h-10 w-10 shrink-0 items-center justify-center rounded border border-border-default text-text-default'
+              aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+            >
+              {isMobileMenuOpen ? (
+                <CloseIcon className='h-5 w-5' />
+              ) : (
+                <MenuIcon className='h-5 w-5' />
+              )}
+            </button>
+          </div>
+
+          <div className='order-last w-full lg:hidden'>
+            <SearchInput />
+          </div>
         </div>
+
+        {isMobileMenuOpen && (
+          <div className='border-t border-border-default py-3 lg:hidden'>
+            <div
+              className='flex flex-col gap-2'
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Link
+                to={ROUTES.favorites}
+                className='flex items-center justify-between rounded px-3 py-2 text-text-default hover:bg-background-muted'
+              >
+                <span>Избранное</span>
+                {favoriteCount > 0 && (
+                  <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-xs text-white'>
+                    {favoriteCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                to={ROUTES.cart}
+                className='flex items-center justify-between rounded px-3 py-2 text-text-default hover:bg-background-muted'
+              >
+                <span>Корзина</span>
+                {cartTotalItems > 0 && (
+                  <span className='flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-xs text-white'>
+                    {cartTotalItems}
+                  </span>
+                )}
+              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to={ROUTES.account.profile}
+                    className='rounded px-3 py-2 text-text-default hover:bg-background-muted'
+                  >
+                    Профиль
+                  </Link>
+                  <Link
+                    to={ROUTES.account.orders}
+                    className='rounded px-3 py-2 text-text-default hover:bg-background-muted'
+                  >
+                    Заказы
+                  </Link>
+                  {user.role === 'ADMIN' && (
+                    <Link
+                      to={ROUTES.admin.base}
+                      className='rounded px-3 py-2 text-text-default hover:bg-background-muted'
+                    >
+                      Панель администратора
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className='rounded px-3 py-2 text-left text-danger hover:bg-danger-subtle hover:text-danger-hover'
+                  >
+                    Выйти
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to={ROUTES.login}
+                  className='rounded px-3 py-2 text-text-default hover:bg-background-muted'
+                >
+                  Войти
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

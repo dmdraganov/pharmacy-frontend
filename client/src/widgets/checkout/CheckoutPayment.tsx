@@ -34,7 +34,7 @@ interface CreditCardFormProps {
 
 const CreditCardForm = memo(
   ({ cardDetails, setCardDetails, errors }: CreditCardFormProps) => (
-    <div className='mt-4 flex flex-col gap-4 rounded-md border border-border-default bg-background-muted p-4'>
+    <div className='mt-4 flex flex-col gap-4 rounded-md border border-border-default bg-background-muted p-3 sm:p-4'>
       <Input
         name='cardNumber'
         placeholder='0000 0000 0000 0000'
@@ -101,7 +101,7 @@ export const CheckoutPayment = memo(
     errors,
   }: CheckoutPaymentProps) => {
     return (
-      <div className='rounded-lg border border-border-default bg-background-default p-6'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4 sm:p-6'>
         <h2 className='mb-4 text-xl font-bold text-text-default'>
           Способ оплаты
         </h2>

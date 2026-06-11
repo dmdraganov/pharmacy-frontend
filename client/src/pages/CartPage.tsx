@@ -67,9 +67,9 @@ const CartPage = memo(() => {
   return (
     <>
       <h1 className='mb-6 text-2xl font-bold text-text-default'>Корзина</h1>
-      <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-        <div className='lg:col-span-2'>
-          <div className='mb-6 flex items-center justify-between rounded'>
+      <div className='grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3'>
+        <div className='min-w-0 lg:col-span-2'>
+          <div className='mb-6 flex flex-col gap-3 rounded sm:flex-row sm:items-center sm:justify-between'>
             <Checkbox
               id='select-all'
               label='Выбрать все'

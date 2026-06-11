@@ -31,7 +31,7 @@ const AdminCategoriesPage = () => {
 
   return (
     <div>
-      <div className='mb-4 flex items-center justify-between'>
+      <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-2xl font-bold text-text-default'>Категории</h1>
         <button className='rounded bg-primary px-4 py-2 font-bold text-text-inverse hover:bg-primary-hover'>
           Добавить категорию
@@ -75,9 +75,11 @@ const AdminCategoriesPage = () => {
           {(categories || []).map((category) => (
             <div
               key={category.id}
-              className='flex items-center justify-between border-b border-border-default p-4'
+              className='flex flex-col gap-3 border-b border-border-default p-4 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between'
             >
-              <p className='font-medium text-text-default'>{category.name}</p>
+              <p className='break-words font-medium text-text-default'>
+                {category.name}
+              </p>
               <div className='flex items-center space-x-2'>
                 <button className='rounded-md bg-primary-subtle px-2 py-1 text-xs text-primary'>
                   Р

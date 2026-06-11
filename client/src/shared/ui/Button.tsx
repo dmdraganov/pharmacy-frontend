@@ -48,7 +48,7 @@ const Button = ({
   ...props
 }: PropsWithChildren<ButtonProps>) => {
   const baseStyles =
-    'rounded font-bold transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex max-w-full items-center justify-center rounded text-center font-bold transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
     primary: 'bg-primary text-text-inverse hover:bg-primary-hover',

@@ -49,8 +49,8 @@ export const ProductCard = memo(
 
     return (
       <div
-        className={`relative flex h-full flex-col overflow-hidden rounded-lg border border-border-default 
-        bg-background-default p-4 transition-all duration-300 shadow-shadow-default hover:shadow-[0_5px_10px_0] min-h-80`}
+        className={`relative flex h-full min-w-0 flex-col overflow-hidden rounded-lg border border-border-default 
+        bg-background-default p-3 transition-all duration-300 shadow-shadow-default hover:shadow-[0_5px_10px_0] sm:p-4`}
       >
         {favoriteAction}
 
@@ -63,7 +63,7 @@ export const ProductCard = memo(
           />
           <div className='py-4'>
             <div
-              className='mb-2 line-clamp-2 text-xl font-semibold'
+              className='mb-2 line-clamp-2 break-words text-lg font-semibold sm:text-xl'
               title={name}
             >
               {name}
@@ -72,8 +72,8 @@ export const ProductCard = memo(
           </div>
         </Link>
         <div className='mt-auto pt-2'>
-          <div className='mb-4 flex items-center justify-between gap-4'>
-            <div>
+          <div className='mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4'>
+            <div className='min-w-0'>
               <span className='text-xl font-semibold'>{price} ₽</span>
               {oldPrice && (
                 <span className='ml-2 text-sm text-text-muted line-through'>
@@ -81,13 +81,17 @@ export const ProductCard = memo(
                 </span>
               )}
             </div>
-            {isPrescription && <Badge variant='warning'>Рецептурный</Badge>}
+            {isPrescription && (
+              <Badge variant='warning' className='self-start'>
+                Рецептурный
+              </Badge>
+            )}
           </div>
           <div className='flex flex-col gap-2'>
             {!quantityInCart ? (
               <Button onClick={handleAdd}>Добавить в корзину</Button>
             ) : (
-              <div className='flex items-center justify-between gap-3'>
+              <div className='flex flex-col gap-3 min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between'>
                 <QuantityControl
                   quantity={quantityInCart}
                   onIncrement={handleIncrement}

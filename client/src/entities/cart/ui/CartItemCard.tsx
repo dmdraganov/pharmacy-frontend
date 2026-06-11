@@ -29,8 +29,8 @@ const CartItemCard = memo((props: CartItemCardProps) => {
   const imageUrl = getProductImage(item.image);
 
   return (
-    <div className='flex items-stretch rounded border border-border-default p-4'>
-      <div className='mr-4 flex items-center'>
+    <div className='flex min-w-0 flex-col gap-4 rounded border border-border-default p-3 sm:flex-row sm:items-stretch sm:p-4'>
+      <div className='flex items-center sm:mr-4'>
         <Checkbox
           id={`select-${item.id}`}
           label=''
@@ -39,41 +39,42 @@ const CartItemCard = memo((props: CartItemCardProps) => {
         />
       </div>
 
-      <img
-        src={imageUrl}
-        alt={item.name}
-        className='mr-4 h-24 w-24 object-cover'
-      />
+      <div className='flex min-w-0 flex-1 gap-3 sm:gap-4'>
+        <img
+          src={imageUrl}
+          alt={item.name}
+          className='h-20 w-20 shrink-0 object-cover sm:h-24 sm:w-24'
+        />
 
-      <div className='flex flex-grow flex-col'>
-        <div>
-          <Link
-            to={`/product/${item.id}`}
-            className='text-lg font-bold hover:underline'
-          >
-            {' '}
-            {item.name}
-          </Link>
-          <p className='text-sm text-text-muted'>{item.brand}</p>
-          {item.isPrescription && (
-            <Badge variant='warning' className='mt-2'>
-              Рецептурный
-            </Badge>
-          )}
-        </div>
-        <div className='mt-auto flex items-center gap-4 pt-2'>
-          {favoriteAction}
-          <Button
-            variant='danger'
-            size='small'
-            onClick={() => onRemoveFromCart(item.id)}
-          >
-            Удалить
-          </Button>
+        <div className='flex min-w-0 flex-grow flex-col'>
+          <div>
+            <Link
+              to={`/product/${item.id}`}
+              className='break-words text-base font-bold hover:underline sm:text-lg'
+            >
+              {item.name}
+            </Link>
+            <p className='text-sm text-text-muted'>{item.brand}</p>
+            {item.isPrescription && (
+              <Badge variant='warning' className='mt-2'>
+                Рецептурный
+              </Badge>
+            )}
+          </div>
+          <div className='mt-auto flex flex-wrap items-center gap-3 pt-2'>
+            {favoriteAction}
+            <Button
+              variant='danger'
+              size='small'
+              onClick={() => onRemoveFromCart(item.id)}
+            >
+              Удалить
+            </Button>
+          </div>
         </div>
       </div>
-      <div className='flex flex-col items-end justify-between'>
-        <div className='flex w-32 flex-col items-end'>
+      <div className='flex flex-row items-center justify-between gap-4 sm:flex-col sm:items-end'>
+        <div className='flex min-w-24 flex-col items-end'>
           <p className='text-lg font-bold'>{item.price * item.quantity} ₽</p>
           {item.oldPrice && (
             <p className='text-sm text-text-muted line-through'>

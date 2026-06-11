@@ -16,7 +16,7 @@ export const SearchInput = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className='relative w-full max-w-sm'>
+    <form onSubmit={handleSearch} className='relative min-w-0 w-full max-w-sm'>
       <Input
         placeholder='Поиск'
         value={query}

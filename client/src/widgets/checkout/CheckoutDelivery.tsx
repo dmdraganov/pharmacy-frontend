@@ -23,7 +23,7 @@ const CourierForm = ({
   onAddressChange: (field: keyof Address, value: string) => void;
   errors?: Partial<Record<keyof Address, string>>;
 }) => (
-  <div className='flex flex-col gap-4'>
+    <div className='flex flex-col gap-4'>
     <Input
       name='city'
       placeholder='Город'
@@ -38,7 +38,7 @@ const CourierForm = ({
       onChange={(e) => onAddressChange('street', e.target.value)}
       error={errors.street}
     />
-    <div className='grid grid-cols-2 gap-4'>
+    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
       <Input
         name='house'
         placeholder='Дом'
@@ -134,12 +134,12 @@ export const CheckoutDelivery = memo(
     };
 
     return (
-      <div className='rounded-lg border border-border-default bg-background-default p-6'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4 sm:p-6'>
         <h2 className='mb-4 text-xl font-bold text-text-default'>
           Способ получения
         </h2>
 
-        <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
+        <div className='mb-6 flex flex-col gap-2 rounded-lg bg-background-muted p-1 sm:flex-row'>
           {!isCourierDisabled && (
             <TabButton
               onClick={() => setDeliveryMethod('courier')}

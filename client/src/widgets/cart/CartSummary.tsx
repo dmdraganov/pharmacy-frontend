@@ -18,31 +18,31 @@ const CartSummary = memo((props: CartSummaryProps) => {
   } = props;
 
   return (
-    <div className='relative z-10 h-fit rounded border border-border-default bg-background-default p-4 lg:col-span-1 overflow-hidden'>
+    <div className='relative z-10 h-fit overflow-hidden rounded border border-border-default bg-background-default p-4 lg:col-span-1'>
       <h2 className='mb-6 text-xl font-bold text-text-default'>Ваша корзина</h2>
       <div className='flex flex-col gap-2'>
         {selectedItemsDiscount > 0 ? (
           <>
-            <div className='flex justify-between text-lg'>
+            <div className='flex justify-between gap-3 text-base sm:text-lg'>
               <span>Товары {selectedItemsCount} шт.</span>
               <span className='line-through'>
                 {selectedItemsOriginalTotal} ₽
               </span>
             </div>
-            <div className='flex justify-between text-lg text-success'>
+            <div className='flex justify-between gap-3 text-base text-success sm:text-lg'>
               <span>Скидка</span>
               <span>{selectedItemsDiscount} ₽</span>
             </div>
           </>
         ) : (
-          <div className='flex justify-between text-lg'>
+          <div className='flex justify-between gap-3 text-base sm:text-lg'>
             <span>Товары {selectedItemsCount} шт.</span>
             <span>{selectedItemsTotal} ₽</span>
           </div>
         )}
       </div>
       <div className='flex flex-col gap-4 mt-8'>
-        <div className='flex justify-between text-xl font-bold'>
+        <div className='flex justify-between gap-3 text-xl font-bold'>
           <span>К оплате</span>
           <span>{selectedItemsTotal} ₽</span>
         </div>

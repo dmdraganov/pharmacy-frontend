@@ -6,7 +6,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className='flex h-screen bg-background-default'>
+    <div className='flex h-dvh min-w-0 bg-background-default'>
       {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden ${
@@ -24,19 +24,21 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         <AdminSidebar onClose={() => setSidebarOpen(false)} />
       </div>
 
-      <div className='flex-1 flex flex-col overflow-hidden'>
-        <header className='lg:hidden bg-background-default border-b p-4 flex items-center'>
+      <div className='flex min-w-0 flex-1 flex-col overflow-hidden'>
+        <header className='lg:hidden bg-background-default border-b p-4 flex items-center min-w-0'>
           <button
             onClick={() => setSidebarOpen(true)}
             className='text-text-muted'
           >
             <MenuIcon className='h-6 w-6' />
           </button>
-          <h1 className='text-xl font-semibold ml-4'>Панель администратора</h1>
+          <h1 className='ml-4 min-w-0 truncate text-xl font-semibold'>
+            Панель администратора
+          </h1>
         </header>
 
         <main className='flex-1 overflow-x-hidden overflow-y-auto bg-background-muted'>
-          <div className='container mx-auto max-w-[1280px] px-3 md:px-4 lg:px-6 py-12'>
+          <div className='container mx-auto min-w-0 max-w-[1280px] px-3 py-8 md:px-4 lg:px-6 lg:py-12'>
             {children}
           </div>
         </main>

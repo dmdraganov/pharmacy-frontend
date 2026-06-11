@@ -85,15 +85,15 @@ const mapCheckoutErrors = (error: unknown): {
 
 // --- Components ---
 const OrderSuccessMessage = () => (
-  <div className='flex flex-col items-center justify-center rounded-lg border border-border-default bg-background-default p-12 text-center'>
-    <h1 className='mb-4 text-3xl font-bold text-success'>
+  <div className='flex flex-col items-center justify-center rounded-lg border border-border-default bg-background-default p-6 text-center sm:p-12'>
+    <h1 className='mb-4 text-2xl font-bold text-success sm:text-3xl'>
       Заказ успешно оформлен!
     </h1>
     <p className='mb-6 text-text-default'>
       Спасибо за покупку! Информация о заказе уже доступна в вашем личном
       кабинете.
     </p>
-    <div className='flex gap-4'>
+    <div className='flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4'>
       <Button as={Link} to={ROUTES.home} variant='secondary'>
         Вернуться на главную
       </Button>
@@ -260,7 +260,7 @@ const CheckoutPage = memo(() => {
 
   return (
     <>
-      <h1 className='mb-8 text-3xl font-bold text-text-default'>
+      <h1 className='mb-6 text-2xl font-bold text-text-default sm:mb-8 sm:text-3xl'>
         Оформление заказа
       </h1>
       {!user && (
@@ -279,8 +279,8 @@ const CheckoutPage = memo(() => {
           {formError}
         </div>
       )}
-      <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
-        <main className='flex flex-col gap-6 lg:col-span-2'>
+      <div className='grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8'>
+        <main className='flex min-w-0 flex-col gap-6 lg:col-span-2'>
           <CheckoutDelivery
             deliveryMethod={effectiveDeliveryMethod}
             setDeliveryMethod={(method) => {

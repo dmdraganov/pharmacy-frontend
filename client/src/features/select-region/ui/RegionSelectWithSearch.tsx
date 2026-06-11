@@ -24,18 +24,18 @@ export const RegionSelectWithSearch = memo(() => {
   };
 
   return (
-    <div className='relative' ref={dropdownRef}>
+    <div className='relative min-w-0' ref={dropdownRef}>
       <button
         type='button'
         {...triggerProps}
-        className='flex items-center gap-1 rounded-md border-none text-sm text-text-default outline-none cursor-pointer'
+        className='flex max-w-full items-center gap-1 rounded-md border-none text-sm text-text-default outline-none cursor-pointer'
       >
-        <span>{region}</span>
+        <span className='truncate'>{region}</span>
         <ChevronIcon direction={isOpen ? 'up' : 'down'} className='h-4 w-4' />
       </button>
 
       {isOpen && (
-        <div className='absolute left-0 mt-2 w-64 rounded-md border border-border-default bg-background-default shadow-lg z-50'>
+        <div className='absolute left-0 z-50 mt-2 w-[min(16rem,calc(100vw-1.5rem))] rounded-md border border-border-default bg-background-default shadow-lg'>
           <div className='p-2'>
             <Input
               type='text'

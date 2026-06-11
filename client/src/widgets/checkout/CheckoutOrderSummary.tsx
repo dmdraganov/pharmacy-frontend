@@ -22,17 +22,17 @@ const CheckoutItem = memo(({ productId }: { productId: string }) => {
   const imageUrl = getProductImage(item.image);
 
   return (
-    <div className='flex items-start gap-4 pt-4'>
+    <div className='flex min-w-0 flex-col gap-3 pt-4 min-[420px]:flex-row min-[420px]:items-start min-[420px]:gap-4'>
       <img
         src={imageUrl}
         alt={item.name}
-        className='h-16 w-16 rounded object-cover'
+        className='h-16 w-16 shrink-0 rounded object-cover'
       />
-      <div className='flex-grow'>
-        <p className='font-semibold'>{item.name}</p>
+      <div className='min-w-0 flex-grow'>
+        <p className='break-words font-semibold'>{item.name}</p>
         <p className='text-sm text-text-muted'>{item.price} ₽</p>
       </div>
-      <div className='flex flex-col items-end gap-2'>
+      <div className='flex flex-row items-center justify-between gap-2 min-[420px]:flex-col min-[420px]:items-end'>
         <QuantityControl
           quantity={item.quantity}
           onIncrement={() => updateQuantity(item.id, item.quantity + 1)}
@@ -56,7 +56,7 @@ export const CheckoutOrderSummary = memo(() => {
 
   if (cartItemIds.length === 0) {
     return (
-      <div className='rounded-lg border border-border-default bg-background-default p-6'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4 sm:p-6'>
         <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
         <p>Ваша корзина пуста.</p>
         <Button as={Link} to='/' className='mt-4 w-full'>
@@ -67,7 +67,7 @@ export const CheckoutOrderSummary = memo(() => {
   }
 
   return (
-    <div className='rounded-lg border border-border-default bg-background-default p-6'>
+    <div className='rounded-lg border border-border-default bg-background-default p-4 sm:p-6'>
       <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
       <div className='flex flex-col gap-4 divide-y divide-border-default'>
         {cartItemIds.map((productId) => (
@@ -75,11 +75,11 @@ export const CheckoutOrderSummary = memo(() => {
         ))}
       </div>
       <div className='mt-6 border-t border-border-default pt-4'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between gap-3'>
           <span>Товары ({totalItems} шт.)</span>
           <span>{total} ₽</span>
         </div>
-        <div className='mt-4 flex justify-between font-bold'>
+        <div className='mt-4 flex justify-between gap-3 font-bold'>
           <span>Итого</span>
           <span>{total} ₽</span>
         </div>

@@ -47,7 +47,7 @@ const RegisterPage = memo(() => {
 
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form className='space-y-6' onSubmit={handleSubmit}>
-          <div className='grid grid-cols-2 gap-4'>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             <Input
               name='firstName'
               placeholder='Имя'

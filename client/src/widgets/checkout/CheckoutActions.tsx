@@ -11,8 +11,8 @@ export const CheckoutActions = memo(
   ({ onConfirm, isProcessing }: CheckoutActionsProps) => {
     const selectedItemsTotal = useSelectedItemsTotal();
     return (
-      <div className='rounded-lg border border-border-default bg-background-default p-6'>
-        <div className='mb-4 flex justify-between font-bold'>
+      <div className='rounded-lg border border-border-default bg-background-default p-4 sm:p-6'>
+        <div className='mb-4 flex justify-between gap-3 font-bold'>
           <span>Итого к оплате</span>
           <span>{selectedItemsTotal} ₽</span>
         </div>

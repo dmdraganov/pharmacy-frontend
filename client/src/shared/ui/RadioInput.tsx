@@ -23,7 +23,7 @@ export const RadioInput = ({
 
   return (
     <label
-      className={`flex cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 ${className}`}
+      className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-lg border border-border-default p-3 has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 ${className}`}
     >
       <input
         type='radio'
@@ -33,7 +33,7 @@ export const RadioInput = ({
         onChange={handleChange}
         className='mt-1'
       />
-      <div className='flex-grow'>{children}</div>
+      <div className='min-w-0 flex-grow break-words'>{children}</div>
     </label>
   );
 };

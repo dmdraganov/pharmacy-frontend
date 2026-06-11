@@ -19,8 +19,10 @@ const ProductGrid = ({ title, products }: ProductGridProps) => {
 
   return (
     <>
-      <h1 className='mb-4 text-2xl font-bold text-text-default'>{title}</h1>
-      <div className='grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3'>
+      <h1 className='mb-4 text-2xl font-bold text-text-default sm:text-3xl'>
+        {title}
+      </h1>
+      <div className='grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6'>
         {currentData.length > 0 ? (
           currentData.map((product) => (
             <ProductCardWithCart key={product.id} product={product} />

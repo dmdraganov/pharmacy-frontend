@@ -72,8 +72,8 @@ const HomePage = memo(() => {
 
   return (
     <>
-      <section className='mb-12'>
-        <h2 className='mb-6 text-3xl font-bold text-text-default'>
+      <section className='mb-10 sm:mb-12'>
+        <h2 className='mb-4 text-2xl font-bold text-text-default sm:mb-6 sm:text-3xl'>
           Популярные товары
         </h2>
         {renderProductList(popularProducts, 'popular')}
@@ -81,7 +81,7 @@ const HomePage = memo(() => {
 
       {promotionalProducts.length > 0 && (
         <section>
-          <h2 className='mb-6 text-3xl font-bold text-text-default'>
+          <h2 className='mb-4 text-2xl font-bold text-text-default sm:mb-6 sm:text-3xl'>
             Акции и скидки
           </h2>
           {renderProductList(promotionalProducts, 'promo')}

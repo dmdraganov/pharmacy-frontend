@@ -40,13 +40,19 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   }, [quantityInCart, product.id, removeFromCart, updateQuantity]);
 
   return (
-    <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
+    <div className='grid min-w-0 grid-cols-1 gap-6 md:grid-cols-2 md:gap-8'>
       <div>
-        <img src={imageUrl} alt={product.name} className='w-full rounded-lg' />
+        <img
+          src={imageUrl}
+          alt={product.name}
+          className='mx-auto aspect-square w-full max-w-md rounded-lg object-cover md:max-w-none'
+        />
       </div>
-      <div>
+      <div className='min-w-0'>
         <div className='flex items-start gap-4'>
-          <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
+          <h1 className='mb-2 min-w-0 break-words text-2xl font-bold sm:text-3xl'>
+            {product.name}
+          </h1>
           <FavoriteButton
             productId={product.id}
             isAuthenticated={isAuthenticated}
@@ -63,9 +69,11 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
           </Badge>
         )}
         <div className='mb-6'>
-          <span className='text-4xl font-bold'>{product.price} ₽</span>
+          <span className='text-3xl font-bold sm:text-4xl'>
+            {product.price} ₽
+          </span>
           {product.oldPrice && (
-            <span className='ml-3 text-xl text-text-muted line-through'>
+            <span className='ml-3 text-lg text-text-muted line-through sm:text-xl'>
               {product.oldPrice} ₽
             </span>
           )}
@@ -74,7 +82,7 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
           {quantityInCart === 0 ? (
             <Button onClick={handleAddProduct}>Добавить в корзину</Button>
           ) : (
-            <div className='flex items-center justify-between'>
+            <div className='flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between'>
               <QuantityControl
                 quantity={quantityInCart}
                 onIncrement={handleIncrement}

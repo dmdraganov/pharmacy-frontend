@@ -72,9 +72,9 @@ const AdminProductsPage = () => {
 
   return (
     <div>
-      <div className='mb-4 flex items-center justify-between'>
+      <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-2xl font-bold text-text-default'>Товары</h1>
-        <button className='rounded bg-primary px-4 py-2 font-bold text-text-inverse hover:bg-primary-hover'>
+        <button className='rounded bg-primary px-4 py-2 font-bold text-text-inverse hover:bg-primary-hover sm:w-auto'>
           Добавить товар
         </button>
       </div>
@@ -139,7 +139,7 @@ const AdminProductsPage = () => {
               key={product.id}
               className='border-b border-border-default p-4'
             >
-              <h3 className='mb-2 text-lg font-bold text-text-default'>
+              <h3 className='mb-2 break-words text-lg font-bold text-text-default'>
                 {product.name}
               </h3>
               <div className='space-y-1 text-sm'>
@@ -160,8 +160,8 @@ const AdminProductsPage = () => {
                   {product.isPrescription ? 'Да' : 'Нет'}
                 </p>
               </div>
-              <div className='mt-4 flex items-center'>
-                <button className='mr-2 rounded-md bg-primary-subtle px-4 py-2 text-sm text-primary'>
+              <div className='mt-4 flex flex-col gap-2 min-[420px]:flex-row min-[420px]:items-center'>
+                <button className='rounded-md bg-primary-subtle px-4 py-2 text-sm text-primary'>
                   Редактировать
                 </button>
                 <button className='rounded-md bg-danger-subtle px-4 py-2 text-sm text-danger-emphasis'>

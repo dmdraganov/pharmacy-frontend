@@ -20,7 +20,7 @@ export const ProductInfo = memo(({ product }: ProductInfoProps) => {
   ];
 
   return (
-    <div className='mt-12'>
+    <div className='mt-8 min-w-0 sm:mt-12'>
       {sections.map((section) => {
         if (section.content && section.content.length > 0) {
           return (

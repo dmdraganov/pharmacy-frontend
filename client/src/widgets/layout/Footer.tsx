@@ -5,8 +5,8 @@ const Footer = memo(() => {
   return (
     <footer className='border-t border-border-default bg-background-muted'>
       <div className='container max-w-7xl mx-auto px-3 md:px-4 lg:px-6 py-8'>
-        <div className='flex flex-col gap-8 md:flex-row md:gap-19'>
-          <div>
+        <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-16'>
+          <div className='min-w-0'>
             <h3 className='mb-4 text-lg font-medium text-text-default'>
               О компании
             </h3>
@@ -29,7 +29,7 @@ const Footer = memo(() => {
               </li>
             </ul>
           </div>
-          <div>
+          <div className='min-w-0'>
             <h3 className='mb-4 text-lg font-medium text-text-default'>
               Покупателям
             </h3>
@@ -52,11 +52,11 @@ const Footer = memo(() => {
               </li>
             </ul>
           </div>
-          <div>
+          <div className='min-w-0 sm:col-span-2 lg:col-span-1'>
             <h3 className='mb-4 text-lg font-medium text-text-default'>
               Обратная связь
             </h3>
-            <ul className='space-y-2 text-text-muted'>
+            <ul className='space-y-2 break-words text-text-muted'>
               <li>
                 Телефон:{' '}
                 <a

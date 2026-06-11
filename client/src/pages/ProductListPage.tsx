@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import {
   getBrands,
   getManufacturers,
+  getProducts,
   getProductsPage,
   getSections,
 } from '@/shared/api';
@@ -76,9 +77,37 @@ const ProductListPage = memo(() => {
     [categoryId, currentSection]
   );
 
-  // 1. Determine the most specific product set BEFORE generating filters.
+  const { data: filterProducts = [], isLoading: areFilterProductsLoading } =
+    useQuery({
+      queryKey: ['catalog-filter-products', sectionId, categoryId],
+      queryFn: () =>
+        getProducts({
+          category_id: categoryId,
+          per_page: 1000,
+        }),
+      enabled: Boolean(sectionId || categoryId),
+    });
+
+  const availableFilterProducts = useMemo(() => {
+    if (categoryId) {
+      return filterProducts.filter((product) => product.categoryId === categoryId);
+    }
+
+    if (sectionId) {
+      const sectionCategoryIds =
+        currentSection?.categories.map((category) => category.id) || [];
+
+      return filterProducts.filter((product) =>
+        sectionCategoryIds.includes(product.categoryId)
+      );
+    }
+
+    return [];
+  }, [categoryId, currentSection, filterProducts, sectionId]);
+
+  // Determine the product set for the current page after server filters.
   const baseProducts = useMemo(() => {
-    if (isLoading) return []; // Return empty array while loading
+    if (isLoading) return [];
     if (categoryId) {
       return products.filter((p) => p.categoryId === categoryId);
     }
@@ -87,14 +116,39 @@ const ProductListPage = memo(() => {
         currentSection?.categories.map((category) => category.id) || [];
       return products.filter((p) => sectionCategoryIds.includes(p.categoryId));
     }
-    return []; // Should not happen on this page
+    return [];
   }, [sectionId, categoryId, products, isLoading, currentSection]);
 
-  // 2. Generate available filters from the specific product set.
   const availableFilters = useMemo(
-    () => getAvailableFilters(baseProducts),
-    [baseProducts]
+    () => getAvailableFilters(availableFilterProducts),
+    [availableFilterProducts]
   );
+
+  const availableBrands = useMemo(() => {
+    const brandIds = new Set(
+      availableFilterProducts
+        .map((product) => product.brandId)
+        .filter((brandId): brandId is string => Boolean(brandId))
+    );
+
+    return (catalogDictionaries?.brands || []).filter((brand) =>
+      brandIds.has(brand.id)
+    );
+  }, [availableFilterProducts, catalogDictionaries?.brands]);
+
+  const availableManufacturers = useMemo(() => {
+    const manufacturerIds = new Set(
+      availableFilterProducts
+        .map((product) => product.manufacturerId)
+        .filter((manufacturerId): manufacturerId is string =>
+          Boolean(manufacturerId)
+        )
+    );
+
+    return (catalogDictionaries?.manufacturers || []).filter((manufacturer) =>
+      manufacturerIds.has(manufacturer.id)
+    );
+  }, [availableFilterProducts, catalogDictionaries?.manufacturers]);
 
   const title = currentCategory?.name || currentSection?.name || 'Загрузка...';
 
@@ -108,19 +162,20 @@ const ProductListPage = memo(() => {
         availableFilters={availableFilters}
         section={currentSection}
         categories={categoryFilterOptions}
-        brands={catalogDictionaries?.brands}
-        manufacturers={catalogDictionaries?.manufacturers}
+        brands={availableBrands}
+        manufacturers={availableManufacturers}
       />
     ),
     [
       availableFilters,
       currentSection,
       categoryFilterOptions,
-      catalogDictionaries,
+      availableBrands,
+      availableManufacturers,
     ]
   );
 
-  if (isLoading || areCatalogDictionariesLoading) {
+  if (isLoading || areCatalogDictionariesLoading || areFilterProductsLoading) {
     return (
       <div className='flex h-[60vh] items-center justify-center'>
         <Spinner />

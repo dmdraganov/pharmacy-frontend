@@ -62,7 +62,7 @@ export const AccountSidebar = memo(() => {
         </p>
       </div>
 
-      <nav className='flex grow flex-col gap-2'>
+      <nav className='flex grow flex-col gap-2 sm:flex-row sm:flex-wrap md:flex-col md:flex-nowrap'>
         <NavLink to='/account/orders' end>
           Заказы
         </NavLink>

@@ -236,9 +236,11 @@ const AdminOrdersPage = () => {
         <div className='md:hidden'>
           {orders.map((order) => (
             <div key={order.id} className='border-b border-border-default p-4'>
-              <div className='mb-2 flex items-start justify-between'>
-                <div>
-                  <h3 className='font-bold text-text-default'>{order.id}</h3>
+              <div className='mb-2 flex flex-col gap-2 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between'>
+                <div className='min-w-0'>
+                  <h3 className='break-all font-bold text-text-default'>
+                    {order.id}
+                  </h3>
                   <p className='text-sm'>
                     {new Date(order.date).toLocaleDateString('ru-RU')}
                   </p>
@@ -258,7 +260,7 @@ const AdminOrdersPage = () => {
                 <h4 className='font-semibold text-text-default'>Состав:</h4>
                 <ul className='list-inside list-disc pl-2 text-sm'>
                   {order.items.map((item) => (
-                    <li key={item.product.id}>
+                  <li key={item.product.id} className='break-words'>
                       {item.product.name} ({item.quantity} x {item.price} ₽)
                     </li>
                   ))}
@@ -267,7 +269,7 @@ const AdminOrdersPage = () => {
               <p className='mt-2 text-right font-bold text-text-default'>
                 Итого: {order.total.toFixed(2)} ₽
               </p>
-              <div className='mt-4 flex justify-end'>
+              <div className='mt-4 flex justify-start min-[420px]:justify-end'>
                 <OrderActions
                   order={order}
                   loadingAction={loadingAction}

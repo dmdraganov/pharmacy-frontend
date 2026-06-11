@@ -38,11 +38,36 @@
 }
 
 @layer base {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+
   html,
   body {
     font-family: var(--font-inter);
     scrollbar-gutter: stable;
     color: var(--color-text-default);
     background: var(--color-background-default);
+  }
+
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
   }
 }
