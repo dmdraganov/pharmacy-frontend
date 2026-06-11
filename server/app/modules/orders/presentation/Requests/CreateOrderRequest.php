@@ -9,8 +9,8 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'delivery_method_id' => 'required|integer|exists:delivery_methods,id',
-            'payment_method_id' => 'required|integer|exists:payment_methods,id',
+            'delivery_method_code' => 'required|string|exists:delivery_methods,code',
+            'payment_method_code' => 'required|string|exists:payment_methods,code',
             'pharmacy_id' => 'nullable|integer|exists:pharmacies,id',
             'delivery_country' => 'nullable|string|max:255',
             'delivery_city' => 'nullable|string|max:255',

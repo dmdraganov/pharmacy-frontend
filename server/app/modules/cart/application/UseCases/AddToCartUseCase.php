@@ -12,7 +12,7 @@ class AddToCartUseCase implements UseCase
         private readonly CartItemRepositoryContract $cartItemRepository
     ) {}
 
-    public function __invoke(string $userId, string $productId, int $quantity): void
+    public function __invoke(string $userId, string $productId, int $quantity): CartItem
     {
         $cartItem = $this->cartItemRepository->findByProduct($userId, $productId);
 
@@ -22,6 +22,6 @@ class AddToCartUseCase implements UseCase
             $cartItem = new CartItem(0, $userId, $productId, $quantity);
         }
 
-        $this->cartItemRepository->save($cartItem);
+        return $this->cartItemRepository->save($cartItem);
     }
 }

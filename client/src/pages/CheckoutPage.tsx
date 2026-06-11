@@ -1,26 +1,19 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCartItems, useCartStore } from '@/features/cart';
+import { useCartStore, useHasPrescriptionItems } from '@/features/cart';
 import { useAuthStore } from '@/features/auth';
 import { CheckoutOrderSummary } from '@/widgets/checkout/CheckoutOrderSummary';
 import { CheckoutDelivery } from '@/widgets/checkout/CheckoutDelivery';
-import { CheckoutContactInfo } from '@/widgets/checkout/CheckoutContactInfo';
 import { CheckoutPayment } from '@/widgets/checkout/CheckoutPayment';
-import { CheckoutPrescription } from '@/widgets/checkout/CheckoutPrescription';
 import { CheckoutActions } from '@/widgets/checkout/CheckoutActions';
 import { CheckoutComments } from '@/widgets/checkout/CheckoutComments';
 import Button from '@/shared/ui/Button';
 import { createOrder } from '@/shared/api';
+import { ApiError } from '@/shared/api/apiClient';
 import { ROUTES } from '@/shared/config/router';
+import type { CardDetails } from '@/widgets/checkout/CheckoutPayment';
 
-// --- Validation ---
-interface ContactInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-}
 interface DeliveryAddress {
   city: string;
   street: string;
@@ -28,9 +21,66 @@ interface DeliveryAddress {
   apartment: string;
 }
 type ValidationErrors = {
-  contactInfo?: Partial<Record<keyof ContactInfo, string>>;
   deliveryAddress?: Partial<Record<keyof DeliveryAddress, string>>;
   selectedPharmacy?: string;
+  cardDetails?: Partial<Record<keyof CardDetails, string>>;
+};
+
+const fieldError = (errors: Record<string, string[]> | undefined, key: string) =>
+  errors?.[key]?.[0];
+
+const isValidCardExpiry = (value: string) => {
+  const match = value.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+  if (!match) return false;
+
+  const month = Number(match[1]);
+  const year = 2000 + Number(match[2]);
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+
+  return year > currentYear || (year === currentYear && month >= currentMonth);
+};
+
+const mapCheckoutErrors = (error: unknown): {
+  formError: string;
+  fieldErrors: ValidationErrors;
+} => {
+  if (!(error instanceof ApiError)) {
+    return {
+      formError: 'Не удалось оформить заказ. Проверьте соединение и попробуйте снова.',
+      fieldErrors: {},
+    };
+  }
+
+  const fieldErrors: ValidationErrors = {};
+  const deliveryAddressError = fieldError(error.errors, 'delivery_address');
+
+  if (
+    deliveryAddressError ||
+    fieldError(error.errors, 'delivery_city') ||
+    fieldError(error.errors, 'delivery_street') ||
+    fieldError(error.errors, 'delivery_house')
+  ) {
+    fieldErrors.deliveryAddress = {
+      city: fieldError(error.errors, 'delivery_city') || deliveryAddressError,
+      street: fieldError(error.errors, 'delivery_street') || deliveryAddressError,
+      house: fieldError(error.errors, 'delivery_house'),
+    };
+  }
+
+  const pharmacyError = fieldError(error.errors, 'pharmacy_id');
+  if (pharmacyError) {
+    fieldErrors.selectedPharmacy = pharmacyError;
+  }
+
+  return {
+    formError:
+      error.status === 401
+        ? 'Сессия истекла. Войдите в аккаунт и повторите оформление.'
+        : error.message || 'Не удалось оформить заказ. Проверьте данные и попробуйте снова.',
+    fieldErrors,
+  };
 };
 
 // --- Components ---
@@ -57,24 +107,13 @@ const OrderSuccessMessage = () => (
 const CheckoutPage = memo(() => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user } = useAuthStore();
-  const { clearCart } = useCartStore();
-  const cartItems = useCartItems();
-  const hasPrescriptionItems = useMemo(
-    () => Object.values(cartItems).some((item) => item.isPrescription),
-    [cartItems]
-  );
+  const user = useAuthStore((state) => state.user);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const hasPrescriptionItems = useHasPrescriptionItems();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
-  // --- Unified Form State ---
-  const [contactInfo, setContactInfo] = useState<ContactInfo>(() => ({
-    firstName: user?.firstName ?? '',
-    lastName: user?.lastName ?? '',
-    email: user?.email ?? '',
-    phone: user?.phone ?? '',
-  }));
   const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup'>(
     'courier'
   );
@@ -93,9 +132,15 @@ const CheckoutPage = memo(() => {
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'on-receipt'>(
     'online'
   );
+  const [cardDetails, setCardDetails] = useState<CardDetails>({
+    number: '',
+    expiry: '',
+    cvv: '',
+  });
   const [comment, setComment] = useState('');
 
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [formError, setFormError] = useState('');
   const createOrderMutation = useMutation({
     mutationFn: createOrder,
     onSuccess: async () => {
@@ -105,7 +150,10 @@ const CheckoutPage = memo(() => {
       setIsOrderPlaced(true);
       setTimeout(() => navigate(ROUTES.account.orders), 2000);
     },
-    onError: () => {
+    onError: (error) => {
+      const { formError, fieldErrors } = mapCheckoutErrors(error);
+      setFormError(formError);
+      setErrors((currentErrors) => ({ ...currentErrors, ...fieldErrors }));
       setIsProcessing(false);
     },
   });
@@ -113,21 +161,7 @@ const CheckoutPage = memo(() => {
   // --- Validation Logic ---
   const validateForm = useCallback((): boolean => {
     const newErrors: ValidationErrors = {};
-    // Validate Contact Info
-    if (!contactInfo.firstName) {
-      if (!newErrors.contactInfo) newErrors.contactInfo = {};
-      newErrors.contactInfo.firstName = 'Имя обязательно';
-    }
-    if (!contactInfo.email || !/\S+@\S+\.\S+/.test(contactInfo.email)) {
-      if (!newErrors.contactInfo) newErrors.contactInfo = {};
-      newErrors.contactInfo.email = 'Введите корректный email';
-    }
-    if (!contactInfo.phone) {
-      if (!newErrors.contactInfo) newErrors.contactInfo = {};
-      newErrors.contactInfo.phone = 'Телефон обязателен';
-    }
 
-    // Validate Delivery
     if (effectiveDeliveryMethod === 'courier') {
       if (!deliveryAddress.city) {
         if (!newErrors.deliveryAddress) newErrors.deliveryAddress = {};
@@ -147,19 +181,54 @@ const CheckoutPage = memo(() => {
       }
     }
 
+    if (paymentMethod === 'online') {
+      const cardErrors: Partial<Record<keyof CardDetails, string>> = {};
+      const cardNumberDigits = cardDetails.number.replace(/\D/g, '');
+      const cvvDigits = cardDetails.cvv.replace(/\D/g, '');
+
+      if (cardNumberDigits.length !== 16) {
+        cardErrors.number = 'Введите 16 цифр карты';
+      }
+      if (!isValidCardExpiry(cardDetails.expiry)) {
+        cardErrors.expiry = 'Введите действительный срок в формате ММ/ГГ';
+      }
+      if (cvvDigits.length < 3 || cvvDigits.length > 4) {
+        cardErrors.cvv = 'Введите 3 или 4 цифры';
+      }
+
+      if (Object.keys(cardErrors).length > 0) {
+        newErrors.cardDetails = cardErrors;
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [contactInfo, effectiveDeliveryMethod, deliveryAddress, selectedPharmacyId]);
+  }, [
+    effectiveDeliveryMethod,
+    deliveryAddress,
+    selectedPharmacyId,
+    paymentMethod,
+    cardDetails,
+  ]);
 
   // --- Order Confirmation ---
   const handleConfirmOrder = useCallback(() => {
     if (!validateForm()) {
+      setFormError('Проверьте выделенные поля перед подтверждением заказа.');
       return;
     }
 
-    const items = Object.values(cartItems);
-    if (items.length === 0 || !user) return;
+    const items = Object.values(useCartStore.getState().items);
+    if (items.length === 0) {
+      setFormError('Корзина пуста. Добавьте товары перед оформлением заказа.');
+      return;
+    }
+    if (!user) {
+      setFormError('Войдите в аккаунт, чтобы оформить заказ.');
+      return;
+    }
 
+    setFormError('');
     setIsProcessing(true);
     createOrderMutation.mutate({
       deliveryMethod:
@@ -175,7 +244,6 @@ const CheckoutPage = memo(() => {
     });
   }, [
     validateForm,
-    cartItems,
     user,
     effectiveDeliveryMethod,
     deliveryAddress,
@@ -206,6 +274,11 @@ const CheckoutPage = memo(() => {
           </p>
         </div>
       )}
+      {formError && (
+        <div className='mb-6 rounded-lg border border-danger bg-danger-subtle p-4 text-danger'>
+          {formError}
+        </div>
+      )}
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-3'>
         <main className='flex flex-col gap-6 lg:col-span-2'>
           <CheckoutDelivery
@@ -222,15 +295,12 @@ const CheckoutPage = memo(() => {
             errors={errors}
             isCourierDisabled={hasPrescriptionItems}
           />
-          <CheckoutContactInfo
-            contactInfo={contactInfo}
-            setContactInfo={setContactInfo}
-            errors={errors.contactInfo}
-          />
-          <CheckoutPrescription />
           <CheckoutPayment
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
+            cardDetails={cardDetails}
+            setCardDetails={setCardDetails}
+            errors={errors.cardDetails}
           />
           <CheckoutComments comment={comment} setComment={setComment} />
         </main>

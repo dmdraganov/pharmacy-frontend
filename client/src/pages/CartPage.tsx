@@ -1,33 +1,57 @@
 import { memo } from 'react';
 import {
-  useCartItems,
+  useCartItemById,
+  useCartItemIds,
+  useIsCartItemSelected,
   useCartStore,
   useCartTotals,
-  useSelectedItemIds,
+  useSelectedItemsCount,
 } from '@/features/cart';
+import { useAuthStore } from '@/features/auth';
 import Checkbox from '@/shared/ui/Checkbox';
 import CartItemCard from '@/entities/cart/ui/CartItemCard';
 import CartSummary from '@/widgets/cart/CartSummary';
 import EmptyState from '@/shared/ui/EmptyState';
 import Button from '@/shared/ui/Button';
-import type { CartItem } from '@/entities/cart';
+import { FavoriteButton } from '@/features/favorites';
 
-const CartPage = memo(() => {
-  const cartItems = useCartItems();
-  const selectedItemIds = useSelectedItemIds();
+const CartPageItem = memo(({ productId }: { productId: string }) => {
+  const item = useCartItemById(productId);
+  const isSelected = useIsCartItemSelected(productId);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const clearCart = useCartStore((state) => state.clearCart);
   const toggleSelectItem = useCartStore((state) => state.toggleSelectItem);
+  const isAuthenticated = useAuthStore((state) => Boolean(state.user));
+
+  if (!item) {
+    return null;
+  }
+
+  return (
+    <CartItemCard
+      item={item}
+      isSelected={isSelected}
+      onSelectItem={toggleSelectItem}
+      onUpdateQuantity={updateQuantity}
+      onRemoveFromCart={removeFromCart}
+      favoriteAction={
+        <FavoriteButton productId={item.id} isAuthenticated={isAuthenticated} />
+      }
+    />
+  );
+});
+
+const CartPage = memo(() => {
+  const cartItemIds = useCartItemIds();
+  const selectedItemsCount = useSelectedItemsCount();
+  const clearCart = useCartStore((state) => state.clearCart);
   const toggleSelectAll = useCartStore((state) => state.toggleSelectAll);
   const summaryProps = useCartTotals();
 
-  const cartItemValues = Object.values(cartItems) as CartItem[];
   const areAllSelected =
-    selectedItemIds.length === cartItemValues.length &&
-    cartItemValues.length > 0;
+    selectedItemsCount === cartItemIds.length && cartItemIds.length > 0;
 
-  if (cartItemValues.length === 0) {
+  if (cartItemIds.length === 0) {
     return (
       <div className='flex grow items-center justify-center'>
         <EmptyState
@@ -57,15 +81,8 @@ const CartPage = memo(() => {
             </Button>
           </div>
           <div className='space-y-4'>
-            {cartItemValues.map((item) => (
-              <CartItemCard
-                key={item.id}
-                item={item}
-                isSelected={selectedItemIds.includes(item.id)}
-                onSelectItem={toggleSelectItem}
-                onUpdateQuantity={updateQuantity}
-                onRemoveFromCart={removeFromCart}
-              />
+            {cartItemIds.map((productId) => (
+              <CartPageItem key={productId} productId={productId} />
             ))}
           </div>
         </div>

@@ -16,6 +16,7 @@ use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -40,34 +41,38 @@ class AuthController extends Controller
 
         // This is a bridge between domain and infrastructure for the sake of the framework
         $userModel = UserModel::find($user->id);
-        $token = $userModel->createToken('auth_token')->plainTextToken;
+        $this->startSession($request, $userModel);
 
         return $this->created([
             'user' => new UserResource($user),
-            'token' => $token,
         ], 'User registered successfully');
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
         $dto = new LoginDTO(
-            email: $request->input('email'),
+            email: mb_strtolower(trim($request->input('email'))),
             password: $request->input('password')
         );
 
         $user = ($this->loginUseCase)($dto);
 
         $userModel = UserModel::find($user->id);
-        $token = $userModel->createToken('auth_token')->plainTextToken;
+        $this->startSession($request, $userModel);
 
         return $this->ok([
-            'token' => $token,
+            'user' => new UserResource($user),
         ], null, 'User logged in successfully');
     }
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        Auth::guard('web')->logout();
+
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return $this->noContent();
     }
@@ -77,6 +82,13 @@ class AuthController extends Controller
         // We need to convert the Eloquent user to our domain user
         // This is a shortcut for now. In a real app, we would have a proper way to get the domain user.
         $userModel = $request->user();
+        $roles = collect();
+
+        if (method_exists($userModel, 'loadMissing')) {
+            $userModel->loadMissing('roles');
+            $roles = $userModel->roles ?? collect();
+        }
+
         $user = new User(
             id: $userModel->id,
             firstName: $userModel->first_name,
@@ -86,9 +98,19 @@ class AuthController extends Controller
             password: $userModel->password,
             createdAt: \DateTimeImmutable::createFromInterface($userModel->created_at),
             updatedAt: \DateTimeImmutable::createFromInterface($userModel->updated_at),
-            roles: $userModel->roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
+            roles: $roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
         );
 
         return $this->ok(new UserResource($user));
+    }
+
+    private function startSession(Request $request, UserModel $userModel): void
+    {
+        if (! $request->hasSession()) {
+            return;
+        }
+
+        Auth::login($userModel);
+        $request->session()->regenerate();
     }
 }

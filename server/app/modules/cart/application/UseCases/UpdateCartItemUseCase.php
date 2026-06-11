@@ -11,10 +11,10 @@ class UpdateCartItemUseCase implements UseCase
         private readonly CartItemRepositoryContract $cartItemRepository
     ) {}
 
-    public function __invoke(int $cartItemId, int $quantity): void
+    public function __invoke(int $cartItemId, int $quantity): \App\Modules\Cart\Domain\CartItem
     {
         $cartItem = $this->cartItemRepository->find($cartItemId);
         $cartItem->quantity = $quantity;
-        $this->cartItemRepository->save($cartItem);
+        return $this->cartItemRepository->save($cartItem);
     }
 }

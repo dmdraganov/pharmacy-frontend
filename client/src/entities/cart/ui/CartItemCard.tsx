@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { CartItem } from '@/entities/cart';
 import QuantityControl from '@/shared/ui/QuantityControl';
@@ -6,7 +6,6 @@ import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Badge from '@/shared/ui/Badge';
 import { getProductImage } from '@/entities/product';
-import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 
 interface CartItemCardProps {
   item: CartItem;
@@ -14,11 +13,18 @@ interface CartItemCardProps {
   onSelectItem: (id: string) => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemoveFromCart: (id: string) => void;
+  favoriteAction?: ReactNode;
 }
 
 const CartItemCard = memo((props: CartItemCardProps) => {
-  const { item, isSelected, onSelectItem, onUpdateQuantity, onRemoveFromCart } =
-    props;
+  const {
+    item,
+    isSelected,
+    onSelectItem,
+    onUpdateQuantity,
+    onRemoveFromCart,
+    favoriteAction,
+  } = props;
 
   const imageUrl = getProductImage(item.image);
 
@@ -56,7 +62,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
           )}
         </div>
         <div className='mt-auto flex items-center gap-4 pt-2'>
-          <FavoriteButton productId={item.id} />
+          {favoriteAction}
           <Button
             variant='danger'
             size='small'

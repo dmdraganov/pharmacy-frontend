@@ -1,4 +1,4 @@
-import { apiRequest, getAuthToken } from './apiClient';
+import { ApiError, apiRequest } from './apiClient';
 import { getProductById } from './productsApi';
 import type { Order, OrderStatus } from '@/entities/order';
 
@@ -11,8 +11,10 @@ interface ApiOrderItem {
 interface ApiOrder {
   id: string;
   status_id: number;
-  delivery_method_id: number;
-  payment_method_id: number;
+  delivery_method_id?: number;
+  delivery_method_code?: 'pickup' | 'delivery';
+  payment_method_id?: number;
+  payment_method_code?: 'online' | 'on_receipt';
   pharmacy_id?: number | string | null;
   delivery_city?: string | null;
   delivery_street?: string | null;
@@ -66,8 +68,7 @@ const mapOrder = async (order: ApiOrder): Promise<Order> => {
     })
   );
 
-  const deliveryMethod =
-    order.delivery_method_id === 2 ? 'pickup' : 'delivery';
+  const deliveryMethod = order.delivery_method_code || 'delivery';
   const deliveryAddress =
     deliveryMethod === 'delivery'
       ? {
@@ -98,17 +99,20 @@ const mapOrder = async (order: ApiOrder): Promise<Order> => {
             .filter(Boolean)
             .join(', '),
     deliveryAddress,
-    paymentMethod: order.payment_method_id === 2 ? 'on-receipt' : 'online',
+    paymentMethod:
+      order.payment_method_code === 'on_receipt' ? 'on-receipt' : 'online',
   };
 };
 
 export const getOrders = async (): Promise<Order[]> => {
-  if (!getAuthToken()) {
-    return [];
-  }
-
   const response = await apiRequest<ApiOrder[]>('/orders', {
     params: { per_page: 100 },
+  }).catch((error) => {
+    if (error instanceof ApiError && error.status === 401) {
+      return { data: [], message: 'Unauthenticated' };
+    }
+
+    throw error;
   });
   return Promise.all(response.data.map(mapOrder));
 };
@@ -126,8 +130,9 @@ export const createOrder = async (
   const response = await apiRequest<ApiOrder>('/orders', {
     method: 'POST',
     body: {
-      delivery_method_id: payload.deliveryMethod === 'pickup' ? 2 : 1,
-      payment_method_id: payload.paymentMethod === 'on-receipt' ? 2 : 1,
+      delivery_method_code: payload.deliveryMethod,
+      payment_method_code:
+        payload.paymentMethod === 'on-receipt' ? 'on_receipt' : 'online',
       pharmacy_id: payload.pharmacyId ? Number(payload.pharmacyId) : null,
       delivery_country: null,
       delivery_city: payload.deliveryAddress?.city || null,

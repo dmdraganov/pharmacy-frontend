@@ -31,7 +31,7 @@ The project follows a strict **Feature-Sliced Design (FSD)** like methodology. T
 - Layers can only depend on layers below them (e.g., `features` can use `entities` and `shared`, but not `pages` or `app`).
 - Features cannot directly import other features.
 - State is managed using **Zustand** for global concerns (auth, cart, favorites, region) and `useState` for local component state.
-- `localStorage` is used via a `useLocalStorage` hook to persist the cart and favorites across sessions.
+- Do not use browser storage for app data; server data should come from API requests and live in the app/query cache.
 
 ## Building and Running
 

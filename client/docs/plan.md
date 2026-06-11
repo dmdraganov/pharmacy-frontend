@@ -27,7 +27,7 @@
   - `204 No Content`;
   - Bearer token для Sanctum;
   - единый `ApiError`.
-- В `STORAGE_KEYS` добавлен ключ `AUTH_TOKEN`.
+- Auth переведен на cookie-session без frontend token storage.
 
 ### TanStack Query
 
@@ -144,7 +144,7 @@
 - После добавления fallback-полей brand/manufacturer повторный `npm run build` также прошёл успешно.
 - Исправить TypeScript ошибки после перевода store actions на async.
 - Проверить места, где callbacks ожидают sync-функции, но теперь получают Promise.
-- Проверить fallback-режим для неавторизованного пользователя: корзина/избранное сейчас частично остаются localStorage, но backend endpoints требуют auth.
+- Корзина/избранное не используют браузерное хранилище; источник данных — backend.
 
 ### 2. Убрать оставшиеся пользовательские моки
 
@@ -160,21 +160,23 @@
 - `ProductListPage` переведён на `getProductsPage` и backend pagination `meta`.
 - Для `/products` уже передаются:
   - `category_id`;
+  - `brand_id`;
+  - `manufacturer_id`;
   - `min_price`;
   - `max_price`;
   - `is_prescription`;
+  - `sort`;
 - Пагинация каталога подключена через общий `Pagination`.
-- Ещё нужно передавать:
-  - `brand_id`;
-  - `manufacturer_id`;
-  - `sort`.
+- `brand_id`, `manufacturer_id` и `sort` теперь передаются в `/products` и `/search/products`.
+- Добавлены справочники `/brands` и `/manufacturers`, sidebar каталога/поиска использует server-side id вместо фильтрации бренда по названию текущей страницы.
+- При изменении фильтров сбрасывается URL-параметр `page`, чтобы не оставаться на несуществующей странице после сужения выдачи.
 - Доработать UI фильтров под backend справочники:
   - categories;
-  - brands;
-  - manufacturers;
-  - prescription flag;
-  - price range;
-  - sort.
+  - brands — базово подключено;
+  - manufacturers — базово подключено;
+  - prescription flag — базово подключено;
+  - price range — базово подключено;
+  - sort — базово подключено.
 - Сейчас `sectionId` у `Product` не приходит напрямую, а backend `/products` не принимает `section_id`; фильтрация section строится через category -> section на клиенте. Для полноценной серверной пагинации разделов нужен backend параметр `section_id` или поддержка массива `category_id`.
 
 ### 4. Доработать карточку и страницу товара
@@ -208,10 +210,11 @@
 - Проверить реальный формат `GET /favorites`; текущий frontend ожидает `product_id`, `productId` или `id`.
 - Лучше доработать backend resource для favorites, чтобы contract был явным.
 - UI нужно дополнить:
-  - loading/disabled state на кнопке сердца;
-  - error state;
-  - Query invalidation;
-  - поведение для неавторизованного пользователя.
+  - loading/disabled state на кнопке сердца — добавлено;
+  - error state — добавлено через title/error color;
+  - Query invalidation — добавлено;
+  - rollback при ошибке toggle — добавлен в favorite store;
+  - поведение для неавторизованного пользователя — кнопка disabled и не отправляет backend request.
 
 ### 7. Доработать оформление заказа
 

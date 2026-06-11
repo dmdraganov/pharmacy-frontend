@@ -1,12 +1,13 @@
 import { memo, useState } from 'react';
-import { useRegionStore } from '@/features/select-region';
 import Input from '@/shared/ui/Input';
 import { useDropdown } from '@/shared/hooks/useDropdown';
+import { useRegionStore } from '../model/store';
 import { REGIONS } from '../lib/constants';
 import { ChevronIcon } from '@/shared/ui/ChevronIcon';
 
 export const RegionSelectWithSearch = memo(() => {
-  const { region, setRegion } = useRegionStore();
+  const region = useRegionStore((state) => state.region);
+  const setRegion = useRegionStore((state) => state.setRegion);
   const [searchTerm, setSearchTerm] = useState('');
   const { isOpen, close, triggerProps, dropdownRef } = useDropdown({
     triggerOn: 'click',

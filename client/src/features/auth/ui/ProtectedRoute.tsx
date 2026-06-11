@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuthStore } from '@/features/auth';
+import { useAuthStore } from '../model/store';
 import type { UserRole } from '@/entities/user';
 import Spinner from '@/shared/ui/Spinner';
 
@@ -8,7 +8,8 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const { user, isAuthLoading } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const isAuthLoading = useAuthStore((state) => state.isAuthLoading);
   const location = useLocation();
 
   if (isAuthLoading) {

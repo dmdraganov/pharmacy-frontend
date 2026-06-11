@@ -13,7 +13,8 @@ const ACTIVE_STATUSES: OrderStatus[] = ['new', 'processing', 'shipping'];
 type Tab = 'current' | 'history';
 
 const AccountOrdersPage = memo(() => {
-  const { user, isAuthLoading } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const isAuthLoading = useAuthStore((state) => state.isAuthLoading);
   const {
     data: orders = [],
     isLoading: isOrdersLoading,

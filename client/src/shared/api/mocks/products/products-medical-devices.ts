@@ -64,7 +64,7 @@ export const medicalDevices: Product[] = [
         label: 'Память',
         value: 'Последнее измерение (некоторые модели 30 измерений)',
       },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -116,7 +116,7 @@ export const medicalDevices: Product[] = [
       { label: 'Время измерения', value: '5 секунд' },
       { label: 'Объем капли крови', value: '0.6 мкл' },
       { label: 'Память', value: '500 результатов' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -178,7 +178,7 @@ export const medicalDevices: Product[] = [
         value:
           'Безртутный, безстеклянный, водонепроницаемый, память последнего измерения',
       },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -233,7 +233,7 @@ export const medicalDevices: Product[] = [
       { label: 'Диапазон измерения пульса', value: '30-240 уд/мин' },
       { label: 'Дисплей', value: 'Цветной OLED' },
       { label: 'Автоотключение', value: 'Через 8 секунд' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -295,7 +295,7 @@ export const medicalDevices: Product[] = [
       { label: 'Скорость распыления', value: 'Около 0.35 мл/мин' },
       { label: 'Объем резервуара для лекарств', value: 'От 2 до 7 мл' },
       { label: 'Комплектация', value: 'Полная для всей семьи' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -354,7 +354,7 @@ export const medicalDevices: Product[] = [
       { label: 'Ширина', value: '10 см' },
       { label: 'Длина', value: '4.5 м' },
       { label: 'Степень растяжимости', value: 'Высокая' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -412,7 +412,7 @@ export const medicalDevices: Product[] = [
       { label: 'Степень фиксации', value: 'Легкая' },
       { label: 'Размер', value: 'M' },
       { label: 'Область применения', value: 'Коленный сустав' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -468,7 +468,7 @@ export const medicalDevices: Product[] = [
       { label: 'Основа', value: 'Тканевая' },
       { label: 'Ширина', value: '3 см' },
       { label: 'Длина', value: '5 м' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -531,7 +531,7 @@ export const medicalDevices: Product[] = [
         label: 'Особенности',
         value: 'Гипоаллергенная, воздухопроницаемая, атравматичная',
       },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -591,7 +591,7 @@ export const medicalDevices: Product[] = [
       },
       { label: 'Количество в упаковке', value: '50 шт.' },
       { label: 'Технология', value: 'No Coding' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -642,7 +642,7 @@ export const medicalDevices: Product[] = [
       { label: 'Дозировка', value: '3%' },
       { label: 'В упаковке', value: '100 мл' },
       { label: 'Фармакологическая группа', value: 'Антисептическое средство' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -698,7 +698,7 @@ export const medicalDevices: Product[] = [
       { label: 'Дозировка', value: '0.05%' },
       { label: 'В упаковке', value: '100 мл' },
       { label: 'Фармакологическая группа', value: 'Антисептическое средство' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -751,7 +751,7 @@ export const medicalDevices: Product[] = [
       { label: 'Размер', value: '1.9 см x 7.2 см' },
       { label: 'В упаковке', value: '10 шт.' },
       { label: 'Основа', value: 'Нетканая, воздухопроницаемая' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
   {
@@ -809,7 +809,7 @@ export const medicalDevices: Product[] = [
       { label: 'Дозировка', value: '5%' },
       { label: 'В упаковке', value: '10 мл' },
       { label: 'Фармакологическая группа', value: 'Антисептическое средство' },
-      { label: 'Отпуск из аптек', value: 'Без рецепта' },
+      { label: 'Отпуск из аптек', value: 'Без проверки' },
     ],
   },
 ];

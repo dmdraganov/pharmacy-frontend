@@ -1,9 +1,9 @@
 import type { Product } from '@/entities/product';
+import type { FilterParams } from '../model/useFilters';
 
 export type AvailableFilters = {
   minPrice: number;
   maxPrice: number;
-  brands: string[];
   isPrescription: boolean;
 };
 
@@ -12,26 +12,23 @@ export const getAvailableFilters = (products: Product[]): AvailableFilters => {
     return {
       minPrice: 0,
       maxPrice: 0,
-      brands: [],
       isPrescription: false,
     };
   }
 
   const prices = products.map((p) => p.price);
-  const brands = new Set(products.map((p) => p.brand));
   const isPrescription = products.some((p) => p.isPrescription);
 
   return {
     minPrice: Math.min(...prices),
     maxPrice: Math.max(...prices),
-    brands: Array.from(brands).sort(),
     isPrescription,
   };
 };
 
 export const applyFilters = (
   products: Product[],
-  filters: import('./useFilters').FilterParams
+  filters: FilterParams
 ): Product[] => {
   let filteredProducts = products;
 
@@ -45,9 +42,14 @@ export const applyFilters = (
       (p) => p.price <= filters.maxPrice!
     );
   }
-  if (filters.brands && filters.brands.length > 0) {
+  if (filters.brandId) {
     filteredProducts = filteredProducts.filter((p) =>
-      filters.brands!.includes(p.brand)
+      p.brandId ? p.brandId === filters.brandId : p.brand === filters.brandId
+    );
+  }
+  if (filters.manufacturerId) {
+    filteredProducts = filteredProducts.filter(
+      (p) => p.manufacturerId === filters.manufacturerId
     );
   }
   if (filters.categories && filters.categories.length > 0) {

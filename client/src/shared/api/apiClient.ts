@@ -1,5 +1,3 @@
-import { STORAGE_KEYS } from '@/shared/config/constants';
-
 export interface ApiMeta {
   current_page: number;
   per_page: number;
@@ -30,23 +28,76 @@ export class ApiError extends Error {
 }
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
+const CSRF_COOKIE_PATH = '/sanctum/csrf-cookie';
+
+const getApiBase = () => {
+  const trimmedUrl = API_URL.trim();
+
+  try {
+    const url = new URL(trimmedUrl);
+    const pathname = url.pathname.replace(/\/+$/, '');
+
+    if (!pathname) {
+      url.pathname = '/api';
+      return url.toString().replace(/\/+$/, '');
+    }
+
+    return trimmedUrl.replace(/\/+$/, '');
+  } catch (_error) {
+    return trimmedUrl.replace(/\/+$/, '');
+  }
+};
 
 const getApiUrl = (path: string) => {
-  const base = API_URL.endsWith('/') ? API_URL.slice(0, -1) : API_URL;
+  const base = getApiBase();
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${base}${normalizedPath}`;
 };
 
-export const getAuthToken = (): string | null => {
-  return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+const getCsrfUrl = () => {
+  const base = getApiBase();
+
+  try {
+    const url = new URL(base, window.location.origin);
+    url.pathname = url.pathname.replace(/\/api\/?$/, '') + CSRF_COOKIE_PATH;
+    url.search = '';
+    return url.toString();
+  } catch (_error) {
+    return CSRF_COOKIE_PATH;
+  }
 };
 
-export const setAuthToken = (token: string): void => {
-  localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+const getCookieValue = (name: string): string | null => {
+  const cookie = document.cookie
+    .split('; ')
+    .find((item) => item.startsWith(`${name}=`));
+
+  return cookie ? decodeURIComponent(cookie.split('=').slice(1).join('=')) : null;
 };
 
-export const clearAuthToken = (): void => {
-  localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+const isUnsafeMethod = (method?: string) => {
+  return !['GET', 'HEAD', 'OPTIONS'].includes((method || 'GET').toUpperCase());
+};
+
+let csrfRequest: Promise<void> | null = null;
+
+const ensureCsrfCookie = async () => {
+  if (!csrfRequest) {
+    csrfRequest = fetch(getCsrfUrl(), {
+      credentials: 'include',
+      headers: { Accept: 'application/json' },
+    }).then((response) => {
+      if (!response.ok) {
+        throw new ApiError('Unable to initialize CSRF protection', response.status);
+      }
+    });
+  }
+
+  try {
+    await csrfRequest;
+  } finally {
+    csrfRequest = null;
+  }
 };
 
 interface RequestOptions extends Omit<RequestInit, 'body'> {
@@ -56,10 +107,16 @@ interface RequestOptions extends Omit<RequestInit, 'body'> {
 
 export const apiRequest = async <T>(
   path: string,
-  options: RequestOptions = {}
+  options: RequestOptions = {},
+  retryWithFreshCsrf = true
 ): Promise<ApiEnvelope<T>> => {
   const { body, params, headers, ...requestOptions } = options;
   const url = new URL(getApiUrl(path), window.location.origin);
+  const method = requestOptions.method || 'GET';
+
+  if (isUnsafeMethod(method)) {
+    await ensureCsrfCookie();
+  }
 
   Object.entries(params || {}).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') {
@@ -67,15 +124,21 @@ export const apiRequest = async <T>(
     }
   });
 
-  const token = getAuthToken();
+  const requestHeaders: HeadersInit = {
+    Accept: 'application/json',
+    ...(isUnsafeMethod(method) && getCookieValue('XSRF-TOKEN')
+      ? { 'X-XSRF-TOKEN': getCookieValue('XSRF-TOKEN') as string }
+      : {}),
+    ...(body !== undefined && !(body instanceof FormData)
+      ? { 'Content-Type': 'application/json' }
+      : {}),
+    ...headers,
+  };
+
   const response = await fetch(url.toString(), {
     ...requestOptions,
-    headers: {
-      Accept: 'application/json',
-      ...(body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
+    credentials: 'include',
+    headers: requestHeaders,
     body:
       body instanceof FormData
         ? body
@@ -91,6 +154,11 @@ export const apiRequest = async <T>(
   const payload = await response.json().catch(() => null);
 
   if (!response.ok) {
+    if (response.status === 419 && retryWithFreshCsrf) {
+      await ensureCsrfCookie();
+      return apiRequest<T>(path, options, false);
+    }
+
     throw new ApiError(
       payload?.message || 'Request failed',
       response.status,

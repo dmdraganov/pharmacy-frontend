@@ -1,15 +1,24 @@
 import { memo } from 'react';
-import { useAllCartTotals, useCartItems, useCartStore } from '@/features/cart';
-import type { CartItem } from '@/entities/cart';
+import {
+  useAllCartTotals,
+  useCartItemById,
+  useCartItemIds,
+  useCartStore,
+} from '@/features/cart';
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
 import { getProductImage } from '@/entities/product';
 
 // Sub-component to handle async image loading for each item
-const CheckoutItem = memo(({ item }: { item: CartItem }) => {
+const CheckoutItem = memo(({ productId }: { productId: string }) => {
+  const item = useCartItemById(productId);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
+  if (!item) {
+    return null;
+  }
+
   const imageUrl = getProductImage(item.image);
 
   return (
@@ -42,12 +51,10 @@ const CheckoutItem = memo(({ item }: { item: CartItem }) => {
 });
 
 export const CheckoutOrderSummary = memo(() => {
-  const cartItems = useCartItems();
+  const cartItemIds = useCartItemIds();
   const { totalItems, total } = useAllCartTotals();
 
-  const items = Object.values(cartItems) as CartItem[];
-
-  if (items.length === 0) {
+  if (cartItemIds.length === 0) {
     return (
       <div className='rounded-lg border border-border-default bg-background-default p-6'>
         <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
@@ -63,8 +70,8 @@ export const CheckoutOrderSummary = memo(() => {
     <div className='rounded-lg border border-border-default bg-background-default p-6'>
       <h2 className='mb-4 text-xl font-bold text-text-default'>Ваш заказ</h2>
       <div className='flex flex-col gap-4 divide-y divide-border-default'>
-        {items.map((item) => (
-          <CheckoutItem key={item.id} item={item} />
+        {cartItemIds.map((productId) => (
+          <CheckoutItem key={productId} productId={productId} />
         ))}
       </div>
       <div className='mt-6 border-t border-border-default pt-4'>

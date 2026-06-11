@@ -1,11 +1,10 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/entities/product';
-import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +12,7 @@ interface ProductCardProps {
   onAddToCart: (product: Product) => void;
   onUpdateQuantity: (productId: string, newQuantity: number) => void;
   onRemoveFromCart: (productId: string) => void;
+  favoriteAction?: ReactNode;
 }
 
 export const ProductCard = memo(
@@ -22,6 +22,7 @@ export const ProductCard = memo(
     onAddToCart,
     onUpdateQuantity,
     onRemoveFromCart,
+    favoriteAction,
   }: ProductCardProps) => {
     const { id, name, brand, price, oldPrice, isPrescription, image } = product;
 
@@ -51,7 +52,7 @@ export const ProductCard = memo(
         className={`relative flex h-full flex-col overflow-hidden rounded-lg border border-border-default 
         bg-background-default p-4 transition-all duration-300 shadow-shadow-default hover:shadow-[0_5px_10px_0] min-h-80`}
       >
-        <FavoriteButton productId={id} className='absolute top-3 right-3' />
+        {favoriteAction}
 
         <Link to={`/product/${id}`} className='group flex grow flex-col'>
           <img

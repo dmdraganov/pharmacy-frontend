@@ -1,7 +1,7 @@
 import { apiRequest, type ApiMeta } from './apiClient';
 import type { Product } from '@/entities/product';
 
-interface ApiProduct {
+export interface ApiProduct {
   id: string;
   name: string;
   slug?: string;
@@ -15,6 +15,7 @@ interface ApiProduct {
   brand_id?: number | string | null;
   manufacturer_id?: number | string | null;
   brand?: { name?: string } | string | null;
+  manufacturer?: { name?: string } | string | null;
   image?: string | null;
   images?: Array<{ image_url?: string; url?: string; path?: string } | string>;
 }
@@ -67,9 +68,13 @@ export const mapProduct = (product: ApiProduct): Product => {
     manufacturerId: product.manufacturer_id
       ? String(product.manufacturer_id)
       : undefined,
-    manufacturer: product.manufacturer_id
-      ? `Производитель #${product.manufacturer_id}`
-      : undefined,
+    manufacturer:
+      typeof product.manufacturer === 'string'
+        ? product.manufacturer
+        : product.manufacturer?.name ||
+          (product.manufacturer_id
+            ? `Производитель #${product.manufacturer_id}`
+            : undefined),
     sectionId: '',
     categoryId,
     price: Number(product.price),

@@ -26,7 +26,17 @@ class CreateOrderUseCase implements UseCase
         return DB::transaction(function () use ($data): Order {
             $totalPrice = 0;
             $orderItems = [];
-            $isPickup = $data->deliveryMethodId === 1;
+            $deliveryMethodId = $this->orderRepository->getDeliveryMethodIdByCode($data->deliveryMethodCode);
+            $paymentMethodId = $this->orderRepository->getPaymentMethodIdByCode($data->paymentMethodCode);
+            $isPickup = $data->deliveryMethodCode === 'pickup';
+
+            if (! $deliveryMethodId) {
+                throw ValidationException::withMessages(['delivery_method_code' => 'Invalid delivery method']);
+            }
+
+            if (! $paymentMethodId) {
+                throw ValidationException::withMessages(['payment_method_code' => 'Invalid payment method']);
+            }
 
             if ($isPickup && ! $data->pharmacyId) {
                 throw ValidationException::withMessages(['pharmacy_id' => 'Pharmacy is required for pickup orders']);
@@ -42,7 +52,7 @@ class CreateOrderUseCase implements UseCase
                     throw ValidationException::withMessages(['items' => 'Product not found']);
                 }
                 if ($product->isPrescription && ! $isPickup) {
-                    throw ValidationException::withMessages(['items' => 'Prescription products can only be picked up']);
+                    throw ValidationException::withMessages(['items' => 'Products that require pharmacy verification can only be picked up']);
                 }
 
                 $pharmacyId = $data->pharmacyId ?? 1;
@@ -64,8 +74,8 @@ class CreateOrderUseCase implements UseCase
                 id: Str::uuid()->toString(),
                 userId: $data->userId,
                 statusId: 1, // Assuming 1 is "new"
-                deliveryMethodId: $data->deliveryMethodId,
-                paymentMethodId: $data->paymentMethodId,
+                deliveryMethodId: $deliveryMethodId,
+                paymentMethodId: $paymentMethodId,
                 pharmacyId: $data->pharmacyId,
                 deliveryCountry: $data->deliveryCountry,
                 deliveryCity: $data->deliveryCity,

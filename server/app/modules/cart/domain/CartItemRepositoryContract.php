@@ -8,7 +8,7 @@ interface CartItemRepositoryContract
 
     public function findByProduct(string $userId, string $productId): ?CartItem;
 
-    public function save(CartItem $cartItem): void;
+    public function save(CartItem $cartItem): CartItem;
 
     public function delete(CartItem $cartItem): void;
 

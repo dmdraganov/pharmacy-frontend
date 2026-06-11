@@ -1,12 +1,13 @@
 import { memo, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { getProductsPage, getSections } from '@/shared/api';
 import {
-  applyFilters,
-  getAvailableFilters,
-} from '@/features/filter-products/lib';
-import { useFilters } from '@/features/filter-products/useFilters';
+  getBrands,
+  getManufacturers,
+  getProductsPage,
+  getSections,
+} from '@/shared/api';
+import { getAvailableFilters, useFilters } from '@/features/filter-products';
 import Spinner from '@/shared/ui/Spinner';
 import Pagination from '@/shared/ui/Pagination';
 import CatalogLayoutWidget from '@/widgets/layout/CatalogLayoutWidget';
@@ -29,9 +30,12 @@ const ProductListPage = memo(() => {
           page,
           per_page: 12,
           category_id: categoryId,
+          brand_id: activeFilters.brandId,
+          manufacturer_id: activeFilters.manufacturerId,
           min_price: activeFilters.minPrice,
           max_price: activeFilters.maxPrice,
           is_prescription: activeFilters.isPrescription,
+          sort: activeFilters.sort,
         }),
         getSections(),
       ]);
@@ -42,6 +46,21 @@ const ProductListPage = memo(() => {
   const products = useMemo(() => data?.productsPage.data || [], [data]);
   const sections = useMemo(() => data?.sections || [], [data]);
   const meta = data?.productsPage.meta;
+
+  const {
+    data: catalogDictionaries,
+    isLoading: areCatalogDictionariesLoading,
+  } = useQuery({
+    queryKey: ['catalog-dictionaries'],
+    queryFn: async () => {
+      const [brands, manufacturers] = await Promise.all([
+        getBrands(),
+        getManufacturers(),
+      ]);
+
+      return { brands, manufacturers };
+    },
+  });
 
   const currentSection = useMemo(
     () =>
@@ -77,12 +96,6 @@ const ProductListPage = memo(() => {
     [baseProducts]
   );
 
-  // 3. Apply active filters to the same specific set for display.
-  const displayProducts = useMemo(
-    () => applyFilters(baseProducts, { brands: activeFilters.brands }),
-    [baseProducts, activeFilters.brands]
-  );
-
   const title = currentCategory?.name || currentSection?.name || 'Загрузка...';
 
   // Category filter is shown only when a section is selected but not a category.
@@ -95,12 +108,19 @@ const ProductListPage = memo(() => {
         availableFilters={availableFilters}
         section={currentSection}
         categories={categoryFilterOptions}
+        brands={catalogDictionaries?.brands}
+        manufacturers={catalogDictionaries?.manufacturers}
       />
     ),
-    [availableFilters, currentSection, categoryFilterOptions]
+    [
+      availableFilters,
+      currentSection,
+      categoryFilterOptions,
+      catalogDictionaries,
+    ]
   );
 
-  if (isLoading) {
+  if (isLoading || areCatalogDictionariesLoading) {
     return (
       <div className='flex h-[60vh] items-center justify-center'>
         <Spinner />
@@ -120,7 +140,7 @@ const ProductListPage = memo(() => {
   return (
     <CatalogLayoutWidget
       title={title}
-      products={displayProducts}
+      products={baseProducts}
       sidebar={sidebar}
       footer={
         meta ? (

@@ -115,49 +115,7 @@ ON inventory(product_id);
 
 
 -- =========================================================
--- 10. РЕЦЕПТЫ
--- =========================================================
-
-CREATE TABLE prescriptions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-
-    uploaded_file_url TEXT NOT NULL,
-
-    doctor_name VARCHAR(255),
-
-    issued_at DATE,
-
-    expires_at DATE,
-
-    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
-
-    verified_by UUID REFERENCES users(id) ON DELETE SET NULL,
-
-    verified_at TIMESTAMPTZ,
-
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-
-CREATE INDEX idx_prescriptions_user_id
-ON prescriptions(user_id);
-
-
--- Связь рецепта с заказом
-
-CREATE TABLE order_prescriptions (
-    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-
-    prescription_id UUID NOT NULL REFERENCES prescriptions(id) ON DELETE CASCADE,
-
-    PRIMARY KEY (order_id, prescription_id)
-);
-
-
--- =========================================================
--- 11. НОРМАЛИЗОВАННЫЙ АДРЕС ДОСТАВКИ
+-- 10. НОРМАЛИЗОВАННЫЙ АДРЕС ДОСТАВКИ
 -- =========================================================
 
 ALTER TABLE orders

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Product } from '@/entities/product';
-import { ProductCardWithCart } from '@/features/cart';
+import { ProductCardWithCart } from '@/widgets/product/ProductCardWithCart';
 import { usePagination } from '@/shared/hooks/usePagination';
 import Pagination from '@/shared/ui/Pagination';
 

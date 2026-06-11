@@ -29,13 +29,15 @@ class CartItemRepository implements CartItemRepositoryContract
         return $this->toDomain($cartItemModel);
     }
 
-    public function save(CartItem $cartItem): void
+    public function save(CartItem $cartItem): CartItem
     {
         $cartItemModel = CartItemModel::find($cartItem->id) ?? new CartItemModel;
         $cartItemModel->user_id = $cartItem->userId;
         $cartItemModel->product_id = $cartItem->productId;
         $cartItemModel->quantity = $cartItem->quantity;
         $cartItemModel->save();
+
+        return $this->toDomain($cartItemModel);
     }
 
     public function delete(CartItem $cartItem): void

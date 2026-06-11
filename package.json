@@ -1,0 +1,13 @@
+{
+  "name": "pharmacy",
+  "version": "1.0.0",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd server && php artisan serve\" \"npm run dev --prefix client\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

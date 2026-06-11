@@ -111,7 +111,7 @@ const OrderCard = memo(({ order }: OrderCardProps) => {
           </div>
           <div className='flex flex-shrink-0 items-start gap-2 sm:items-end sm:flex-col'>
             {requiresPrescription && (
-              <Badge variant='warning'>Требуется рецепт</Badge>
+              <Badge variant='warning'>Проверка в аптеке</Badge>
             )}
           </div>
         </div>

@@ -6,6 +6,9 @@ import { useFavoritesStore } from './store';
 export const useFavoriteIds = () =>
   useFavoritesStore((state) => state.favoriteIds);
 
+export const useFavoriteCount = () =>
+  useFavoritesStore((state) => state.favoriteIds.length);
+
 /**
  * Hook for components that only need favorite actions.
  */
@@ -16,6 +19,5 @@ export const useFavoriteActions = () =>
  * Hook to check if a specific product is in favorites.
  */
 export const useIsFavorite = (productId: string) => {
-  const favoriteIds = useFavoriteIds();
-  return favoriteIds.includes(productId);
+  return useFavoritesStore((state) => state.favoriteIds.includes(productId));
 };

@@ -11,8 +11,8 @@ class CreateOrderDTO extends DTO
      */
     public function __construct(
         public readonly string $userId,
-        public readonly int $deliveryMethodId,
-        public readonly int $paymentMethodId,
+        public readonly string $deliveryMethodCode,
+        public readonly string $paymentMethodCode,
         public readonly ?int $pharmacyId,
         public readonly ?string $deliveryCountry,
         public readonly ?string $deliveryCity,

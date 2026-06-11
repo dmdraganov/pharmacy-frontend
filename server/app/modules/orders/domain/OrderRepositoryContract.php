@@ -15,4 +15,12 @@ interface OrderRepositoryContract
     public function getStatusIdByCode(string $code): ?int;
 
     public function getStatusCodeById(int $id): ?string;
+
+    public function getDeliveryMethodIdByCode(string $code): ?int;
+
+    public function getDeliveryMethodCodeById(int $id): ?string;
+
+    public function getPaymentMethodIdByCode(string $code): ?int;
+
+    public function getPaymentMethodCodeById(int $id): ?string;
 }

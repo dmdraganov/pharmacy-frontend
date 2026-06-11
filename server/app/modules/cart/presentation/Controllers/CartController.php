@@ -8,6 +8,8 @@ use App\Modules\Cart\Application\UseCases\ListCartItemsUseCase;
 use App\Modules\Cart\Application\UseCases\RemoveFromCartUseCase;
 use App\Modules\Cart\Application\UseCases\UpdateCartItemUseCase;
 use App\Modules\Cart\Presentation\Resources\CartItemResource;
+use App\Modules\Catalog\Domain\ProductRepositoryContract;
+use App\Modules\Catalog\Presentation\Resources\ProductResource;
 use App\Support\ApiResponse;
 use App\Support\PaginatesArrays;
 use Illuminate\Http\JsonResponse;
@@ -19,26 +21,44 @@ class CartController extends Controller
     use ApiResponse;
     use PaginatesArrays;
 
-    public function list(Request $request, ListCartItemsUseCase $useCase): JsonResponse
+    public function list(
+        Request $request,
+        ListCartItemsUseCase $useCase,
+        ProductRepositoryContract $productRepository
+    ): JsonResponse
     {
         $cartItems = $useCase($request->user()->id);
-        $result = $this->paginateArray($cartItems, $request);
+        $itemsWithProducts = array_map(
+            function ($item) use ($request, $productRepository): array {
+                $payload = (new CartItemResource($item))->resolve($request);
+                $product = $productRepository->find($item->productId);
 
-        return $this->ok(CartItemResource::collection($result['data']), $result['meta']);
+                return [
+                    ...$payload,
+                    'product' => $product
+                        ? (new ProductResource($product))->resolve($request)
+                        : null,
+                ];
+            },
+            $cartItems
+        );
+        $result = $this->paginateArray($itemsWithProducts, $request);
+
+        return $this->ok($result['data'], $result['meta']);
     }
 
     public function add(Request $request, AddToCartUseCase $useCase): JsonResponse
     {
-        $useCase($request->user()->id, $request->input('product_id'), $request->input('quantity', 1));
+        $cartItem = $useCase($request->user()->id, $request->input('product_id'), $request->input('quantity', 1));
 
-        return $this->noContent();
+        return $this->ok(new CartItemResource($cartItem));
     }
 
     public function update(Request $request, UpdateCartItemUseCase $useCase, int $cartItemId): JsonResponse
     {
-        $useCase($cartItemId, $request->input('quantity'));
+        $cartItem = $useCase($cartItemId, $request->input('quantity'));
 
-        return $this->noContent();
+        return $this->ok(new CartItemResource($cartItem));
     }
 
     public function remove(RemoveFromCartUseCase $useCase, int $cartItemId): JsonResponse

@@ -17,9 +17,11 @@ interface Address {
 const CourierForm = ({
   address,
   onAddressChange,
+  errors = {},
 }: {
   address: Address;
   onAddressChange: (field: keyof Address, value: string) => void;
+  errors?: Partial<Record<keyof Address, string>>;
 }) => (
   <div className='flex flex-col gap-4'>
     <Input
@@ -27,12 +29,14 @@ const CourierForm = ({
       placeholder='Город'
       value={address.city}
       onChange={(e) => onAddressChange('city', e.target.value)}
+      error={errors.city}
     />
     <Input
       name='street'
       placeholder='Улица'
       value={address.street}
       onChange={(e) => onAddressChange('street', e.target.value)}
+      error={errors.street}
     />
     <div className='grid grid-cols-2 gap-4'>
       <Input
@@ -40,12 +44,14 @@ const CourierForm = ({
         placeholder='Дом'
         value={address.house}
         onChange={(e) => onAddressChange('house', e.target.value)}
+        error={errors.house}
       />
       <Input
         name='apartment'
         placeholder='Квартира'
         value={address.apartment}
         onChange={(e) => onAddressChange('apartment', e.target.value)}
+        error={errors.apartment}
       />
     </div>
   </div>
@@ -96,6 +102,7 @@ interface CheckoutDeliveryProps {
   selectedPharmacy: string | null;
   setSelectedPharmacy: (id: string | null) => void;
   errors?: {
+    deliveryAddress?: Partial<Record<keyof Address, string>>;
     selectedPharmacy?: string;
   };
   isCourierDisabled?: boolean;
@@ -109,6 +116,7 @@ export const CheckoutDelivery = memo(
     setAddress,
     selectedPharmacy,
     setSelectedPharmacy,
+    errors = {},
     isCourierDisabled = false,
   }: CheckoutDeliveryProps) => {
     const {
@@ -132,13 +140,14 @@ export const CheckoutDelivery = memo(
         </h2>
 
         <div className='mb-6 flex gap-2 rounded-lg bg-background-muted p-1'>
-          <TabButton
-            onClick={() => setDeliveryMethod('courier')}
-            isActive={deliveryMethod === 'courier'}
-            disabled={isCourierDisabled}
-          >
-            Курьерская доставка
-          </TabButton>
+          {!isCourierDisabled && (
+            <TabButton
+              onClick={() => setDeliveryMethod('courier')}
+              isActive={deliveryMethod === 'courier'}
+            >
+              Курьерская доставка
+            </TabButton>
+          )}
           <TabButton
             onClick={() => setDeliveryMethod('pickup')}
             isActive={deliveryMethod === 'pickup'}
@@ -148,7 +157,8 @@ export const CheckoutDelivery = memo(
         </div>
         {isCourierDisabled && (
           <p className='mb-4 text-sm text-warning-text'>
-            Для рецептурных товаров доступен только самовывоз.
+            Для рецептурных товаров доступен только самовывоз. Документы
+            предъявляются фармацевту при получении в аптеке.
           </p>
         )}
 
@@ -156,6 +166,7 @@ export const CheckoutDelivery = memo(
           <CourierForm
             address={address}
             onAddressChange={handleAddressChange}
+            errors={errors.deliveryAddress}
           />
         )}
         {deliveryMethod === 'pickup' &&
@@ -171,6 +182,9 @@ export const CheckoutDelivery = memo(
               onSelect={setSelectedPharmacy}
             />
           ))}
+        {deliveryMethod === 'pickup' && errors.selectedPharmacy && (
+          <p className='mt-3 text-sm text-danger'>{errors.selectedPharmacy}</p>
+        )}
       </div>
     );
   }

@@ -5,8 +5,8 @@ import Button from '@/shared/ui/Button';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SearchInput } from '@/features/search';
 import { RegionSelectWithSearch } from '@/features/select-region';
-import { useCartTotals } from '@/features/cart';
-import { useFavoriteIds } from '@/features/favorites';
+import { useCartTotalItems } from '@/features/cart';
+import { useFavoriteCount } from '@/features/favorites';
 import { useAuthStore } from '@/features/auth';
 import { useDropdown } from '@/shared/hooks/useDropdown';
 import UserIcon from '@/shared/ui/UserIcon';
@@ -15,9 +15,10 @@ const Header = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
-  const { totalItems: cartTotalItems } = useCartTotals();
-  const favoriteIds = useFavoriteIds();
-  const { user, logout } = useAuthStore();
+  const cartTotalItems = useCartTotalItems();
+  const favoriteCount = useFavoriteCount();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const { isOpen, close, containerProps, dropdownRef } = useDropdown({
     triggerOn: 'hover',
   });
@@ -74,9 +75,9 @@ const Header = memo(() => {
               className='relative text-text-muted hover:text-text-default'
             >
               Избранное
-              {favoriteIds.length > 0 && (
+              {favoriteCount > 0 && (
                 <span className='absolute -top-1 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-danger text-xs text-white'>
-                  {favoriteIds.length}
+                  {favoriteCount}
                 </span>
               )}
             </Link>

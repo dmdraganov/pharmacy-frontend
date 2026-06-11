@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getFavoriteIds, getProducts } from '@/shared/api';
-import { ProductCardWithCart } from '@/features/cart';
+import { ProductCardWithCart } from '@/widgets/product/ProductCardWithCart';
 import EmptyState from '@/shared/ui/EmptyState';
 import Spinner from '@/shared/ui/Spinner';
 

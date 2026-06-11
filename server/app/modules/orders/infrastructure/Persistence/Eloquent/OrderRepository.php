@@ -78,6 +78,26 @@ class OrderRepository implements OrderRepositoryContract
         return DB::table('order_statuses')->where('id', $id)->value('code');
     }
 
+    public function getDeliveryMethodIdByCode(string $code): ?int
+    {
+        return DB::table('delivery_methods')->where('code', $code)->value('id');
+    }
+
+    public function getDeliveryMethodCodeById(int $id): ?string
+    {
+        return DB::table('delivery_methods')->where('id', $id)->value('code');
+    }
+
+    public function getPaymentMethodIdByCode(string $code): ?int
+    {
+        return DB::table('payment_methods')->where('code', $code)->value('id');
+    }
+
+    public function getPaymentMethodCodeById(int $id): ?string
+    {
+        return DB::table('payment_methods')->where('id', $id)->value('code');
+    }
+
     private function toDomain(OrderModel $orderModel): Order
     {
         $items = $orderModel->items->map(fn ($itemModel) => new OrderItem(

@@ -24,8 +24,8 @@ class OrderController extends Controller
     {
         $dto = new CreateOrderDTO(
             userId: $request->user()->id,
-            deliveryMethodId: $request->input('delivery_method_id'),
-            paymentMethodId: $request->input('payment_method_id'),
+            deliveryMethodCode: $request->input('delivery_method_code'),
+            paymentMethodCode: $request->input('payment_method_code'),
             pharmacyId: $request->input('pharmacy_id'),
             deliveryCountry: $request->input('delivery_country'),
             deliveryCity: $request->input('delivery_city'),

@@ -1,16 +1,29 @@
 import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSearch } from '@/features/search';
 import FiltersSidebar from '@/widgets/layout/FiltersSidebar';
-import { useFilters } from '@/features/filter-products/useFilters';
 import {
   applyFilters,
   getAvailableFilters,
-} from '@/features/filter-products/lib';
+  useFilters,
+} from '@/features/filter-products';
 import CatalogLayoutWidget from '@/widgets/layout/CatalogLayoutWidget';
+import { getBrands, getManufacturers } from '@/shared/api';
 
 const SearchPage = () => {
-  const { searchTerm, searchResults } = useSearch();
   const { activeFilters } = useFilters();
+  const { searchTerm, searchResults } = useSearch(activeFilters);
+  const { data: catalogDictionaries } = useQuery({
+    queryKey: ['catalog-dictionaries'],
+    queryFn: async () => {
+      const [brands, manufacturers] = await Promise.all([
+        getBrands(),
+        getManufacturers(),
+      ]);
+
+      return { brands, manufacturers };
+    },
+  });
 
   const availableFilters = useMemo(
     () => getAvailableFilters(searchResults),
@@ -27,9 +40,13 @@ const SearchPage = () => {
   const sidebar = useMemo(
     () =>
       searchResults.length > 0 ? (
-        <FiltersSidebar availableFilters={availableFilters} />
+        <FiltersSidebar
+          availableFilters={availableFilters}
+          brands={catalogDictionaries?.brands}
+          manufacturers={catalogDictionaries?.manufacturers}
+        />
       ) : null,
-    [searchResults.length, availableFilters]
+    [searchResults.length, availableFilters, catalogDictionaries]
   );
 
   return (

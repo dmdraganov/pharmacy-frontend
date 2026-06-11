@@ -1,4 +1,4 @@
-import type { Section } from '@/entities/section/types';
+import type { Section } from '@/entities/section';
 
 export const sections: Section[] = [
   // 1) Лекарственные средства

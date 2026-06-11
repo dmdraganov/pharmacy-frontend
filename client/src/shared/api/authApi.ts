@@ -1,9 +1,4 @@
-import {
-  apiRequest,
-  clearAuthToken,
-  setAuthToken,
-  type ApiEnvelope,
-} from './apiClient';
+import { apiRequest, type ApiEnvelope } from './apiClient';
 import type { User, UserRole } from '@/entities/user';
 
 interface ApiUser {
@@ -17,7 +12,6 @@ interface ApiUser {
 
 interface AuthResponse {
   user?: ApiUser;
-  token: string;
 }
 
 export interface RegisterPayload {
@@ -51,7 +45,6 @@ export const login = async (
     method: 'POST',
     body: { email, password },
   });
-  setAuthToken(response.data.token);
   return response.data.user ? mapUser(response.data.user) : getMe();
 };
 
@@ -67,16 +60,11 @@ export const register = async (userData: RegisterPayload): Promise<User> => {
       password_confirmation: userData.password,
     },
   });
-  setAuthToken(response.data.token);
   return response.data.user ? mapUser(response.data.user) : getMe();
 };
 
 export const logout = async (): Promise<void> => {
-  try {
-    await apiRequest<void>('/auth/logout', { method: 'POST' });
-  } finally {
-    clearAuthToken();
-  }
+  await apiRequest<void>('/auth/logout', { method: 'POST' });
 };
 
 export const getMe = async (): Promise<User> => {

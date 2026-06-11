@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useCartTotals } from '@/features/cart';
+import { useSelectedItemsTotal } from '@/features/cart';
 import Button from '@/shared/ui/Button';
 
 interface CheckoutActionsProps {
@@ -9,7 +9,7 @@ interface CheckoutActionsProps {
 
 export const CheckoutActions = memo(
   ({ onConfirm, isProcessing }: CheckoutActionsProps) => {
-    const { selectedItemsTotal } = useCartTotals();
+    const selectedItemsTotal = useSelectedItemsTotal();
     return (
       <div className='rounded-lg border border-border-default bg-background-default p-6'>
         <div className='mb-4 flex justify-between font-bold'>

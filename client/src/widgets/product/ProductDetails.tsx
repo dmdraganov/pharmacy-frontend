@@ -3,8 +3,9 @@ import { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
 import { getProductImage } from '@/entities/product';
+import { useAuthStore } from '@/features/auth';
 import { useCartStore, useCartItemQuantity } from '@/features/cart';
-import { FavoriteButton } from '@/features/favorites/ui/FavoriteButton';
+import { FavoriteButton } from '@/features/favorites';
 import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
@@ -18,6 +19,7 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const quantityInCart = useCartItemQuantity(product.id);
+  const isAuthenticated = useAuthStore((state) => Boolean(state.user));
   const imageUrl = getProductImage(product.image);
 
   const handleAddProduct = useCallback(() => {
@@ -45,7 +47,11 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
       <div>
         <div className='flex items-start gap-4'>
           <h1 className='mb-2 text-3xl font-bold'>{product.name}</h1>
-          <FavoriteButton productId={product.id} className='mt-2 shrink-0' />
+          <FavoriteButton
+            productId={product.id}
+            isAuthenticated={isAuthenticated}
+            className='mt-2 shrink-0'
+          />
         </div>
         <div className='mb-4 text-lg text-text-muted'>
           {product.brand && <p>{product.brand}</p>}

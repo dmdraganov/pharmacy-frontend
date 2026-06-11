@@ -17,7 +17,8 @@ class LoginUseCase implements UseCase
 
     public function __invoke(LoginDTO $data): User
     {
-        $user = $this->userRepository->findByEmail($data->email);
+        $email = mb_strtolower(trim($data->email));
+        $user = $this->userRepository->findByEmail($email);
 
         if (! $user || ! Hash::check($data->password, $user->password)) {
             throw ValidationException::withMessages([

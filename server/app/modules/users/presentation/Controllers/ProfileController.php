@@ -22,6 +22,13 @@ class ProfileController extends Controller
     public function show(Request $request): JsonResponse
     {
         $userModel = $request->user();
+        $roles = collect();
+
+        if (method_exists($userModel, 'loadMissing')) {
+            $userModel->loadMissing('roles');
+            $roles = $userModel->roles ?? collect();
+        }
+
         $user = new User(
             id: $userModel->id,
             firstName: $userModel->first_name,
@@ -31,7 +38,7 @@ class ProfileController extends Controller
             password: $userModel->password,
             createdAt: \DateTimeImmutable::createFromInterface($userModel->created_at),
             updatedAt: \DateTimeImmutable::createFromInterface($userModel->updated_at),
-            roles: $userModel->roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
+            roles: $roles->map(fn ($roleModel) => new Role($roleModel->id, $roleModel->name))->all()
         );
 
         return $this->ok(new UserResource($user));

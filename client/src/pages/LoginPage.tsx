@@ -19,7 +19,7 @@ const LoginPage = memo(() => {
     e.preventDefault();
     setError('');
     try {
-      await login(email, password);
+      await login(email.trim().toLowerCase(), password);
       navigate(from, { replace: true });
     } catch (err) {
       setError('Неверный email или пароль.');

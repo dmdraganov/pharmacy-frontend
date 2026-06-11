@@ -1,4 +1,4 @@
-import { apiRequest, getAuthToken } from './apiClient';
+import { ApiError, apiRequest } from './apiClient';
 
 interface ApiFavorite {
   product_id?: string;
@@ -7,12 +7,14 @@ interface ApiFavorite {
 }
 
 export const getFavoriteIds = async (): Promise<string[]> => {
-  if (!getAuthToken()) {
-    return [];
-  }
-
   const response = await apiRequest<ApiFavorite[]>('/favorites', {
     params: { per_page: 100 },
+  }).catch((error) => {
+    if (error instanceof ApiError && error.status === 401) {
+      return { data: [], message: 'Unauthenticated' };
+    }
+
+    throw error;
   });
 
   return response.data
@@ -21,10 +23,6 @@ export const getFavoriteIds = async (): Promise<string[]> => {
 };
 
 export const addFavorite = async (productId: string): Promise<void> => {
-  if (!getAuthToken()) {
-    return;
-  }
-
   await apiRequest<void>('/favorites', {
     method: 'POST',
     body: { product_id: productId },
@@ -32,9 +30,5 @@ export const addFavorite = async (productId: string): Promise<void> => {
 };
 
 export const removeFavorite = async (productId: string): Promise<void> => {
-  if (!getAuthToken()) {
-    return;
-  }
-
   await apiRequest<void>(`/favorites/${productId}`, { method: 'DELETE' });
 };
