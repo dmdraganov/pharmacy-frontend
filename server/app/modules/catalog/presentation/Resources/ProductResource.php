@@ -8,6 +8,14 @@ class ProductResource extends JsonResource
 {
     public function toArray($request): array
     {
+        $images = $this->images ?? [];
+        $mainImage = collect($images)
+            ->sortBy([
+                ['isMain', 'desc'],
+                ['sortOrder', 'asc'],
+            ])
+            ->first();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -18,6 +26,8 @@ class ProductResource extends JsonResource
             'is_popular' => $this->isPopular,
             'is_prescription' => $this->isPrescription,
             'info' => $this->info,
+            'image' => $mainImage?->imageUrl,
+            'images' => ProductImageResource::collection($images),
             'category_id' => $this->categoryId,
             'brand_id' => $this->brandId,
             'manufacturer_id' => $this->manufacturerId,

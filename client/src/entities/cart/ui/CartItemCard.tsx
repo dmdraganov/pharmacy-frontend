@@ -5,7 +5,7 @@ import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Badge from '@/shared/ui/Badge';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 
 interface CartItemCardProps {
   item: CartItem;
@@ -44,6 +44,7 @@ const CartItemCard = memo((props: CartItemCardProps) => {
           src={imageUrl}
           alt={item.name}
           className='h-20 w-20 shrink-0 object-cover sm:h-24 sm:w-24'
+          onError={handleProductImageError}
         />
 
         <div className='flex min-w-0 flex-grow flex-col'>

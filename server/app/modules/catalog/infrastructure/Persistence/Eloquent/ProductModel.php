@@ -52,7 +52,7 @@ class ProductModel extends Model
 
     public function images()
     {
-        return $this->hasMany(ProductImageModel::class);
+        return $this->hasMany(ProductImageModel::class, 'product_id', 'id');
     }
 
     public function attributes()

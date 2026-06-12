@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import Button from '@/shared/ui/Button';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 
 // Sub-component to handle async image loading for each item
 const CheckoutItem = memo(({ productId }: { productId: string }) => {
@@ -27,6 +27,7 @@ const CheckoutItem = memo(({ productId }: { productId: string }) => {
         src={imageUrl}
         alt={item.name}
         className='h-16 w-16 shrink-0 rounded object-cover'
+        onError={handleProductImageError}
       />
       <div className='min-w-0 flex-grow'>
         <p className='break-words font-semibold'>{item.name}</p>

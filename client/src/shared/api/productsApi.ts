@@ -38,7 +38,7 @@ export interface PaginatedResult<T> {
   meta?: ApiMeta;
 }
 
-const FALLBACK_PRODUCT_IMAGE = 'paracetamol-500.webp';
+const FALLBACK_PRODUCT_IMAGE = 'product-placeholder.svg';
 
 export const mapProduct = (product: ApiProduct): Product => {
   const categoryId = product.category_id ? String(product.category_id) : '';

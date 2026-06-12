@@ -1,7 +1,7 @@
 import Spinner from '@/shared/ui/Spinner';
 import { Suspense, useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import router from './router';
+import router from './router/router';
 import { useAuthStore } from '@/features/auth';
 import { useCartStore } from '@/features/cart';
 import { useFavoritesStore } from '@/features/favorites/model/store';

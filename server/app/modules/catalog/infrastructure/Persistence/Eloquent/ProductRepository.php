@@ -6,6 +6,7 @@ use App\Modules\Catalog\Domain\Events\ProductCreated;
 use App\Modules\Catalog\Domain\Events\ProductDeleted;
 use App\Modules\Catalog\Domain\Events\ProductUpdated;
 use App\Modules\Catalog\Domain\Product;
+use App\Modules\Catalog\Domain\ProductImage;
 use App\Modules\Catalog\Domain\ProductRepositoryContract;
 use App\Modules\Inventory\Infrastructure\Persistence\Eloquent\InventoryModel;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,7 @@ class ProductRepository implements ProductRepositoryContract
 {
     public function find(string $id): ?Product
     {
-        $productModel = ProductModel::find($id);
+        $productModel = ProductModel::with($this->productRelations())->find($id);
         if (! $productModel) {
             return null;
         }
@@ -59,7 +60,7 @@ class ProductRepository implements ProductRepositoryContract
 
     public function list(array $criteria = []): array
     {
-        $query = ProductModel::query();
+        $query = ProductModel::query()->with($this->productRelations());
         $this->applyCriteria($query, $criteria);
 
         return $this->paginate($query, $criteria);
@@ -71,10 +72,20 @@ class ProductRepository implements ProductRepositoryContract
             ->whereRaw('(stock_quantity - reserved_quantity) > 0')
             ->pluck('product_id');
 
-        $query = ProductModel::query()->whereIn('id', $productIds);
+        $query = ProductModel::query()->with($this->productRelations())->whereIn('id', $productIds);
         $this->applyCriteria($query, $criteria);
 
         return $this->paginate($query, $criteria);
+    }
+
+    private function productRelations(): array
+    {
+        return [
+            'images' => fn ($query) => $query
+                ->orderByDesc('is_main')
+                ->orderBy('sort_order')
+                ->orderBy('created_at'),
+        ];
     }
 
     private function applyCriteria(Builder $query, array $criteria): void
@@ -154,7 +165,17 @@ class ProductRepository implements ProductRepositoryContract
             createdBy: $productModel->created_by,
             updatedBy: $productModel->updated_by,
             createdAt: \DateTimeImmutable::createFromInterface($productModel->created_at),
-            updatedAt: \DateTimeImmutable::createFromInterface($productModel->updated_at)
+            updatedAt: \DateTimeImmutable::createFromInterface($productModel->updated_at),
+            images: $productModel->images
+                ->map(fn (ProductImageModel $imageModel) => new ProductImage(
+                    id: $imageModel->id,
+                    productId: $imageModel->product_id,
+                    imageUrl: $imageModel->image_url,
+                    altText: $imageModel->alt_text,
+                    sortOrder: $imageModel->sort_order,
+                    isMain: $imageModel->is_main,
+                ))
+                ->all()
         );
     }
 }

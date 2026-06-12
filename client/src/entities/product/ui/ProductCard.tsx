@@ -4,7 +4,7 @@ import Badge from '@/shared/ui/Badge';
 import Button from '@/shared/ui/Button';
 import QuantityControl from '@/shared/ui/QuantityControl';
 import type { Product } from '@/entities/product';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 
 interface ProductCardProps {
   product: Product;
@@ -60,6 +60,7 @@ export const ProductCard = memo(
             src={imageUrl}
             alt={name}
             loading='lazy'
+            onError={handleProductImageError}
           />
           <div className='py-4'>
             <div

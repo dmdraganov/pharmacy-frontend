@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import Badge, { type BadgeVariant } from '@/shared/ui/Badge';
 import { type Order, type OrderStatus, OrderItemRow } from '@/entities/order';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 import Button from '@/shared/ui/Button';
 import Spinner from '@/shared/ui/Spinner';
 import { cancelOrder } from '@/shared/api';
@@ -96,6 +96,7 @@ const OrderCard = memo(({ order }: OrderCardProps) => {
                     src={getProductImage(item.product.image)}
                     alt={item.product.name}
                     className='h-10 w-10 rounded-full border-2 border-white object-cover'
+                    onError={handleProductImageError}
                   />
                 ))}
               </div>

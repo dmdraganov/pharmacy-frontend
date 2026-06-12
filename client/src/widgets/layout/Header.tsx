@@ -66,15 +66,15 @@ const Header = memo(() => {
         >
           <RegionSelectWithSearch />
         </div>
-        <div className='flex flex-wrap items-center justify-between gap-3 py-3 lg:flex-nowrap lg:py-4'>
+        <div className='flex flex-wrap items-center justify-between gap-3 py-3 md:flex-nowrap md:py-4'>
           <Logo />
 
-          <div className='hidden flex-1 items-center justify-center gap-4 px-8 lg:flex'>
+          <div className='hidden flex-1 items-center justify-center gap-4 px-8 md:flex'>
             <Button onClick={handleCatalogToggle}>Каталог</Button>
             <SearchInput />
           </div>
 
-          <nav className='hidden items-center space-x-4 lg:flex'>
+          <nav className='hidden items-center space-x-4 md:flex'>
             <Link
               to={ROUTES.favorites}
               className='relative text-text-muted hover:text-text-default'
@@ -160,7 +160,7 @@ const Header = memo(() => {
             )}
           </nav>
 
-          <div className='flex items-center justify-end gap-2 lg:hidden'>
+          <div className='flex items-center justify-end gap-2 md:hidden'>
             <Button
               onClick={handleCatalogToggle}
               className='shrink-0 px-3 py-2 text-sm'
@@ -181,13 +181,13 @@ const Header = memo(() => {
             </button>
           </div>
 
-          <div className='order-last w-full lg:hidden'>
+          <div className='order-last w-full md:hidden'>
             <SearchInput />
           </div>
         </div>
 
         {isMobileMenuOpen && (
-          <div className='border-t border-border-default py-3 lg:hidden'>
+          <div className='border-t border-border-default py-3 md:hidden'>
             <div
               className='flex flex-col gap-2'
               onClick={() => setIsMobileMenuOpen(false)}

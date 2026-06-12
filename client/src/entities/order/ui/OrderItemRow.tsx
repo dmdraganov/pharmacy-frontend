@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '@/shared/ui/Badge';
 import type { OrderItem } from '@/entities/order';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 
 export const OrderItemRow = memo(({ item }: { item: OrderItem }) => {
   const imageUrl = getProductImage(item.product.image);
@@ -13,6 +13,7 @@ export const OrderItemRow = memo(({ item }: { item: OrderItem }) => {
         src={imageUrl}
         alt={item.product.name}
         className='h-16 w-16 rounded object-cover'
+        onError={handleProductImageError}
       />
       <div className='flex-grow'>
         <Link

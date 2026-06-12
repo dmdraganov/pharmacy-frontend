@@ -19,9 +19,11 @@ class Product extends Entity
         public int $categoryId,
         public int $brandId,
         public int $manufacturerId,
-        public readonly string $createdBy,
-        public string $updatedBy,
+        public readonly ?string $createdBy,
+        public ?string $updatedBy,
         public readonly \DateTimeImmutable $createdAt,
         public \DateTimeImmutable $updatedAt,
+        /** @var ProductImage[] */
+        public array $images = [],
     ) {}
 }

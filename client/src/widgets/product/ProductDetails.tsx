@@ -2,7 +2,7 @@ import { ROUTES } from '@/shared/config/router';
 import { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/entities/product';
-import { getProductImage } from '@/entities/product';
+import { getProductImage, handleProductImageError } from '@/entities/product';
 import { useAuthStore } from '@/features/auth';
 import { useCartStore, useCartItemQuantity } from '@/features/cart';
 import { FavoriteButton } from '@/features/favorites';
@@ -46,6 +46,7 @@ export const ProductDetails = memo(({ product }: ProductDetailsProps) => {
           src={imageUrl}
           alt={product.name}
           className='mx-auto aspect-square w-full max-w-md rounded-lg object-cover md:max-w-none'
+          onError={handleProductImageError}
         />
       </div>
       <div className='min-w-0'>
