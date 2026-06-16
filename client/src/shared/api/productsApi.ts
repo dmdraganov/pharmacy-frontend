@@ -62,8 +62,7 @@ export const mapProduct = (product: ApiProduct): Product => {
     brand:
       typeof product.brand === 'string'
         ? product.brand
-        : product.brand?.name ||
-          (product.brand_id ? `Бренд #${product.brand_id}` : ''),
+        : product.brand?.name || '',
     brandId: product.brand_id ? String(product.brand_id) : undefined,
     manufacturerId: product.manufacturer_id
       ? String(product.manufacturer_id)
@@ -71,10 +70,7 @@ export const mapProduct = (product: ApiProduct): Product => {
     manufacturer:
       typeof product.manufacturer === 'string'
         ? product.manufacturer
-        : product.manufacturer?.name ||
-          (product.manufacturer_id
-            ? `Производитель #${product.manufacturer_id}`
-            : undefined),
+        : product.manufacturer?.name || undefined,
     sectionId: '',
     categoryId,
     price: Number(product.price),

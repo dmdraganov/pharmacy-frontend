@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd server && php artisan serve\" \"npm run dev --prefix client\""
+    "dev": "concurrently \"cd server && php artisan serve\" \"npm run dev --prefix client\"",
+    "test": "concurrently 'cd server && php artisan test'"
   },
   "devDependencies": {
     "concurrently": "^10.0.3"

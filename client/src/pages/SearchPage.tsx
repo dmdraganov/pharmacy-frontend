@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearch } from '@/features/search';
 import FiltersSidebar from '@/widgets/layout/FiltersSidebar';
 import {
-  applyFilters,
   getAvailableFilters,
   useFilters,
 } from '@/features/filter-products';
@@ -13,6 +12,7 @@ import { getBrands, getManufacturers } from '@/shared/api';
 const SearchPage = () => {
   const { activeFilters } = useFilters();
   const { searchTerm, searchResults } = useSearch(activeFilters);
+  const { searchResults: filterSourceProducts } = useSearch();
   const { data: catalogDictionaries } = useQuery({
     queryKey: ['catalog-dictionaries'],
     queryFn: async () => {
@@ -26,33 +26,59 @@ const SearchPage = () => {
   });
 
   const availableFilters = useMemo(
-    () => getAvailableFilters(searchResults),
-    [searchResults]
+    () => getAvailableFilters(filterSourceProducts),
+    [filterSourceProducts]
   );
 
-  const displayProducts = useMemo(
-    () => applyFilters(searchResults, activeFilters),
-    [searchResults, activeFilters]
-  );
+  const availableBrands = useMemo(() => {
+    const brandIds = new Set(
+      filterSourceProducts
+        .map((product) => product.brandId)
+        .filter((brandId): brandId is string => Boolean(brandId))
+    );
+
+    return (catalogDictionaries?.brands || []).filter((brand) =>
+      brandIds.has(brand.id)
+    );
+  }, [filterSourceProducts, catalogDictionaries?.brands]);
+
+  const availableManufacturers = useMemo(() => {
+    const manufacturerIds = new Set(
+      filterSourceProducts
+        .map((product) => product.manufacturerId)
+        .filter((manufacturerId): manufacturerId is string =>
+          Boolean(manufacturerId)
+        )
+    );
+
+    return (catalogDictionaries?.manufacturers || []).filter((manufacturer) =>
+      manufacturerIds.has(manufacturer.id)
+    );
+  }, [filterSourceProducts, catalogDictionaries?.manufacturers]);
 
   const title = searchTerm ? `Результаты поиска: "${searchTerm}"` : 'Поиск';
 
   const sidebar = useMemo(
     () =>
-      searchResults.length > 0 ? (
+      filterSourceProducts.length > 0 ? (
         <FiltersSidebar
           availableFilters={availableFilters}
-          brands={catalogDictionaries?.brands}
-          manufacturers={catalogDictionaries?.manufacturers}
+          brands={availableBrands}
+          manufacturers={availableManufacturers}
         />
       ) : null,
-    [searchResults.length, availableFilters, catalogDictionaries]
+    [
+      filterSourceProducts.length,
+      availableFilters,
+      availableBrands,
+      availableManufacturers,
+    ]
   );
 
   return (
     <CatalogLayoutWidget
       title={title}
-      products={displayProducts}
+      products={searchResults}
       sidebar={sidebar}
     />
   );

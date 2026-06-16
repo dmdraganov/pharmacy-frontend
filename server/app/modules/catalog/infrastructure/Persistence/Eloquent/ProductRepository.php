@@ -46,9 +46,9 @@ class ProductRepository implements ProductRepositoryContract
         $productModel->save();
 
         if ($isNew) {
-            Event::dispatch(new ProductCreated($this->toDomain($productModel)));
+            Event::dispatch(new ProductCreated($this->toDomain($productModel->load($this->productRelations()))));
         } else {
-            Event::dispatch(new ProductUpdated($this->toDomain($productModel)));
+            Event::dispatch(new ProductUpdated($this->toDomain($productModel->load($this->productRelations()))));
         }
     }
 
@@ -81,6 +81,8 @@ class ProductRepository implements ProductRepositoryContract
     private function productRelations(): array
     {
         return [
+            'brand',
+            'manufacturer',
             'images' => fn ($query) => $query
                 ->orderByDesc('is_main')
                 ->orderBy('sort_order')
@@ -175,7 +177,9 @@ class ProductRepository implements ProductRepositoryContract
                     sortOrder: $imageModel->sort_order,
                     isMain: $imageModel->is_main,
                 ))
-                ->all()
+                ->all(),
+            brandName: $productModel->brand?->name,
+            manufacturerName: $productModel->manufacturer?->name,
         );
     }
 }

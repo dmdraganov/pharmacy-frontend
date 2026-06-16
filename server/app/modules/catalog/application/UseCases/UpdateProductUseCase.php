@@ -38,6 +38,6 @@ class UpdateProductUseCase implements UseCase
 
         $this->productRepository->save($product);
 
-        return $product;
+        return $this->productRepository->find($product->id) ?? $product;
     }
 }

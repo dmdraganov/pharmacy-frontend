@@ -30,7 +30,9 @@ class ProductResource extends JsonResource
             'images' => ProductImageResource::collection($images),
             'category_id' => $this->categoryId,
             'brand_id' => $this->brandId,
+            'brand' => $this->brandName,
             'manufacturer_id' => $this->manufacturerId,
+            'manufacturer' => $this->manufacturerName,
             'created_at' => $this->createdAt?->format(DATE_ATOM),
             'updated_at' => $this->updatedAt?->format(DATE_ATOM),
         ];

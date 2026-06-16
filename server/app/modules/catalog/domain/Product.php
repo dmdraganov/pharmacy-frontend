@@ -25,5 +25,7 @@ class Product extends Entity
         public \DateTimeImmutable $updatedAt,
         /** @var ProductImage[] */
         public array $images = [],
+        public ?string $brandName = null,
+        public ?string $manufacturerName = null,
     ) {}
 }
